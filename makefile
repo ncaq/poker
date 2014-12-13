@@ -1,3 +1,5 @@
+programname = poker
+
 CXX			=	g++
 CXXFLAGS	=	-std=c++11 -ggdb -Wall -Wextra
 LDFLAGS		=	-lcurses
@@ -6,15 +8,18 @@ SRCS := $(shell ./findcpp.sh)
 OBJS := $(SRCS:%.cpp=%.o)
 DEPS := $(SRCS:%.cpp=%.d)
 
-.PHONY:	all clean
+.PHONY:	all run clean
 
-all: main
+all: program
+
+run: all
+	./poker
 
 clean:
-	$(RM) $(OBJS) $(DEPS)
+	$(RM) $(OBJS) $(DEPS) $(programname)
 
-main: $(DEPS) $(OBJS)
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o main $(OBJS)
+program: $(DEPS) $(OBJS)
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(programname) $(OBJS)
 
 %.d: %.cpp
 	$(CXX) $(CXXFLAGS) -MM $< | sed $(addprefix "$(addprefix s/.*:/,$(subst .d,.o,$(subst /,\/,$@:))),/)" > $@

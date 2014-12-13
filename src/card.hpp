@@ -1,3 +1,6 @@
+#pragma once
+
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -20,11 +23,24 @@ public:
     {
         return height_;
     }
+
 private:
+    class image_cell
+    {
+    public:
+        image_cell(const std::string& path);
+
+        std::string split(const size_t l, const size_t c, const size_t y, const size_t x);
+
+    private:
+        std::vector<std::string> lines_;
+    };
+    static std::unique_ptr<card::image_cell> sprite_;
+    
     suit suit_;
     size_t rank_;
 
-    size_t width_, height_;
+    size_t height_, width_;
 
-    std::string contents_;
+    std::string view_;
 };
