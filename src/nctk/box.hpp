@@ -1,7 +1,6 @@
 #pragma once
 
 #include "new_window.hpp"
-#include "sub_window.hpp"
 #include <cmath>
 #include <curses.h>
 #include <memory>
@@ -14,7 +13,7 @@ namespace nctk
     {
     public:
         box(const T& c, const size_t y, const size_t x)
-            :contents_(c), draw_area_(new sub_window(stdscr, contents_.height(), contents_.width(), y, x))
+            :contents_(c), draw_area_(new new_window(contents_.height(), contents_.width(), y, x))
         {
         }
 
@@ -26,12 +25,12 @@ namespace nctk
 
         void moving_draw(const size_t y, const size_t x)
         {
-            while(y != draw_area_->y() && x != draw_area_->x())
+            while(y != draw_area_->y() || x != draw_area_->x())
             {
                 wclear(*draw_area_);
                 wrefresh(*draw_area_);
-                const size_t sy = y - draw_area_->y();
-                const size_t sx = x - draw_area_->x();
+                const int sy = y - draw_area_->y();
+                const int sx = x - draw_area_->x();
                 if(std::signbit(sy))
                 {
                     if(y < draw_area_->y() - 1)
@@ -45,7 +44,7 @@ namespace nctk
                 }
                 else
                 {
-                    if(draw_area_->y() + 1)
+                    if(draw_area_->y() + 1 < y)
                     {
                         draw_area_->y(draw_area_->y() + 1);
                     }
@@ -67,7 +66,7 @@ namespace nctk
                 }
                 else
                 {
-                    if(draw_area_->x() + 1)
+                    if(draw_area_->x() + 1 < x)
                     {
                         draw_area_->x(draw_area_->x() + 1);
                     }

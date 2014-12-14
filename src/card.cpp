@@ -8,17 +8,17 @@ card::image_cell card::sprite_ = card::image_cell("cards.txt");
 
 card::card(const suit s, const size_t r)
 {
-    // todo
     this->suit_   = s;
     this->rank_   = r;
     this->height_ = 9;
     this->width_  = 11;
+    const size_t y = this->height_ * (13 - this->rank_);
     const size_t x =
-        (s == suit::club)    ?  0 :
-        (s == suit::diamond) ? 11 :
-        (s == suit::heart)   ? 22 :
+        (this->suit_ == suit::club)    ?  0 :
+        (this->suit_ == suit::diamond) ? 11 :
+        (this->suit_ == suit::heart)   ? 22 :
         33 ;
-    this->view_   = sprite_.split(height_, width_, 0, x);
+    this->view_   = sprite_.split(height_, width_, y, x);
 }
 
 std::string card::to_string()const
@@ -42,7 +42,7 @@ std::string card::image_cell::split(const size_t l, const size_t c, const size_t
 {
     std::string result;
     std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> cv;
-    for(size_t i = y; i <= y + l; ++i)
+    for(size_t i = y; i < y + l; ++i)
     {
         result += cv.to_bytes(lines_.at(i).substr(x, c));
     }

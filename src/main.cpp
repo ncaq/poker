@@ -16,12 +16,12 @@ int main()
     {
         initscr();
 
-        nctk::box<card> b(nctk::box<card>(card(suit::spade, 1), 0, 0));
-        b.draw();
-        refresh();
-        usleep(100000);
+        nctk::box<card> b (nctk::box<card>(card(suit::spade, 1), 0, 0));
+        nctk::box<card> b2(nctk::box<card>(card(suit::spade, 13), 40, 40));
+
         b.moving_draw(20, 20);
-    
+        b2.moving_draw(10, 10);
+        
         refresh();
         usleep(100000);
     }
@@ -34,6 +34,5 @@ int main()
         endwin();
         throw;
     }
-    sleep(10);
     endwin();
 }
