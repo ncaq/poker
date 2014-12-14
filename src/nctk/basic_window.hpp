@@ -48,6 +48,6 @@ namespace nctk
     private:
         WINDOW* window_ptr_;
 
-        size_t width_, height_, y_, x_;
+        size_t height_, width_, y_, x_;
     };
 }

@@ -29,5 +29,5 @@ GPATH
 GRTAGS
 GTAGS
 
-# undefined license
-cards
+# log
+*.log

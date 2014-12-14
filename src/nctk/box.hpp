@@ -14,7 +14,7 @@ namespace nctk
     {
     public:
         box(const T& c, const size_t y, const size_t x)
-            :contents_(c), draw_area_(new sub_window(stdscr, contents_.width(), contents_.height(), y, x))
+            :contents_(c), draw_area_(new sub_window(stdscr, contents_.height(), contents_.width(), y, x))
         {
         }
 
@@ -34,9 +34,9 @@ namespace nctk
                 const size_t sx = x - draw_area_->x();
                 if(std::signbit(sy))
                 {
-                    if(y < draw_area_->y() - 1 + sy / 10)
+                    if(y < draw_area_->y() - 1)
                     {
-                        draw_area_->y(draw_area_->y() - 1 + sy / 10);
+                        draw_area_->y(draw_area_->y() - 1);
                     }
                     else
                     {
@@ -45,9 +45,9 @@ namespace nctk
                 }
                 else
                 {
-                    if(draw_area_->y() + 1 + sy / 10 < y)
+                    if(draw_area_->y() + 1)
                     {
-                        draw_area_->y(draw_area_->y() + 1 + sy / 10);
+                        draw_area_->y(draw_area_->y() + 1);
                     }
                     else
                     {
@@ -56,9 +56,9 @@ namespace nctk
                 }
                 if(std::signbit(sx))
                 {
-                    if(x < draw_area_->x() - 1 + sx / 10)
+                    if(x < draw_area_->x() - 1)
                     {
-                        draw_area_->x(draw_area_->x() - 1 + sx / 10);
+                        draw_area_->x(draw_area_->x() - 1);
                     }
                     else
                     {
@@ -67,9 +67,9 @@ namespace nctk
                 }
                 else
                 {
-                    if(draw_area_->x() + 1 + sx / 10 < x)
+                    if(draw_area_->x() + 1)
                     {
-                        draw_area_->x(draw_area_->x() + 1 + sx / 10);
+                        draw_area_->x(draw_area_->x() + 1);
                     }
                     else
                     {

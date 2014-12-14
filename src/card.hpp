@@ -35,12 +35,11 @@ private:
     private:
         std::vector<std::string> lines_;
     };
-    static std::unique_ptr<card::image_cell> sprite_;
+    static card::image_cell sprite_;
     
     suit suit_;
     size_t rank_;
 
     size_t height_, width_;
-
     std::string view_;
 };

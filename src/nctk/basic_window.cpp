@@ -3,7 +3,7 @@
 namespace nctk
 {
     basic_window::basic_window(WINDOW* win, const size_t lines, const size_t cols, const size_t y, const size_t x)
-        :window_ptr_(win), width_(lines), height_(cols), y_(y), x_(x)
+        :window_ptr_(win), height_(lines), width_(cols), y_(y), x_(x)
     {
     }
 
