@@ -1,8 +1,8 @@
 programname = poker
 
-CXX			=	clang++ -stdlib=libc++
-CXXFLAGS	=	-std=c++11 -ggdb -Wall -Wextra
-LDFLAGS		=	-lncursesw
+CXX			= clang++
+CXXFLAGS	= -Wall -Wextra -std=c++11 -stdlib=libc++ -ggdb
+LDFLAGS		= -lncursesw
 
 SRCS := $(shell ./findcpp.sh)
 OBJS := $(SRCS:%.cpp=%.o)

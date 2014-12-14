@@ -20,7 +20,7 @@ int main()
         b.draw();
         refresh();
         usleep(100000);
-        // b.moving_draw(20, 20);
+        b.moving_draw(20, 20);
     
         refresh();
         usleep(100000);

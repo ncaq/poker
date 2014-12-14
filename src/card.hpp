@@ -33,7 +33,7 @@ private:
         std::string split(const size_t l, const size_t c, const size_t y, const size_t x);
 
     private:
-        std::vector<std::string> lines_;
+        std::vector<std::u32string> lines_;
     };
     static card::image_cell sprite_;
     
