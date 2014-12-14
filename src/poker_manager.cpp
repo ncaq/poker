@@ -20,3 +20,12 @@ poker_manager::poker_manager()
     std::shuffle(this->deck_.begin(), this->deck_.end(), std::mt19937(init_seed()));
     // std::random_shuffleはstd::rand()使ってるのでC++14から非推奨になる
 }
+
+void poker_manager::deal(const size_t limit)
+{
+    for(size_t i = 0; i < limit && !hand_.empty(); ++i)
+    {
+        hand_.push_back(deck_.back());
+        deck_.pop_back();
+    }
+}
