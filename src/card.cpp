@@ -21,6 +21,20 @@ card::card(const suit s, const size_t r)
     this->view_   = sprite_.split(height_, width_, y, x);
 }
 
+bool card::operator<(const card& take)
+{
+    if(this->rank_ == take.rank_)
+    {
+        return this->suit_ < take.suit_;
+    }
+    else
+    {
+        const size_t this_rotated_rank = (this->rank_ == 1) ? 14 : this->rank_; // 1を14として計算する
+        const size_t take_rotated_rank = (take. rank_ == 1) ? 14 : take. rank_;
+        return this_rotated_rank < take_rotated_rank;
+    }
+}
+
 std::string card::to_string()const
 {
     return view_;

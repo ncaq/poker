@@ -5,12 +5,14 @@
 #include <vector>
 
 enum class suit
-{spade, heart, diamond, club};
+{spade, heart, club, diamond};
 
 class card
 {
 public:
     card(const suit s, const size_t r);
+
+    bool operator<(const card& take);
 
     std::string to_string()const;
 
