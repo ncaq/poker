@@ -1,7 +1,7 @@
 #include "curses_field.hpp"
 
 curses_field::curses_field()
-    :deck_area_(undefined_card(), 0, 0)
+    :deck_area_(undefined_card(), 0, 0), cursors()
 {
 }
 

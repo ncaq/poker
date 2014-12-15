@@ -82,12 +82,14 @@ namespace nctk
             usleep(100000);
         }
 
-        box<T> make_under(const T& c)const
+        template <typename Another>
+        box<Another> make_under(const Another& c)const
         {
             return box(c, draw_area_->under(), draw_area_->x());
         }
 
-        void move_to_right(box<T>& take)const
+        template <typename Another>
+        void move_to_right(box<Another>& take)const
         {
             take.moving_draw(draw_area_->y(), draw_area_->x());
         }
