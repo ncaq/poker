@@ -6,7 +6,7 @@ LDFLAGS		= -lncursesw
 
 SRCS := $(shell ./findcpp.sh)
 OBJS := $(SRCS:%.cpp=%.o)
-DEPS := $(SRCS:%.cpp=%.d)
+DEPS := $(SRCS:%.cpp=%.deps)
 
 .PHONY:	all run clean
 
@@ -21,8 +21,8 @@ clean:
 program: $(DEPS) $(OBJS)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(programname) $(OBJS)
 
-%.d: %.cpp
-	$(CXX) $(CXXFLAGS) -MM $< | sed $(addprefix "$(addprefix s/.*:/,$(subst .d,.o,$(subst /,\/,$@:))),/)" > $@
+%.deps: %.cpp
+	$(CXX) $(CXXFLAGS) -MM $< | sed $(addprefix "$(addprefix s/.*:/,$(subst .deps,.o,$(subst /,\/,$@:))),/)" > $@
 -include $(DEPS)
 
 %.o: %.cpp
