@@ -29,3 +29,26 @@ void poker_manager::deal(const size_t limit)
         deck_.pop_back();
     }
 }
+
+void poker_manager::init_deal()
+{
+    deal(5);
+}
+
+void poker_manager::exchange(const std::vector<size_t>& selected)
+{
+    std::vector<card> stash;
+    for(size_t i = 0; i < selected.size(); ++i)
+    {
+        stash.push_back(deck_.front());
+        deck_.pop_front();
+    }
+    for(auto exchange_iterator = selected.begin(); exchange_iterator != selected.end(); ++exchange_iterator)
+    {
+        std::swap(hand_.at(*exchange_iterator), stash.at(std::distance(selected.begin(), exchange_iterator)));
+    }
+    for(auto s : stash)
+    {
+        deck_.push_back(s);
+    }
+}

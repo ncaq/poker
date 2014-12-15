@@ -16,34 +16,13 @@ namespace nctk
 
         operator WINDOW*();
 
-        void yx(const size_t y, const size_t x)
-        {
-            y_ = y;
-            x_ = x;
-            mvwin(*this, y_, x_);
-        }
-        
-        size_t y(const size_t n)
-        {
-            yx(n, x_);
-            return y_;
-        }
-
-        size_t x(const size_t n)
-        {
-            yx(y_, n);
-            return x_;
-        }
-        
-        size_t y()const
-        {
-            return y_;
-        }
-
-        size_t x()const
-        {
-            return x_;
-        }
+        void yx(const size_t y, const size_t x);
+        size_t y(const size_t n);
+        size_t x(const size_t n);
+        size_t y()const;
+        size_t x()const;
+        size_t under()const;
+        size_t right()const;
 
     private:
         WINDOW* window_ptr_;

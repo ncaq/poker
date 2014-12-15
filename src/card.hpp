@@ -16,14 +16,14 @@ public:
 
     std::string to_string()const;
 
-    size_t width()const
-    {
-        return width_;
-    }
-
     size_t height()const
     {
         return height_;
+    }
+
+    size_t width()const
+    {
+        return width_;
     }
 
 private:

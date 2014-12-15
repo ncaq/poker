@@ -1,3 +1,5 @@
+#pragma once
+
 #include "basic_window.hpp"
 
 namespace nctk
