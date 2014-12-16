@@ -6,7 +6,7 @@ class undefined_card
 {
 public:
     undefined_card();
-    
+
     std::string to_string()const;
 
     size_t height()const

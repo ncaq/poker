@@ -7,7 +7,7 @@ undefined_card::undefined_card()
     this->view_ = std::string(std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>());
 
     this->height_ = 9;
-    this->width_  = 11;
+    this->width_  = 12;         // 11 + 1(\n)
 }
 
 std::string undefined_card::to_string()const
