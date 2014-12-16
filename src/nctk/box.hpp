@@ -85,7 +85,7 @@ namespace nctk
         template <typename Another>
         box<Another> make_under(const Another& c)const
         {
-            return box(c, draw_area_->under(), draw_area_->x());
+            return box<Another>(c, draw_area_->under(), draw_area_->x());
         }
 
         template <typename Another>

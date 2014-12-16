@@ -1,11 +1,8 @@
 #include "event_manager.hpp"
 
-event_manager::event_manager()
+void event_manager::play()
 {
     poker.init_deal();
-    for(auto card : poker.hand())
-    {
-        field.deal(card);
-    }
+    field.deal(poker.hand());
     
 }

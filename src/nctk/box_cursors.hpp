@@ -32,7 +32,7 @@ namespace nctk
     {
     public:
         box_cursors()
-            :hover_cursor(0)
+            :hover_cursor_(0)
         {};
         
         void bind(const std::vector<box<T>>& h)
@@ -44,20 +44,20 @@ namespace nctk
         {
             for(size_t i = 0; i < hand_.size(); ++i)
             {
-                if(std::find(selected_.begin(), selected_.end(), i))
+                if(std::find(selected_.begin(), selected_.end(), i) != selected_.end())
                 {
                     hand_.at(i).make_under(arrow()).draw();
                 }
             }
-            hand_.at(hover_cursor).make_under(arrow()).draw();
+            hand_.at(hover_cursor_).make_under(arrow()).draw();
         }
 
         void toggle()
         {
-            auto may_found = std::find(selected_.begin(), selected_.end(), this->hover_cursor);
+            auto may_found = std::find(selected_.begin(), selected_.end(), this->hover_cursor_);
             if(may_found == selected_.end()) // 未登録
             {
-                selected_.push_back(this->hover_cursor);
+                selected_.push_back(this->hover_cursor_);
             }
             else
             {
@@ -65,9 +65,38 @@ namespace nctk
             }
         }
 
+        void shift_to_right()
+        {
+            if(hover_cursor_ <= hand_.size())
+            {
+                hover_cursor_ = 0;
+            }
+            else
+            {
+                ++hover_cursor_;
+            }
+        }
+
+        void shift_to_left()
+        {
+            if(0 <= hover_cursor_)
+            {
+                hover_cursor_ = hand_.size() - 1;
+            }
+            else
+            {
+                --hover_cursor_;
+            }
+        }
+
+        std::vector<size_t> selected()
+        {
+            return this->selected_;
+        }
+
     private:
         const std::vector<box<T>> hand_;
         std::vector<size_t> selected_;
-        size_t hover_cursor;
+        size_t hover_cursor_;
     };
 }

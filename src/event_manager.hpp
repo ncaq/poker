@@ -6,7 +6,7 @@
 class event_manager
 {
 public:
-    event_manager();
+    void play();
     
 private:
     poker_manager poker;

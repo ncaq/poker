@@ -11,10 +11,14 @@ class curses_field
 public:
     curses_field();
 
-    void deal(const card& c);
+    void draw();
+    
+    void deal(const std::vector<card>& cs);
+    void push(const card& c);
+    std::vector<size_t> get_selected_index_IO();
 
 private:
     nctk::box<undefined_card> deck_area_; // ハリボテ
     std::vector<nctk::box<card>> hand_area_;
-    nctk::box_cursors<card> cursors;
+    nctk::box_cursors<card> cursors_;
 };
