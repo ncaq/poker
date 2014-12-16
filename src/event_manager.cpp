@@ -4,5 +4,6 @@ void event_manager::play()
 {
     poker.init_deal();
     field.deal(poker.hand());
-    
+
+    field.draw();
 }

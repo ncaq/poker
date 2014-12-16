@@ -1,5 +1,4 @@
-#include "card.hpp"
-#include "nctk/box.hpp"
+#include "event_manager.hpp"
 #include <curses.h>
 #include <fstream>
 #include <iostream>
@@ -16,23 +15,22 @@ int main()
     {
         initscr();
 
-        nctk::box<card> b (nctk::box<card>(card(suit::spade, 1), 0, 0));
-        nctk::box<card> b2(nctk::box<card>(card(suit::spade, 13), 40, 40));
+        event_manager game;
+        game.play();
 
-        b.moving_draw(20, 20);
-        b2.moving_draw(10, 10);
-        
-        refresh();
-        usleep(100000);
+        mvaddstr(0, 0, "test");
+
+        usleep(1000000);
     }
     catch(const std::exception& e)
     {
         cerr                  << "exception: " << typeid(e).name() << endl << e.what() << endl;
-        ofstream("error.log") << "exception: " << typeid(e).name() << endl << e.what() << endl;
+        ofstream("error.log", std::ios::app) << "exception( " << time << "): "  << std::endl << typeid(e).name() << endl << e.what() << endl;
 
         sleep(1);
         endwin();
         throw;
     }
+    usleep(1000000);
     endwin();
 }

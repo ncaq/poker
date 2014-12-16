@@ -6,7 +6,7 @@ poker_manager::poker_manager()
 {
     auto push_card = [this](const suit s)
         {
-            for(size_t r = 0; r <= 13; ++r)
+            for(size_t r = 1; r <= 13; ++r)
             {
                 this->deck_.push_back(card(s, r));
             }
@@ -23,7 +23,7 @@ poker_manager::poker_manager()
 
 void poker_manager::deal(const size_t limit)
 {
-    for(size_t i = 0; i < limit && !hand_.empty(); ++i)
+    for(size_t i = 0; i < limit && !deck_.empty(); ++i)
     {
         hand_.push_back(deck_.back());
         deck_.pop_back();

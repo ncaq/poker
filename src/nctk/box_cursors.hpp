@@ -49,7 +49,10 @@ namespace nctk
                     hand_.at(i).make_under(arrow()).draw();
                 }
             }
-            hand_.at(hover_cursor_).make_under(arrow()).draw();
+            if(!hand_.empty())
+            {                
+                hand_.at(hover_cursor_).make_under(arrow()).draw();
+            }
         }
 
         void toggle()

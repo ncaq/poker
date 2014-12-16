@@ -17,9 +17,10 @@ void curses_field::draw()
 
 void curses_field::deal(const std::vector<card>& cs)
 {
-    for(auto c : cs)
+    for(const auto& c : cs)
     {
         this->push(c);
+        this->draw();
     }
 }
 

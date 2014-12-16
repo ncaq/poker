@@ -12,7 +12,7 @@ public:
     curses_field();
 
     void draw();
-    
+
     void deal(const std::vector<card>& cs);
     void push(const card& c);
     std::vector<size_t> get_selected_index_IO();

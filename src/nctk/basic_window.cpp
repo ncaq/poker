@@ -14,6 +14,8 @@ namespace nctk
 
     void basic_window::add_string(const std::string& str)
     {
+        wclear(*this);
+        wrefresh(*this);
         waddstr(*this, str.data());
     }
 

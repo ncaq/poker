@@ -23,19 +23,19 @@ namespace nctk
             wrefresh(*draw_area_);
         }
 
-        void moving_draw(const size_t y, const size_t x)
+        void moving_draw(const size_t y, const size_t x) // todo: 同時に移動できるように書き換えます
         {
             while(y != draw_area_->y() || x != draw_area_->x())
             {
                 wclear(*draw_area_);
                 wrefresh(*draw_area_);
-                const int sy = y - draw_area_->y();
-                const int sx = x - draw_area_->x();
+                const int sy = std::ceil((y - draw_area_->y()) / 5);
+                const int sx = std::ceil((x - draw_area_->x()) / 5);
                 if(std::signbit(sy))
                 {
-                    if(y < draw_area_->y() - 1)
+                    if(y < draw_area_->y() + sy - 1)
                     {
-                        draw_area_->y(draw_area_->y() - 1);
+                        draw_area_->y(draw_area_->y() + sy - 1);
                     }
                     else
                     {
@@ -44,9 +44,9 @@ namespace nctk
                 }
                 else
                 {
-                    if(draw_area_->y() + 1 < y)
+                    if(draw_area_->y() + sy + 1 < y)
                     {
-                        draw_area_->y(draw_area_->y() + 1);
+                        draw_area_->y(draw_area_->y() + sy + 1);
                     }
                     else
                     {
@@ -55,9 +55,9 @@ namespace nctk
                 }
                 if(std::signbit(sx))
                 {
-                    if(x < draw_area_->x() - 1)
+                    if(x < draw_area_->x() + sx - 1)
                     {
-                        draw_area_->x(draw_area_->x() - 1);
+                        draw_area_->x(draw_area_->x() + sx - 1);
                     }
                     else
                     {
@@ -66,9 +66,9 @@ namespace nctk
                 }
                 else
                 {
-                    if(draw_area_->x() + 1 < x)
+                    if(draw_area_->x() + sx + 1 < x)
                     {
-                        draw_area_->x(draw_area_->x() + 1);
+                        draw_area_->x(draw_area_->x() + sx + 1);
                     }
                     else
                     {
@@ -76,10 +76,8 @@ namespace nctk
                     }
                 }
                 this->draw();
-                usleep(100000);
+                usleep(1000000);
             }
-            this->draw();
-            usleep(100000);
         }
 
         template <typename Another>
@@ -91,7 +89,7 @@ namespace nctk
         template <typename Another>
         void move_to_right(box<Another>& take)const
         {
-            take.moving_draw(draw_area_->y(), draw_area_->x());
+            take.moving_draw(draw_area_->y(), draw_area_->right());
         }
 
     private:
