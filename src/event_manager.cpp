@@ -1,4 +1,5 @@
 #include "event_manager.hpp"
+#include "nctk/form.hpp"
 
 void event_manager::play()
 {
@@ -20,10 +21,10 @@ void event_manager::play()
 
     field.draw();
 
-    auto message_win = nctk::new_window(1, getmaxx(stdscr) - 1, getmaxy(stdscr) - 1, 0);
-    message_win.echo("please push any key to exit");
+    const std::string message_to_wait = "please push any key to exit:";
+    auto message_win = nctk::new_window(1, message_to_wait.size(), getmaxy(stdscr) - 1, 0);
+    message_win.echo(message_to_wait);
 
-    nctk::new_window form(0, 0, -1, -1);
-    keypad(form, true);
+    nctk::form form(getmaxy(stdscr) - 1, message_win.right());
     form.get_char();
 }

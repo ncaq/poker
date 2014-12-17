@@ -1,4 +1,5 @@
 #include "game_field.hpp"
+#include "nctk/form.hpp"
 
 game_field::game_field()
     :deck_area_(undefined_card(), 0, 0)
@@ -42,14 +43,13 @@ std::vector<bool> game_field::selected_array_IO()
 {
     nctk::box_cursors<card> cursors(hand_area_);
     int key;
-    nctk::new_window form(1, 1, getmaxy(stdscr), 0);
-    keypad(form, true);
+    nctk::form input(0, getmaxx(stdscr) - 1);
     do
     {
         this->draw();
         cursors.draw();
 
-        key = form.get_char();
+        key = input.get_char();
 
         if(key == 5)             // right
         {
@@ -63,7 +63,7 @@ std::vector<bool> game_field::selected_array_IO()
         {
             cursors.toggle();
         }
-    }while(key != '\n');
+    }while(key != '\n' && key != 2);
     return cursors.selected_array();
 }
 

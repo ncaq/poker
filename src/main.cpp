@@ -14,9 +14,6 @@ int main()
     {
         initscr();
 
-        // test_exchange();
-        // test_selected_array_IO();
-
         event_manager game;
         game.play();
     }

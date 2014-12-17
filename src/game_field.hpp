@@ -21,7 +21,7 @@ private:
     void swap(const card& c, const size_t index); // todo:
     
     nctk::box<undefined_card> deck_area_; // ハリボテ
-    std::vector<nctk::box<card>> hand_area_;
+    std::vector<nctk::box<card>> hand_area_; // 手札
 };
 
 void test_selected_array_IO();

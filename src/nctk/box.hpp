@@ -85,7 +85,7 @@ namespace nctk
                     }
                 }
                 this->draw();
-                usleep(10000);
+                usleep(20000);
             }
         }
 

@@ -10,6 +10,5 @@ namespace nctk
 
     new_window::~new_window()
     {
-    
     }
 }
