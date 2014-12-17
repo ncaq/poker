@@ -6,10 +6,10 @@
 #include "undefined_card.hpp"
 #include <vector>
 
-class curses_field
+class game_field
 {
 public:
-    curses_field();
+    game_field();
 
     void draw();
 

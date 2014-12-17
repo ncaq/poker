@@ -1,11 +1,11 @@
-#include "curses_field.hpp"
+#include "game_field.hpp"
 
-curses_field::curses_field()
+game_field::game_field()
     :deck_area_(undefined_card(), 0, 0)
 {
 }
 
-void curses_field::draw()
+void game_field::draw()
 {
     deck_area_.draw();
     for(const auto& h : hand_area_)
@@ -14,7 +14,7 @@ void curses_field::draw()
     }
 }
 
-void curses_field::deal(const std::vector<card>& cs)
+void game_field::deal(const std::vector<card>& cs)
 {
     hand_area_.clear();
 
@@ -25,7 +25,7 @@ void curses_field::deal(const std::vector<card>& cs)
     }
 }
 
-void curses_field::push(const card& c)
+void game_field::push(const card& c)
 {
     hand_area_.push_back(nctk::box<card>(c, 0, 0));
     if(hand_area_.size() <= 1)
@@ -38,7 +38,7 @@ void curses_field::push(const card& c)
     }
 }
 
-std::vector<bool> curses_field::selected_array_IO()
+std::vector<bool> game_field::selected_array_IO()
 {
     nctk::box_cursors<card> cursors(hand_area_);
     int key;
@@ -69,7 +69,7 @@ std::vector<bool> curses_field::selected_array_IO()
 
 void test_selected_array_IO()
 {
-    curses_field field;
+    game_field field;
     field.deal({card(suit::spade, 1)});
 
     std::string buffer;

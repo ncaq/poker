@@ -1,6 +1,6 @@
 #pragma once
 
-#include "curses_field.hpp"
+#include "game_field.hpp"
 #include "poker_manager.hpp"
 
 class event_manager
@@ -10,5 +10,5 @@ public:
 
 private:
     poker_manager poker;
-    curses_field field;
+    game_field field;
 };
