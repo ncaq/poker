@@ -2,17 +2,25 @@
 #include "nctk/form.hpp"
 
 game_field::game_field()
-    :deck_area_(undefined_card(), 0, 0)
+    : deck_area_(undefined_card(), 0, 0)
+    , description_(4, 40, 0, 13)
 {
 }
 
 void game_field::draw()
 {
+    clear();
+    refresh();
     deck_area_.draw();
     for(const auto& h : hand_area_)
     {
         h.draw();
     }
+
+    description_.echo(
+        R"(up: select card to change
+right and left: move cursor
+down or enter: done selecting)");
 }
 
 void game_field::deal(const std::vector<card>& cs)
@@ -31,7 +39,7 @@ void game_field::push(const card& c)
     hand_area_.push_back(nctk::box<card>(c, 0, 0));
     if(hand_area_.size() <= 1)
     {
-        hand_area_.at(0).moving_draw(14, 0);
+        hand_area_.at(0).moving_draw(11, 0);
     }
     else
     {

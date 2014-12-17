@@ -22,6 +22,7 @@ private:
     
     nctk::box<undefined_card> deck_area_; // ハリボテ
     std::vector<nctk::box<card>> hand_area_; // 手札
+    nctk::new_window description_;            // 操作説明
 };
 
 void test_selected_array_IO();

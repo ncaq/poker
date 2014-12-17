@@ -7,11 +7,11 @@
 card::image_cell card::sprite_ = card::image_cell("cards.txt");
 
 card::card(const suit s, const size_t r)
+    : suit_(s)
+    , rank_(r)
+    , height_(9)
+    , width_(11)
 {
-    this->suit_   = s;
-    this->rank_   = r;
-    this->height_ = 9;
-    this->width_  = 11;
     const size_t y = this->height_ * (13 - this->rank_);
     const size_t x =
         (this->suit_ == suit::club)    ?  0 :

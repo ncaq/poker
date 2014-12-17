@@ -13,15 +13,9 @@ void event_manager::play()
         field.deal(poker.hand());
     }
 
-    {
-        auto selected = field.selected_array_IO();
-        poker.exchange(selected);
-        field.deal(poker.hand());
-    }
-
     field.draw();
 
-    const std::string message_to_wait = "please push any key to exit:";
+    const std::string message_to_wait = "press any key to exit:";
     auto message_win = nctk::new_window(1, message_to_wait.size(), getmaxy(stdscr) - 1, 0);
     message_win.echo(message_to_wait);
 

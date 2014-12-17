@@ -9,7 +9,7 @@
 namespace nctk
 {
     template <typename T>
-    class box
+    class box                   // 後から見ると分離したのは間違いだったので,廃止予定
     {
     public:
         box(const T& c, const size_t y, const size_t x)
