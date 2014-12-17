@@ -12,11 +12,23 @@ namespace nctk
         delwin(window_ptr_);
     }
 
-    void basic_window::add_string(const std::string& str)
+    void basic_window::echo(const std::string& str)
     {
         wclear(*this);
         wrefresh(*this);
         waddstr(*this, str.data());
+        wrefresh(*this);
+    }
+
+    void basic_window::clear()
+    {
+        wclear(*this);
+        wrefresh(*this);
+    }
+
+    char basic_window::get_char()
+    {
+        return wgetch(*this);
     }
 
     basic_window::operator WINDOW*()

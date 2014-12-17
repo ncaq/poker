@@ -17,10 +17,19 @@ namespace nctk
         {
         }
 
+        box(const box<T>& take)
+            :contents_(take.contents_), draw_area_(new new_window(contents_.height(), contents_.width(), take.draw_area_->y(), take.draw_area_->x()))
+        {
+        }
+
         void draw()const
         {
-            draw_area_->add_string(contents_.to_string());
-            wrefresh(*draw_area_);
+            draw_area_->echo(contents_.to_string());
+        }
+
+        void clear()const
+        {
+            draw_area_->clear();
         }
 
         void moving_draw(const size_t y, const size_t x) // todo: 同時に移動できるように書き換えます
@@ -76,7 +85,7 @@ namespace nctk
                     }
                 }
                 this->draw();
-                usleep(100000);
+                usleep(10000);
             }
         }
 

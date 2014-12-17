@@ -19,7 +19,7 @@ namespace nctk
         }
         size_t width()const
         {
-            return 11;
+            return 12;          // + '\n'
         }
 
     private:
@@ -31,75 +31,90 @@ namespace nctk
     class box_cursors
     {
     public:
-        box_cursors()
+        box_cursors(const std::vector<box<T>>& hs)
             :hover_cursor_(0)
-        {};
-        
-        void bind(const std::vector<box<T>>& h)
         {
-            std::copy(h.begin(), h.end(), this->hand_.end());
+            for(const auto& h : hs)
+            {
+                hand_.push_back(std::make_pair(&h, false));
+            }
         }
 
-        void draw()
+        void draw()const
         {
-            for(size_t i = 0; i < hand_.size(); ++i)
+            for(const auto& h : hand_)
             {
-                if(std::find(selected_.begin(), selected_.end(), i) != selected_.end())
+                if(h.second)
                 {
-                    hand_.at(i).make_under(arrow()).draw();
+                    h.first->make_under(arrow()).draw();
+                }
+                else
+                {
+                    h.first->make_under(arrow()).clear();
                 }
             }
-            if(!hand_.empty())
-            {                
-                hand_.at(hover_cursor_).make_under(arrow()).draw();
+            if(hover_cursor_ < hand_.size())
+            {
+                hand_.at(hover_cursor_).first->make_under(arrow()).draw();
             }
         }
 
         void toggle()
         {
-            auto may_found = std::find(selected_.begin(), selected_.end(), this->hover_cursor_);
-            if(may_found == selected_.end()) // 未登録
+            if(hand_.at(hover_cursor_).second) // 登録済み
             {
-                selected_.push_back(this->hover_cursor_);
+                hand_.at(hover_cursor_).second = false;
             }
             else
             {
-                selected_.erase(may_found);
+                hand_.at(hover_cursor_).second = true;
             }
         }
 
         void shift_to_right()
         {
-            if(hover_cursor_ <= hand_.size())
+            if(hover_cursor_ < hand_.size() - 1)
             {
-                hover_cursor_ = 0;
+                ++hover_cursor_;
             }
             else
             {
-                ++hover_cursor_;
+                hover_cursor_ = 0;
             }
         }
 
         void shift_to_left()
         {
-            if(0 <= hover_cursor_)
-            {
-                hover_cursor_ = hand_.size() - 1;
-            }
-            else
+            if(0 < hover_cursor_)
             {
                 --hover_cursor_;
             }
+            else
+            {
+                hover_cursor_ = hand_.size() - 1;
+            }
         }
 
-        std::vector<size_t> selected()
+        bool is_selected(const size_t index)const
         {
-            return this->selected_;
+            return this->selected_.at(index);
+        }
+
+        std::vector<bool> selected_array()const
+        {
+            std::vector<bool> result;
+            std::transform(hand_.begin(), hand_.end(), std::back_inserter(result),
+                           [](const may_select_box m)
+                           {
+                               return m.second;
+                           });
+            return result;
         }
 
     private:
-        const std::vector<box<T>> hand_;
-        std::vector<size_t> selected_;
+        using selected = bool;
+        using may_select_box = std::pair<const box<T>*, selected>;
+        std::vector<may_select_box> hand_;
         size_t hover_cursor_;
     };
 }

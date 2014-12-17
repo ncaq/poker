@@ -12,7 +12,9 @@ namespace nctk
 
         virtual ~basic_window() = 0;
 
-        void add_string(const std::string& str);
+        void echo(const std::string& str);
+        void clear();
+        char get_char();
 
         operator WINDOW*();
 

@@ -13,12 +13,15 @@ public:
 
     void draw();
 
-    void deal(const std::vector<card>& cs);
-    void push(const card& c);
-    std::vector<size_t> get_selected_index_IO();
+    void deal(const std::vector<card>& cs); // todo: 引数をstd::vector<box<card>>&に変更
+    std::vector<bool> selected_array_IO();
 
 private:
+    void push(const card& c);
+    void swap(const card& c, const size_t index); // todo:
+    
     nctk::box<undefined_card> deck_area_; // ハリボテ
     std::vector<nctk::box<card>> hand_area_;
-    nctk::box_cursors<card> cursors_;
 };
+
+void test_selected_array_IO();

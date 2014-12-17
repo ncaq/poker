@@ -21,7 +21,7 @@ card::card(const suit s, const size_t r)
     this->view_   = sprite_.split(height_, width_, y, x);
 }
 
-bool card::operator<(const card& take)
+bool card::operator<(const card& take)const
 {
     if(this->rank_ == take.rank_)
     {
@@ -33,6 +33,16 @@ bool card::operator<(const card& take)
         const size_t take_rotated_rank = (take. rank_ == 1) ? 14 : take. rank_;
         return this_rotated_rank < take_rotated_rank;
     }
+}
+
+card::card(const card& take)
+    :suit_(take.suit_), rank_(take.rank_), height_(take.height_), width_(take.width_), view_(take.view_)
+{
+}
+
+bool card::operator==(const card& take)const
+{
+    return this->suit_ == take.suit_ && this->rank_ == take.rank_;
 }
 
 std::string card::to_string()const

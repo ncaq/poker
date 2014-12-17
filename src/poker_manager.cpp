@@ -28,6 +28,7 @@ void poker_manager::deal(const size_t limit)
         hand_.push_back(deck_.back());
         deck_.pop_back();
     }
+    std::sort(hand_.begin(), hand_.end());
 }
 
 void poker_manager::init_deal()
@@ -35,20 +36,44 @@ void poker_manager::init_deal()
     deal(5);
 }
 
-void poker_manager::exchange(const std::vector<size_t>& selected)
+void poker_manager::exchange(const std::vector<bool>& selected)
 {
     std::vector<card> stash;
-    for(size_t i = 0; i < selected.size(); ++i)
+    const size_t changed_size = std::count(selected.begin(), selected.end(), true);
+    std::move(deck_.begin(), deck_.begin() + changed_size, std::back_inserter(stash));
+    deck_.erase(deck_.begin(), deck_.begin() + changed_size);
+
+    auto stock_top = stash.begin();           // 山札のトップ
+    for(size_t hand_index = 0; hand_index < selected.size(); ++hand_index)
     {
-        stash.push_back(deck_.front());
-        deck_.pop_front();
+        if(selected.at(hand_index))
+        {
+            std::swap(hand_.at(hand_index), *stock_top);
+            ++stock_top;
+        }
     }
-    for(auto exchange_iterator = selected.begin(); exchange_iterator != selected.end(); ++exchange_iterator)
-    {
-        std::swap(hand_.at(*exchange_iterator), stash.at(std::distance(selected.begin(), exchange_iterator)));
-    }
-    for(auto s : stash)
-    {
-        deck_.push_back(s);
+    std::copy(stash.begin(), stash.end(), std::back_inserter(deck_));
+    std::sort(hand_.begin(), hand_.end());
+}
+
+std::vector<card> poker_manager::hand()const
+{
+    return hand_;
+}
+
+#include <cassert>
+
+void test_exchange()
+{
+    poker_manager p;
+    p.init_deal();
+    for(size_t i = 0; i < 5; ++i)
+    {        
+        std::vector<bool> s = {false, false, false, false, false};
+        s.at(i) = true;
+        auto old_hand = p.hand();
+        p.exchange(s);
+        auto new_hand = p.hand();
+        assert(!(old_hand.at(i) == new_hand.at(i)));
     }
 }

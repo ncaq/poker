@@ -1,7 +1,7 @@
 #include "curses_field.hpp"
 
 curses_field::curses_field()
-    :deck_area_(undefined_card(), 0, 0), cursors_()
+    :deck_area_(undefined_card(), 0, 0)
 {
 }
 
@@ -12,11 +12,12 @@ void curses_field::draw()
     {
         h.draw();
     }
-    cursors_.draw();
 }
 
 void curses_field::deal(const std::vector<card>& cs)
 {
+    hand_area_.clear();
+
     for(const auto& c : cs)
     {
         this->push(c);
@@ -37,21 +38,45 @@ void curses_field::push(const card& c)
     }
 }
 
-std::vector<size_t> curses_field::get_selected_index_IO ()
+std::vector<bool> curses_field::selected_array_IO()
 {
+    nctk::box_cursors<card> cursors(hand_area_);
     int key;
+    nctk::new_window form(1, 1, getmaxy(stdscr), 0);
+    keypad(form, true);
     do
     {
-        key = getch();
-        if(key == KEY_RIGHT)
-        {
-            cursors_.shift_to_right();
-        }
-        else if(key == KEY_LEFT)
-        {
-            cursors_.shift_to_left();
-        }
         this->draw();
-    }while(key == KEY_ENTER);
-    return cursors_.selected();
+        cursors.draw();
+
+        key = form.get_char();
+
+        if(key == 5)             // right
+        {
+            cursors.shift_to_right();
+        }
+        else if(key == 4)       // left
+        {
+            cursors.shift_to_left();
+        }
+        else if(key == 3)        // up
+        {
+            cursors.toggle();
+        }
+    }while(key != '\n');
+    return cursors.selected_array();
+}
+
+void test_selected_array_IO()
+{
+    curses_field field;
+    field.deal({card(suit::spade, 1)});
+
+    std::string buffer;
+    for(auto c : field.selected_array_IO())
+    {
+        buffer += std::to_string(c);
+    }
+    nctk::new_window(1, 20, 40, 0).echo(buffer);
+    usleep(1000000);
 }
