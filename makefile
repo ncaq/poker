@@ -16,7 +16,7 @@ run: all
 	./poker
 
 clean:
-	$(RM) $(OBJS) $(DEPS) $(programname)
+	find . -regextype posix-extended -regex '.*\.(o|deps)'|xargs $(RM) $(programname)
 
 program: $(DEPS) $(OBJS)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(programname) $(OBJS)
