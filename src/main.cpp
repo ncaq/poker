@@ -4,8 +4,6 @@
 #include <iostream>
 #include <unistd.h>
 
-using namespace std;
-
 int main()
 {
     setlocale(LC_ALL, "");
@@ -19,10 +17,28 @@ int main()
     }
     catch(const std::exception& e)
     {
-        cerr                                 << "exception: "                                << typeid(e).name() << endl << e.what() << endl;
-        ofstream("error.log", std::ios::app) << "exception( " << time << "): "  << std::endl << typeid(e).name() << endl << e.what() << endl;
+        std::cerr << "exception: " << typeid(e).name() << std::endl
+                  << e.what() << std::endl;
 
-        sleep(1);
+        auto lvalue_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+        std::ofstream("error.log", std::ios::app)
+            << std::ctime(&lvalue_time) << ": "  << std::endl
+            << typeid(e).name() << std::endl
+            << e.what() << std::endl;
+
+        endwin();
+        throw;
+    }
+    catch(...)
+    {
+        std::cerr << "exception: " << std::endl
+                  << "unclear error" << std::endl;
+
+        auto lvalue_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+        std::ofstream("error.log", std::ios::app)
+            << std::ctime(&lvalue_time) << ": " << std::endl
+            << "unclear error" << std::endl;
+
         endwin();
         throw;
     }
