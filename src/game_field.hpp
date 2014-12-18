@@ -1,10 +1,11 @@
 #pragma once
 
-#include "card.hpp"
-#include "nctk/box.hpp"
-#include "nctk/box_cursors.hpp"
-#include "undefined_card.hpp"
-#include <vector>
+#include "card_view.hpp"
+#include "nctk/new_window.hpp"
+#include "nctk/window_selecter_horizontally.hpp"
+#include "undefined_card_view.hpp"
+#include <deque>
+#include <memory>
 
 class game_field
 {
@@ -13,15 +14,15 @@ public:
 
     void draw();
 
-    void deal(const std::vector<card>& cs); // todo: 引数をstd::vector<card>&に変更, rename to reset
-    std::vector<bool> selected_array_IO();
+    void reset(const std::deque<std::shared_ptr<card> >& cs);
+    std::deque<bool> selected_array_IO();
 
 private:
-    void push(const card& c);
+    void push(const std::shared_ptr<card>& c);
     void swap(const card& c, const size_t index); // todo:
-    
-    nctk::box<undefined_card> deck_area_; // ハリボテ
-    std::vector<nctk::box<card>> hand_area_; // 手札
+
+    undefined_card_view deck_area_; // ハリボテ
+    std::deque<std::shared_ptr<card_view> > hand_area_; // 手札
     nctk::new_window description_;            // 操作説明
 };
 

@@ -15,7 +15,7 @@ namespace nctk
 
         const debug_console& operator<<(const std::string& message)const // todo: iostream的にする
         {
-            window->echo(message);
+            window->set_contents(message).draw();
             std::ofstream("error.log", std::ios::app) << "debug_console( " << time << "): " << message << std::endl;
             return *this;
         }

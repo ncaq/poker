@@ -1,61 +1,60 @@
 #pragma once
 
-#include "box.hpp"
+#include "new_window.hpp"
 #include <fstream>
-#include <vector>
+#include <deque>
 
 namespace nctk
 {
-    class arrow
+    class arrow_view : public new_window
     {
     public:
-        std::string to_string()const
+        arrow_view(const size_t y, const size_t x)
+            : new_window::new_window(6, 12, y, x)
         {
-            return view_;
+            this->set_contents(immutable_contents_);
         }
-        size_t height()const
-        {
-            return 6;
-        }
-        size_t width()const
-        {
-            return 12;          // + '\n'
-        }
-
+        
     private:
         static std::ifstream ifs;
-        static std::string view_;
+        static const std::string immutable_contents_;
     };
     
     template <typename T>
-    class box_cursors
+    class window_selecter_horizontally
     {
     public:
-        box_cursors(const std::vector<box<T>>& hs)
+        window_selecter_horizontally(const std::deque<std::shared_ptr<T> >& hs)
             :hover_cursor_(0)
         {
             for(const auto& h : hs)
             {
-                hand_.push_back(std::make_pair(&h, false));
+                hand_.push_back(std::make_pair(h, false));
             }
         }
 
         void draw()const
         {
+            auto make_arrow_view =
+                [this](const size_t y, const size_t x)
+                {
+                    return std::make_shared<arrow_view>(y, x);
+                };
             for(const auto& h : hand_)
             {
+                auto under_area = h.first->make_under(make_arrow_view);
                 if(h.second)
                 {
-                    h.first->make_under(arrow()).draw();
+                    under_area->draw();
                 }
                 else
                 {
-                    h.first->make_under(arrow()).clear();
+                    under_area->clear();
                 }
             }
             if(hover_cursor_ < hand_.size())
             {
-                hand_.at(hover_cursor_).first->make_under(arrow()).draw();
+                hand_.at(hover_cursor_).first->make_under(make_arrow_view)->draw();
             }
         }
 
@@ -100,9 +99,9 @@ namespace nctk
             return this->selected_.at(index);
         }
 
-        std::vector<bool> selected_array()const
+        std::deque<bool> selected_array()const
         {
-            std::vector<bool> result;
+            std::deque<bool> result;
             std::transform(hand_.begin(), hand_.end(), std::back_inserter(result),
                            [](const may_select_box m)
                            {
@@ -113,8 +112,8 @@ namespace nctk
 
     private:
         using selected = bool;
-        using may_select_box = std::pair<const box<T>*, selected>;
-        std::vector<may_select_box> hand_;
+        using may_select_box = std::pair<const std::shared_ptr<T>, selected>;
+        std::deque<may_select_box> hand_;
         size_t hover_cursor_;
     };
 }

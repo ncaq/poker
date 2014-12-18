@@ -1,27 +1,27 @@
-#include "poker_manager.hpp"
+#include "game_manager.hpp"
 #include <algorithm>
 #include <random>
 
-poker_manager::poker_manager()
+game_manager::game_manager()
 {
-    auto push_card = [this](const suit s)
+    auto push_card = [this](const suit_t s)
         {
             for(size_t r = 1; r <= 13; ++r)
             {
-                this->deck_.push_back(card(s, r));
+                this->deck_.push_back(std::make_shared<card>(s, r));
             }
         };
-    push_card(suit::spade);
-    push_card(suit::heart);
-    push_card(suit::club);
-    push_card(suit::diamond);
+    push_card(suit_t::spade);
+    push_card(suit_t::heart);
+    push_card(suit_t::club);
+    push_card(suit_t::diamond);
 
     std::random_device init_seed;
     std::shuffle(this->deck_.begin(), this->deck_.end(), std::mt19937(init_seed()));
     // std::random_shuffleはstd::rand()使ってるのでC++14から非推奨になる
 }
 
-void poker_manager::deal(const size_t limit)
+void game_manager::deal(const size_t limit)
 {
     for(size_t i = 0; i < limit && !deck_.empty(); ++i)
     {
@@ -31,14 +31,14 @@ void poker_manager::deal(const size_t limit)
     std::sort(hand_.begin(), hand_.end());
 }
 
-void poker_manager::init_deal()
+void game_manager::init_deal()
 {
     deal(5);
 }
 
-void poker_manager::exchange(const std::vector<bool>& selected)
+void game_manager::exchange(const std::deque<bool>& selected)
 {
-    std::vector<card> stash;
+    std::deque<std::shared_ptr<card> > stash;
     const size_t changed_size = std::count(selected.begin(), selected.end(), true);
     std::move(deck_.begin(), deck_.begin() + changed_size, std::back_inserter(stash));
     deck_.erase(deck_.begin(), deck_.begin() + changed_size);
@@ -48,7 +48,7 @@ void poker_manager::exchange(const std::vector<bool>& selected)
     {
         if(selected.at(hand_index))
         {
-            std::swap(hand_.at(hand_index), *stock_top);
+            hand_.at(hand_index).swap(*stock_top);
             ++stock_top;
         }
     }
@@ -56,7 +56,7 @@ void poker_manager::exchange(const std::vector<bool>& selected)
     std::sort(hand_.begin(), hand_.end());
 }
 
-std::vector<card> poker_manager::hand()const
+std::deque<std::shared_ptr<card> > game_manager::hand()const
 {
     return hand_;
 }
@@ -65,11 +65,11 @@ std::vector<card> poker_manager::hand()const
 
 void test_exchange()
 {
-    poker_manager p;
+    game_manager p;
     p.init_deal();
     for(size_t i = 0; i < 5; ++i)
     {        
-        std::vector<bool> s = {false, false, false, false, false};
+        std::deque<bool> s = {false, false, false, false, false};
         s.at(i) = true;
         auto old_hand = p.hand();
         p.exchange(s);
