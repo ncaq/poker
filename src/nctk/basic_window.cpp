@@ -2,8 +2,8 @@
 
 namespace nctk
 {
-    basic_window::basic_window(WINDOW* win, const size_t lines, const size_t cols, const size_t y, const size_t x)
-        :window_ptr_(win), height_(lines), width_(cols), y_(y), x_(x)
+    basic_window::basic_window(WINDOW* win)
+        :window_ptr_(win)
     {
     }
 
@@ -36,42 +36,43 @@ namespace nctk
         return window_ptr_;
     }
 
-    void basic_window::yx(const size_t y, const size_t x)
+    basic_window::operator const WINDOW*()const
     {
-        y_ = y;
-        x_ = x;
-        mvwin(*this, y_, x_);
-    }
-        
-    size_t basic_window::y(const size_t n)
-    {
-        yx(n, x_);
-        return y_;
+        return window_ptr_;
     }
 
-    size_t basic_window::x(const size_t n)
+    void basic_window::yx(const size_t y, const size_t x)
     {
-        yx(y_, n);
-        return x_;
+        mvwin(*this, y, x);
     }
-    
+
+    void basic_window::y(const size_t y)
+    {
+        this->yx(y, this->x());
+    }
+
+    void basic_window::x(const size_t x)
+    {
+        this->yx(this->y(), x);
+    }
+
     size_t basic_window::y()const
     {
-        return y_;
+        return getbegy(window_ptr_); // Preprocessor Macroなのが原因なのか,型変換効かない
     }
 
     size_t basic_window::x()const
     {
-        return x_;
+        return getbegx(window_ptr_);
     }
 
     size_t basic_window::under()const
     {
-        return y_ + height_;
+        return y() + getmaxy(window_ptr_);
     }
 
     size_t basic_window::right()const
     {
-        return x_ + width_;
+        return x() + getmaxx(window_ptr_);
     }
 }

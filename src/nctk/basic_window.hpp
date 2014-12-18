@@ -8,7 +8,7 @@ namespace nctk
     class basic_window
     {
     public:
-        basic_window(WINDOW* win, const size_t lines, const size_t cols, const size_t y, const size_t x);
+        basic_window(WINDOW* win);
 
         virtual ~basic_window() = 0;
 
@@ -17,10 +17,11 @@ namespace nctk
         char get_char();
 
         operator WINDOW*();
+        operator const WINDOW*()const;
 
         void yx(const size_t y, const size_t x);
-        size_t y(const size_t n);
-        size_t x(const size_t n);
+        void y(const size_t y);
+        void x(const size_t x);
         size_t y()const;
         size_t x()const;
         size_t under()const;
@@ -28,7 +29,5 @@ namespace nctk
 
     private:
         WINDOW* window_ptr_;
-
-        size_t height_, width_, y_, x_;
     };
 }
