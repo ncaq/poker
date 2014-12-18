@@ -20,7 +20,7 @@ int main()
         std::cerr << "exception: " << typeid(e).name() << std::endl
                   << e.what() << std::endl;
 
-        auto lvalue_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+        auto lvalue_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()); // bad know-how
         std::ofstream("error.log", std::ios::app)
             << std::ctime(&lvalue_time) << ": "  << std::endl
             << typeid(e).name() << std::endl
@@ -42,6 +42,5 @@ int main()
         endwin();
         throw;
     }
-    usleep(100000);
     endwin();
 }

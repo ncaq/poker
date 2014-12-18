@@ -13,7 +13,7 @@ public:
 
     void draw();
 
-    void deal(const std::vector<card>& cs); // todo: 引数をstd::vector<box<card>>&に変更
+    void deal(const std::vector<card>& cs); // todo: 引数をstd::vector<card>&に変更, rename to reset
     std::vector<bool> selected_array_IO();
 
 private:
