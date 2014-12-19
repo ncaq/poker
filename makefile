@@ -25,7 +25,7 @@ debug: CXXFLAGS += $(CXXDEBUG)
 debug: $(program)
 
 run: debug
-	./poker
+	./$(program)
 
 clean:
 	find . -regextype posix-extended -iregex '.*\.(o|deps)'|xargs $(RM)
