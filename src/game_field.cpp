@@ -1,5 +1,7 @@
 #include "game_field.hpp"
 #include "nctk/form.hpp"
+#include <numeric>
+#include <unistd.h>
 
 game_field::game_field()
     : deck_area_(0, 0)
@@ -13,14 +15,17 @@ down or enter: done selecting)");
 
 void game_field::draw()
 {
-    // clear();
-    // refresh();
     deck_area_.draw();
-    for(auto&& h : hand_area_)
-    {
-        h->draw();
-    }
     description_.draw();
+    if(!std::accumulate(hand_area_.begin(), hand_area_.end(), true,
+                        [](const bool a, const std::shared_ptr<card_view>& h)
+                        {
+                            return h->draw() && a;
+                        }))
+    {
+        usleep(100000);
+        this->draw();
+    }
 }
 
 void game_field::reset(const std::deque<std::shared_ptr<card> >& cs)
