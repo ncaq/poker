@@ -16,6 +16,8 @@
 a.out
 main
 poker
+*.elf
+*.exe
 
 # Pre compile
 *.gch
