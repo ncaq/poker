@@ -43,7 +43,7 @@ void game_field::push(const std::shared_ptr<card>& c)
     }
     else
     {
-        (*(hand_area_.end() - 2))->move_to_right_while_drawing(*hand_area_.back());
+        (*(hand_area_.end() - 2))->place_other_window_to_right_while_drawing(*hand_area_.back());
     }
 }
 

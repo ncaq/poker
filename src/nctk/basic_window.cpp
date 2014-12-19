@@ -5,7 +5,9 @@
 namespace nctk
 {
     basic_window::basic_window(WINDOW* win)
-        :window_ptr_(win)
+        : window_ptr_(win)
+        , distination_y_(this->y())
+        , distination_x_(this->x())
     {
     }
 
@@ -20,12 +22,13 @@ namespace nctk
         return *this;
     }
     
-    void basic_window::draw()
+    bool basic_window::draw()
     {
         wclear(*this);
         wrefresh(*this);
         waddstr(*this, this->contents_.data());
         wrefresh(*this);
+        return this->increase_moving();
     }
 
     void basic_window::clear()
@@ -91,7 +94,7 @@ namespace nctk
         }
     }
 
-    void basic_window::move_to_right_while_drawing(basic_window& take)const
+    void basic_window::place_other_window_to_right_while_drawing(basic_window& take)const
     {
         take.move_while_drawing(this->y(), this->right());
     }
@@ -159,5 +162,10 @@ namespace nctk
     size_t basic_window::right()const
     {
         return x() + getmaxx(window_ptr_);
+    }
+
+    bool basic_window::increase_moving() // wip
+    {
+        return (this->y() == this->distination_y_ && this->x() == this->distination_x_);
     }
 }
