@@ -9,6 +9,7 @@ class card_view : public nctk::new_window
 {
 public:
     card_view(const std::shared_ptr<const card> base, const size_t y, const size_t x);
+    card_view(const card_view& take) = delete;
 
     bool operator<(const card_view& take)const;
     bool operator==(const card_view& take)const;

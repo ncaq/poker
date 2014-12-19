@@ -8,21 +8,21 @@ card::card(const suit_t s, const size_t r)
 
 bool card::operator<(const card& take)const
 {
-    if(this->rank_ == take.rank_)
+    if(this->rank() == take.rank())
     {
-        return this->suit_ < take.suit_;
+        return this->suit() < take.suit();
     }
     else
     {
-        const size_t this_rotated_rank = (this->rank_ == 1) ? 14 : this->rank_; // 1を14として計算する
-        const size_t take_rotated_rank = (take. rank_ == 1) ? 14 : take. rank_;
+        const size_t this_rotated_rank = (this->rank() == 1) ? 14 : this->rank(); // 1を14として計算する
+        const size_t take_rotated_rank = (take. rank() == 1) ? 14 : take. rank();
         return this_rotated_rank < take_rotated_rank;
     }
 }
 
 bool card::operator==(const card& take)const
 {
-    return this->suit_ == take.suit_ && this->rank_ == take.rank_;
+    return this->suit() == take.suit() && this->rank() == take.rank();
 }
 
 suit_t card::suit()const
@@ -32,5 +32,5 @@ suit_t card::suit()const
 
 size_t card::rank()const
 {
-    return rank_;
+    return this->rank_;
 }

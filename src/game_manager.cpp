@@ -20,7 +20,7 @@ game_manager::game_manager()
     std::shuffle(this->deck_.begin(), this->deck_.end(), std::mt19937(init_seed()));
     // std::random_shuffleはstd::rand()使ってるのでC++14から非推奨になる
 }
-
+#include "nctk/debug_console.hpp"
 void game_manager::deal(const size_t limit)
 {
     for(size_t i = 0; i < limit && !deck_.empty(); ++i)
@@ -28,7 +28,30 @@ void game_manager::deal(const size_t limit)
         hand_.push_back(deck_.back());
         deck_.pop_back();
     }
-    std::sort(hand_.begin(), hand_.end());
+    // std::for_each(hand_.begin(), hand_.end(),
+    //               [](const std::shared_ptr<card> c)
+    //               {
+    //                   nctk::debug_console() << "suit: "
+    //                   + std::to_string(static_cast<size_t>(c->suit()))
+    //                   + ", rank: "
+    //                   + std::to_string(c->rank());
+    //               });
+    // nctk::debug_console() << "sort";
+    
+    std::sort(hand_.begin(), hand_.end(),
+              [](const std::shared_ptr<card> a, const std::shared_ptr<card> b)
+              {
+                  return *a < *b;
+              });
+    
+    // std::for_each(hand_.begin(), hand_.end(),
+    //               [](const std::shared_ptr<card> c)
+    //               {
+    //                   nctk::debug_console() << "suit: "
+    //                   + std::to_string(static_cast<size_t>(c->suit()))
+    //                   + ", rank: "
+    //                   + std::to_string(c->rank());
+    //               });
 }
 
 void game_manager::init_deal()
