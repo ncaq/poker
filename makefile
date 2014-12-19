@@ -4,7 +4,7 @@ CXX			= clang++
 CXXFLAGS	= -Wall -Wextra -std=c++11 -stdlib=libc++ -ggdb
 LDFLAGS		= -lncursesw
 
-SRCS := $(shell ./findcpp.sh)
+SRCS := $(shell find . -iregex ".*\.cpp")
 OBJS := $(SRCS:%.cpp=%.o)
 DEPS := $(SRCS:%.cpp=%.deps)
 
@@ -16,7 +16,7 @@ run: all
 	./poker
 
 clean:
-	find . -regextype posix-extended -regex '.*\.(o|deps)'|xargs $(RM) $(programname)
+	find . -regextype posix-extended -iregex '.*\.(o|deps)'|xargs $(RM) $(programname)
 
 program: $(DEPS) $(OBJS)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(programname) $(OBJS)
