@@ -9,7 +9,6 @@ class card
 {
 public:
     card(const suit_t s, const size_t r);
-    card(const card& take) = delete;
 
     bool operator<(const card& take)const;
     bool operator==(const card& take)const;

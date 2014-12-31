@@ -3,9 +3,10 @@
 
 namespace nctk
 {
-    form::form(const size_t y, const size_t x)
-        : new_window::new_window(1, 0, y, x) // if 0 -> COLS - begin_x.
+    form::form(const std::string& prompt_message)
+        : new_window::new_window(1, 0, getmaxy(stdscr), 0) // if 0 -> COLS - begin_x.
     {
+        this->set_contents(prompt_message);
         keypad(*this, true);
     }
 

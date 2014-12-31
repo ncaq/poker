@@ -1,6 +1,6 @@
 #pragma once
 
-#include "nctk/new_window.hpp"
+#include "../nctk/new_window.hpp"
 #include <string>
 
 class undefined_card_view : public nctk::new_window

@@ -16,18 +16,31 @@ namespace nctk
         operator const WINDOW*()const;
 
         basic_window& set_contents(const std::string& input);
+        void align_window();
         bool draw();
         void clear();
         void move_while_drawing(const size_t to_y, const size_t to_x);
         void place_other_window_to_right_while_drawing(basic_window& take)const;
 
-        char get_char();
+        virtual char get_char();
+        virtual std::string get_string();
 
-        std::shared_ptr<basic_window> make_under(std::function<std::shared_ptr<basic_window>(const size_t, const size_t)> maker);
+        template <typename Window>
+        Window make_under(std::function<Window(const size_t, const size_t)> maker)const
+        {
+            return maker(this->under(), this->x());
+        }
+
+        template <typename Window>
+        Window make_right(std::function<Window(const size_t, const size_t)> maker)const
+        {
+            return maker(this->y(), this->right());
+        }
 
         void yx(const size_t y, const size_t x);
         void y(const size_t y);
         void x(const size_t x);
+        void resize(const size_t h, const size_t w);
         size_t y()const;
         size_t x()const;
         size_t height()const;

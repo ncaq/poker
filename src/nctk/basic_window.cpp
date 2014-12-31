@@ -1,6 +1,9 @@
 #include "basic_window.hpp"
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
 #include <cmath>
 #include <unistd.h>
+#include <vector>
 
 namespace nctk
 {
@@ -20,6 +23,20 @@ namespace nctk
     {
         this->contents_ = input;
         return *this;
+    }
+
+    void basic_window::align_window()
+    {
+        size_t lines, max_column;
+        std::vector<std::string> stash;
+        boost::algorithm::split(stash, contents_, boost::is_any_of("\n"));
+        lines = stash.size();
+        max_column = std::max_element(stash.begin(), stash.end(),
+                                      [](const std::string a, std::string b)
+                                      {
+                                          return a.size() < b.size();
+                                      })->size();
+        resize(lines, max_column);
     }
     
     bool basic_window::draw()
@@ -53,9 +70,11 @@ namespace nctk
         return wgetch(*this);
     }
 
-    std::shared_ptr<basic_window> basic_window::make_under(std::function<std::shared_ptr<basic_window>(const size_t, const size_t)> maker)
+    std::string basic_window::get_string()
     {
-        return maker(this->under(), this->x());
+        char buffer[256] = {};
+        wgetnstr(*this, buffer, 255);
+        return std::string(buffer);
     }
 
     basic_window::operator WINDOW*()
@@ -81,6 +100,11 @@ namespace nctk
     void basic_window::x(const size_t x)
     {
         this->yx(this->y(), x);
+    }
+
+    void basic_window::resize(const size_t h, const size_t w)
+    {
+        wresize(window_ptr_, h, w);
     }
 
     size_t basic_window::y()const

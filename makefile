@@ -28,7 +28,7 @@ run: debug
 	./$(program)
 
 clean:
-	find . -regextype posix-extended -iregex '.*\.(o|deps)'|xargs $(RM)
+	find . -regextype posix-extended -iregex '.*\.(o|deps)'|xargs $(RM) -v
 
 $(program): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $(OBJS)

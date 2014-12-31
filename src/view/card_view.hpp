@@ -1,7 +1,7 @@
 #pragma once
 
-#include "card.hpp"
-#include "nctk/new_window.hpp"
+#include "../model/card.hpp"
+#include "../nctk/new_window.hpp"
 #include <string>
 #include <vector>
 

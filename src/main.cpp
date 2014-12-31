@@ -1,4 +1,4 @@
-#include "event_manager.hpp"
+#include "controller/event_manager.hpp"
 #include <curses.h>
 #include <fstream>
 #include <iostream>

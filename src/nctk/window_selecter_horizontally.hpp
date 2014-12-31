@@ -35,26 +35,26 @@ namespace nctk
 
         void draw()const
         {
-            auto make_arrow_view =
+            std::function<arrow_view(const size_t, const size_t)> make_arrow_view =
                 [this](const size_t y, const size_t x)
                 {
-                    return std::make_shared<arrow_view>(y, x);
+                    return arrow_view(y, x);
                 };
             for(const auto& h : hand_)
             {
                 auto under_area = h.first->make_under(make_arrow_view);
                 if(h.second)
                 {
-                    under_area->draw();
+                    under_area.draw();
                 }
                 else
                 {
-                    under_area->clear();
+                    under_area.clear();
                 }
             }
             if(hover_cursor_ < hand_.size())
             {
-                hand_.at(hover_cursor_).first->make_under(make_arrow_view)->draw();
+                hand_.at(hover_cursor_).first->make_under(make_arrow_view).draw();
             }
         }
 
