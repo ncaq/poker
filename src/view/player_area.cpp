@@ -44,3 +44,8 @@ bool player_area::call()
 {
     return (nctk::form("Do you call? [y/n]:").get_string().at(0) == 'y');
 }
+
+size_t player_area::hand_y_top()const
+{
+    return 18;
+}

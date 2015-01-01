@@ -9,8 +9,8 @@ namespace nctk
 {
     basic_window::basic_window(WINDOW* win)
         : window_ptr_(win)
-        , distination_y_(this->y())
-        , distination_x_(this->x())
+        , distination_y_(getbegy(win)) // コンストラクタに入らないとインスタンス関数は使えない
+        , distination_x_(getbegx(win))
     {
     }
 
@@ -38,7 +38,7 @@ namespace nctk
                                       })->size();
         resize(lines, max_column);
     }
-    
+
     bool basic_window::draw()
     {
         this->clear();
@@ -54,17 +54,17 @@ namespace nctk
         wrefresh(*this);
     }
 
-    void basic_window::move_while_drawing(const size_t distination_y_, const size_t distination_x_)
+    void basic_window::move_while_drawing(const size_t to_y, const size_t to_x)
     {
-        this->distination_y_ = distination_y_;
-        this->distination_x_ = distination_x_;
+        this->distination_y_ = to_y;
+        this->distination_x_ = to_x;
     }
 
     void basic_window::place_other_window_to_right_while_drawing(basic_window& take)const
     {
-        take.move_while_drawing(this->y(), this->right());
+        take.move_while_drawing(this->distination_y_, this->right());
     }
-    
+
     char basic_window::get_char()
     {
         return wgetch(*this);
@@ -109,7 +109,7 @@ namespace nctk
 
     size_t basic_window::y()const
     {
-        return getbegy(window_ptr_); // Preprocessor Macroなのが原因なのか,型変換効かない
+        return getbegy(window_ptr_); // Preprocessor Macroなのが原因なのか,型変換が効かない
     }
 
     size_t basic_window::x()const
@@ -129,15 +129,15 @@ namespace nctk
 
     size_t basic_window::under()const
     {
-        return y() + getmaxy(window_ptr_);
+        return this->distination_y_ + this->height();
     }
 
     size_t basic_window::right()const
     {
-        return x() + getmaxx(window_ptr_);
+        return this->distination_x_ + this->width();
     }
 
-    bool basic_window::increase_moving() // wip
+    bool basic_window::increase_moving()
     {
         const int sy = std::ceil((distination_y_ - this->y()) / 5);
         const int sx = std::ceil((distination_x_ - this->x()) / 5);

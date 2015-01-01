@@ -17,8 +17,8 @@ class poker_mediator
 public:
     poker_mediator(player_area& player_input);
 
-    game_state bet_ante();
     void init_deal();
+    game_state bet_ante();
     void exchange();
     void raise();
     void call();

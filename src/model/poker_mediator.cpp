@@ -24,21 +24,6 @@ poker_mediator::poker_mediator(player_area& player_input)
     // std::random_shuffleはstd::rand()使ってるのでC++14から非推奨になる
 }
 
-game_state poker_mediator::bet_ante()
-{
-    if(player_.pay(ante))
-    {
-        return game_state::ai_win;
-    }
-    pool += ante;
-    if(ai_.pay(ante))
-    {
-        return game_state::player_win;
-    }
-    pool += ante;
-    return game_state::playing;
-}
-
 void poker_mediator::init_deal()
 {
     {
@@ -57,6 +42,21 @@ void poker_mediator::init_deal()
         }
         ai_.init_deal(ai_stash);
     }
+}
+
+game_state poker_mediator::bet_ante()
+{
+    if(player_.pay(ante))
+    {
+        return game_state::ai_win;
+    }
+    pool += ante;
+    if(ai_.pay(ante))
+    {
+        return game_state::player_win;
+    }
+    pool += ante;
+    return game_state::playing;
 }
 
 void poker_mediator::exchange()

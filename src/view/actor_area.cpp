@@ -20,9 +20,9 @@ bool actor_area::draw()
 void actor_area::push(std::shared_ptr<card_view> card)
 {
     hand_.push_back(card);
-    if(hand_.size() <= 1)
+    if(hand_.size() == 1)
     {
-        hand_.at(0)->move_while_drawing(11, 0);
+        hand_.at(0)->move_while_drawing(this->hand_y_top(), 0);
     }
     else
     {
@@ -33,6 +33,11 @@ void actor_area::push(std::shared_ptr<card_view> card)
 void actor_area::clear()
 {
     hand_.clear();
+}
+
+size_t actor_area::hand_y_top()const
+{
+    return 0;
 }
 
 std::deque<std::shared_ptr<card_view> > actor_area::hand()const

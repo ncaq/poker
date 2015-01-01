@@ -14,7 +14,10 @@ public:
 
     bool draw();
     void push(std::shared_ptr<card_view> card);
+    void swap(const std::shared_ptr<card>& c, const size_t index); // todo:
     void clear();
+
+    virtual size_t hand_y_top()const;
 
     std::deque<std::shared_ptr<card_view> > hand()const;
 

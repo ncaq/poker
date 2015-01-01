@@ -7,7 +7,7 @@ endif
 CXX			= clang++
 CXXFLAGS	+= -std=c++11 -stdlib=libc++ -Wall -Wextra -Werror -pipe
 CXXRELEASE	+= -O2 -fomit-frame-pointer #default
-CXXDEBUG	+= -ggdb
+CXXDEBUG	+= -O0 -fno-inline -ggdb
 LDFLAGS		+= -lncursesw
 
 SRCS := $(shell find . -iregex ".*\.cpp")

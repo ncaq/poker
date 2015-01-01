@@ -9,4 +9,6 @@ public:
     std::deque<bool> select_changing_cards();
     size_t raise();
     bool call();
+
+    virtual size_t hand_y_top()const;
 };

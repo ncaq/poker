@@ -20,8 +20,6 @@ public:
     player_area& player_input();
 
 private:
-    void swap(const card& c, const size_t index); // todo:
-
     undefined_card_view deck_area_; // ハリボテ
     player_area player_;
     actor_area ai_;

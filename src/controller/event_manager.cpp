@@ -8,15 +8,25 @@ event_manager::event_manager()
 
 void event_manager::play()
 {
+    poker_.init_deal();
     game_area_.new_game(poker_.player_hand(), poker_.ai_hand());
     game_area_.draw();
 
-    // poker_
-    
-    // const std::string message_to_wait = "press any key to exit:";
-    // auto message_win = nctk::new_window(1, message_to_wait.size(), getmaxy(stdscr) - 1, 0);
-    // message_win.set_contents(message_to_wait).draw();
+    poker_.bet_ante();
+    game_area_.draw();
 
-    // nctk::form form(getmaxy(stdscr) - 1, message_win.right());
-    // form.get_char();
+    poker_.exchange();
+    game_area_.draw();
+
+    poker_.raise();
+    game_area_.draw();
+
+    poker_.call();
+    game_area_.draw();
+
+    poker_.payoff();
+    game_area_.draw();
+
+    nctk::form to_wait("press any key to exit:");
+    to_wait.get_char();
 }

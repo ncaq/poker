@@ -28,13 +28,13 @@ namespace nctk
         template <typename Window>
         Window make_under(std::function<Window(const size_t, const size_t)> maker)const
         {
-            return maker(this->under(), this->x());
+            return maker(this->under(), this->distination_x_);
         }
 
         template <typename Window>
         Window make_right(std::function<Window(const size_t, const size_t)> maker)const
         {
-            return maker(this->y(), this->right());
+            return maker(this->distination_y_, this->right());
         }
 
         void yx(const size_t y, const size_t x);
