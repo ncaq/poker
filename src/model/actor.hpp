@@ -14,6 +14,7 @@ public:
     void init_deal(std::deque<std::shared_ptr<card> > hand);
     void exchange(std::deque<std::shared_ptr<card> > deck);
     bool pay(const size_t size); // true: 金額不足
+    void payoff(const size_t paying_chip);
     poker_hands show_down();
 
     virtual std::deque<bool> select_changing_cards() = 0;
@@ -22,7 +23,6 @@ public:
 
     size_t chip()const;
     size_t pool_chip()const;
-
     std::deque<std::shared_ptr<card> > hand()const;
 
 private:

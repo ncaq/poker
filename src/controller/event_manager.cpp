@@ -1,12 +1,13 @@
-#include "event_observer.hpp"
+#include "../model/poker_mediator.hpp"
 #include "../nctk/form.hpp"
+#include "../view/game_area.hpp"
+#include "event.hpp"
+#include "event_manager.hpp"
 
-event_observer::event_observer()
-    : game_area_()
-    , poker_(game_area_.player_input())
+event_manager::event_manager()
 {}
 
-void event_observer::play()
+void event_manager::play()
 {
     poker_.init_deal();
     game_area_.new_game(poker_.player_hand(), poker_.ai_hand());

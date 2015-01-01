@@ -1,10 +1,6 @@
 #include "../view/player_area.hpp"
 #include "player.hpp"
 
-player::player(player_area& player_input)
-    : player_input_(player_input)
-{}
-
 player::~player(){}
 
 std::deque<bool> player::select_changing_cards()

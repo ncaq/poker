@@ -1,10 +1,10 @@
 #include "../view/player_area.hpp"
+#include "card.hpp"
 #include "poker_mediator.hpp"
 #include <algorithm>
 #include <random>
 
-poker_mediator::poker_mediator(player_area& player_input)
-    : player_(player_input)
+poker_mediator::poker_mediator()
 {
     // 山札にカードを振り分ける
     auto push_card = [this](const suit_t s)
@@ -50,12 +50,10 @@ game_state poker_mediator::bet_ante()
     {
         return game_state::ai_win;
     }
-    pool += ante;
     if(ai_.pay(ante))
     {
         return game_state::player_win;
     }
-    pool += ante;
     return game_state::playing;
 }
 
@@ -99,7 +97,27 @@ void poker_mediator::call()
 
 void poker_mediator::payoff()
 {
-    
+    auto player_hands = player_.show_down()
+        ,ai_hands     = ai_.show_down();
+    if(player_hands == ai_hands)
+    {
+        player_.payoff(player_.pool_chip());
+        ai_.payoff(ai_.pool_chip());
+    }
+    else
+    {
+        auto pool = player_.pool_chip() + ai_.pool_chip();
+        if(player_hands < ai_hands)
+        {
+            player_.payoff(0);
+            ai_.payoff(pool);
+        }
+        else
+        {
+            player_.payoff(pool);
+            ai_.payoff(0);
+        }
+    }
 }
 
 std::deque<std::shared_ptr<card> > poker_mediator::player_hand()const

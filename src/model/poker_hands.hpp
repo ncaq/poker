@@ -22,7 +22,9 @@ class poker_hands
 public:
     poker_hands(const std::deque<std::shared_ptr<card> >& cards);
 
-    bool operator<(const poker_hands& take);
+    bool operator==(const poker_hands& take);
+    bool operator< (const poker_hands& take);
+    bool card_ranking_compare(const poker_hands& take)const;
 
     static poker_hands_type from_cards(const std::deque<std::shared_ptr <card> >& sorted_cards);
 

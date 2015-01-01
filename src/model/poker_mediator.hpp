@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ai.hpp"
-#include "card.hpp"
 #include "player.hpp"
 #include <deque>
 #include <functional>
@@ -10,14 +9,14 @@
 enum class game_state
 {playing, player_win, ai_win};
 
-class player_area;
+class card;
 
 class poker_mediator
 {
 public:
-    poker_mediator(player_area& player_input);
-
+    poker_mediator();
     void init_deal();
+
     game_state bet_ante();
     void exchange();
     void raise();
@@ -31,7 +30,6 @@ private:
     std::deque<std::shared_ptr<card> > deck_;     // 山札
     player player_;
     ai ai_;
-    size_t pool = 0;
 };
 
 constexpr size_t ante = 5;

@@ -45,6 +45,12 @@ bool actor::pay(const size_t size)
     }
 }
 
+void actor::payoff(const size_t paying_chip)
+{
+    chip_ += paying_chip;
+    pool_chip_ = 0;
+}
+
 poker_hands actor::show_down()
 {
     return poker_hands(hand_);

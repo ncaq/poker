@@ -9,17 +9,27 @@ poker_hands::poker_hands(const std::deque<std::shared_ptr<card> >& cards)
     this->type_ = poker_hands::from_cards(sorted_cards_);
 }
 
+bool poker_hands::operator==(const poker_hands& take)
+{
+    return this->card_ranking_compare(take);
+}
+
 bool poker_hands::operator<(const poker_hands& take)
 {
     if(this->type_ == take.type_)
     {
-        return std::lexicographical_compare(this->sorted_cards_.rbegin(), this->sorted_cards_.rend(),
-                                            take. sorted_cards_.rbegin(), take. sorted_cards_.rend());
+        return this->card_ranking_compare(take);
     }
     else
     {
         return this->type_ < take.type_;
     }
+}
+
+bool poker_hands::card_ranking_compare(const poker_hands& take)const
+{
+    return std::lexicographical_compare(this->sorted_cards_.rbegin(), this->sorted_cards_.rend(),
+                                        take. sorted_cards_.rbegin(), take. sorted_cards_.rend());
 }
 
 poker_hands_type poker_hands::from_cards(const std::deque<std::shared_ptr <card> >& sorted_cards)
