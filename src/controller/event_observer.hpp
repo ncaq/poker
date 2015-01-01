@@ -3,10 +3,10 @@
 #include "../model/poker_mediator.hpp"
 #include "../view/game_area.hpp"
 
-class event_manager
+class event_observer
 {
 public:
-    event_manager();
+    event_observer();
 
     void play();
 

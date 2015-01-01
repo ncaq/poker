@@ -1,12 +1,12 @@
-#include "event_manager.hpp"
+#include "event_observer.hpp"
 #include "../nctk/form.hpp"
 
-event_manager::event_manager()
+event_observer::event_observer()
     : game_area_()
     , poker_(game_area_.player_input())
 {}
 
-void event_manager::play()
+void event_observer::play()
 {
     poker_.init_deal();
     game_area_.new_game(poker_.player_hand(), poker_.ai_hand());
