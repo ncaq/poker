@@ -1,10 +1,14 @@
 #include "../view/player_area.hpp"
+#include "ai.hpp"
 #include "card.hpp"
+#include "player.hpp"
 #include "poker_mediator.hpp"
 #include <algorithm>
 #include <random>
 
 poker_mediator::poker_mediator()
+    : player_()
+    , ai_(std::make_shared<ai>())
 {
     // 山札にカードを振り分ける
     auto push_card = [this](const suit_t s)
@@ -24,6 +28,11 @@ poker_mediator::poker_mediator()
     // std::random_shuffleはstd::rand()使ってるのでC++14から非推奨になる
 }
 
+void poker_mediator::set_player_input(std::shared_ptr<player_area> player_input)
+{
+    player_.reset(new player(player_input));
+}
+
 void poker_mediator::init_deal()
 {
     {
@@ -32,7 +41,7 @@ void poker_mediator::init_deal()
         {
             player_stash.push_back(deck_.front());
         }
-        player_.init_deal(player_stash);
+        player_->init_deal(player_stash);
     }
     {
         std::deque<std::shared_ptr<card> > ai_stash;
@@ -40,17 +49,17 @@ void poker_mediator::init_deal()
         {
             ai_stash.push_back(deck_.front());
         }
-        ai_.init_deal(ai_stash);
+        ai_->init_deal(ai_stash);
     }
 }
 
 game_state poker_mediator::bet_ante()
 {
-    if(player_.pay(ante))
+    if(player_->pay(ante))
     {
         return game_state::ai_win;
     }
-    if(ai_.pay(ante))
+    if(ai_->pay(ante))
     {
         return game_state::player_win;
     }
@@ -59,73 +68,73 @@ game_state poker_mediator::bet_ante()
 
 void poker_mediator::exchange()
 {
-    player_.exchange(deck_);
-    ai_.exchange(deck_);
+    player_->exchange(deck_);
+    ai_->exchange(deck_);
 }
 
 void poker_mediator::raise()
 {
-    if(player_.pool_chip() == ai_.pool_chip())
+    if(player_->pool_chip() == ai_->pool_chip())
     {
         return;
     }
-    else if(player_.pool_chip() < ai_.pool_chip())
+    else if(player_->pool_chip() < ai_->pool_chip())
     {
-        player_.raise();
+        player_->raise();
     }
     else
     {
-        ai_.raise();
+        ai_->raise();
     }
 }
 
 void poker_mediator::call()
 {
-    if(player_.pool_chip() == ai_.pool_chip())
+    if(player_->pool_chip() == ai_->pool_chip())
     {
         return;
     }
-    else if(player_.pool_chip() < ai_.pool_chip())
+    else if(player_->pool_chip() < ai_->pool_chip())
     {
-        player_.call();
+        player_->call();
     }
     else
     {
-        ai_.call();
+        ai_->call();
     }
 }
 
 void poker_mediator::payoff()
 {
-    auto player_hands = player_.show_down()
-        ,ai_hands     = ai_.show_down();
+    auto player_hands = player_->show_down()
+        ,ai_hands     = ai_->show_down();
     if(player_hands == ai_hands)
     {
-        player_.payoff(player_.pool_chip());
-        ai_.payoff(ai_.pool_chip());
+        player_->payoff(player_->pool_chip());
+        ai_->payoff(ai_->pool_chip());
     }
     else
     {
-        auto pool = player_.pool_chip() + ai_.pool_chip();
+        auto pool = player_->pool_chip() + ai_->pool_chip();
         if(player_hands < ai_hands)
         {
-            player_.payoff(0);
-            ai_.payoff(pool);
+            player_->payoff(0);
+            ai_->payoff(pool);
         }
         else
         {
-            player_.payoff(pool);
-            ai_.payoff(0);
+            player_->payoff(pool);
+            ai_->payoff(0);
         }
     }
 }
 
 std::deque<std::shared_ptr<card> > poker_mediator::player_hand()const
 {
-    return player_.hand();
+    return player_->hand();
 }
 
 std::deque<std::shared_ptr<card> > poker_mediator::ai_hand()const
 {
-    return ai_.hand();
+    return ai_->hand();
 }

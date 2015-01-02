@@ -1,8 +1,5 @@
 #include "actor.hpp"
 
-actor::actor()
-{};
-
 actor::~actor()
 {};
 

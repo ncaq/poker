@@ -1,33 +1,27 @@
-#include "../model/poker_mediator.hpp"
 #include "../nctk/form.hpp"
-#include "../view/game_area.hpp"
-#include "event.hpp"
 #include "event_manager.hpp"
 
 event_manager::event_manager()
-{}
+    : game_area_(std::make_shared<game_area>())
+    , poker_(std::make_shared<poker_mediator>())
+    , event_scene_(new init_chip())
+{
+    poker_->set_player_input(game_area_->player_input());
+}
 
 void event_manager::play()
 {
-    poker_.init_deal();
-    game_area_.new_game(poker_.player_hand(), poker_.ai_hand());
-    game_area_.draw();
-
-    poker_.bet_ante();
-    game_area_.draw();
-
-    poker_.exchange();
-    game_area_.draw();
-
-    poker_.raise();
-    game_area_.draw();
-
-    poker_.call();
-    game_area_.draw();
-
-    poker_.payoff();
-    game_area_.draw();
 
     nctk::form to_wait("press any key to exit:");
     to_wait.get_char();
+}
+
+std::shared_ptr<game_area> event_manager::gui()
+{
+    return game_area_;
+}
+
+std::shared_ptr<poker_mediator> event_manager::poker()
+{
+    return poker_;
 }

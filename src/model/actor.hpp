@@ -8,7 +8,6 @@
 class actor
 {
 public:
-    actor();
     virtual ~actor() = 0;
 
     void init_deal(std::deque<std::shared_ptr<card> > hand);

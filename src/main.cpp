@@ -1,9 +1,8 @@
-#include "controller/event_observer.hpp"
+#include "controller/event_manager.hpp"
 #include <curses.h>
 #include <fstream>
 #include <iostream>
 #include <unistd.h>
-
 
 int main()
 {

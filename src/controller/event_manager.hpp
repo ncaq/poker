@@ -1,19 +1,19 @@
 #pragma once
 
+#include "../model/poker_mediator.hpp"
+#include "../view/game_area.hpp"
+#include "event.hpp"
 #include <memory>
-
-class game_area;
-class poker_mediator;
-class event;
 
 class event_manager
 {
-    friend event;
-
 public:
     event_manager();
 
     void play();
+
+    std::shared_ptr<game_area> gui();
+    std::shared_ptr<poker_mediator> poker();
 
 private:
     std::shared_ptr<game_area> game_area_;
