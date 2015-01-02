@@ -16,17 +16,19 @@ bool actor_area::draw()
                            return h->draw();
                        });
 }
-
+#include "../nctk/debug_stream.hpp"
 void actor_area::push(std::shared_ptr<card_view> card)
 {
+    static nctk::debug_stream dout;
+    dout << "y: " << card->y() << ", x: " << card->x() << std::endl;
     hand_.push_back(card);
     if(hand_.size() == 1)
     {
-        hand_.at(0)->move_while_drawing(this->hand_y_top(), 0);
+        hand_.front()->move_while_drawing(this->hand_y_top(), 0);
     }
     else
     {
-        (*(hand_.end() - 2))->place_other_window_to_right_while_drawing(*hand_.back());
+        (*(hand_.end() - 2))->place_to_right(*hand_.back());
     }
 }
 

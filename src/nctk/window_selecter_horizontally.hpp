@@ -47,10 +47,6 @@ namespace nctk
                 {
                     under_area.draw();
                 }
-                else
-                {
-                    under_area.clear();
-                }
             }
             if(hover_cursor_ < hand_.size())
             {

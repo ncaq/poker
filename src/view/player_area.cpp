@@ -10,11 +10,11 @@ player_area::player_area(game_area& whole_area_)
 std::deque<bool> player_area::select_changing_cards()
 {
     nctk::window_selecter_horizontally<card_view> cursors(this->hand());
-    int key;
+    int key = 0;
     nctk::form input("");
     do
     {
-        this->draw();
+        this->whole().draw();
         cursors.draw();
 
         key = input.get_char();

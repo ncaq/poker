@@ -19,10 +19,16 @@ namespace nctk
         delwin(window_ptr_);
     }
 
-    basic_window& basic_window::set_contents(const std::string& input)
+    basic_window* basic_window::set_contents(const std::string& input)
     {
         this->contents_ = input;
-        return *this;
+        return this;
+    }
+
+    basic_window* basic_window::add_contents(const std::string& input)
+    {
+        this->contents_ += input;
+        return this;
     }
 
     void basic_window::align_window()
@@ -41,7 +47,6 @@ namespace nctk
 
     bool basic_window::draw()
     {
-        this->clear();
         bool done = this->increase_moving();
         waddstr(*this, this->contents_.data());
         wrefresh(*this);
@@ -60,7 +65,7 @@ namespace nctk
         this->distination_x_ = to_x;
     }
 
-    void basic_window::place_other_window_to_right_while_drawing(basic_window& take)const
+    void basic_window::place_to_right(basic_window& take)const
     {
         take.move_while_drawing(this->distination_y_, this->right());
     }
@@ -139,11 +144,11 @@ namespace nctk
 
     bool basic_window::increase_moving()
     {
-        const int sy = std::ceil((distination_y_ - this->y()) / 5);
-        const int sx = std::ceil((distination_x_ - this->x()) / 5);
+        const int sy = (static_cast<int>(distination_y_) - static_cast<int>(this->y())) / 5;
+        const int sx = (static_cast<int>(distination_x_) - static_cast<int>(this->x())) / 5;
         if(std::signbit(sy))
         {
-            if(distination_y_ < this->y() + sy - 1)
+            if(distination_y_ < this->y() + sy)
             {
                 this->y(this->y() + sy - 1);
             }
@@ -154,7 +159,7 @@ namespace nctk
         }
         else
         {
-            if(this->y() + sy + 1 < distination_y_)
+            if(this->y() + sy < distination_y_)
             {
                 this->y(this->y() + sy + 1);
             }
@@ -165,7 +170,7 @@ namespace nctk
         }
         if(std::signbit(sx))
         {
-            if(distination_x_ < this->x() + sx - 1)
+            if(distination_x_ < this->x() + sx)
             {
                 this->x(this->x() + sx - 1);
             }
@@ -176,7 +181,7 @@ namespace nctk
         }
         else
         {
-            if(this->x() + sx + 1 < distination_x_)
+            if(this->x() + sx < distination_x_)
             {
                 this->x(this->x() + sx + 1);
             }

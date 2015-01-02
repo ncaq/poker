@@ -4,76 +4,81 @@
 
 class event_manager;
 
-class event
+namespace event
 {
-public:
-    virtual ~event() = 0;
-    virtual std::unique_ptr<event> next_event(event_manager& context);
-    virtual std::unique_ptr<event> update(event_manager& context) = 0;
-};
+    class event
+    {
+    public:
+        virtual ~event() = 0;
+        virtual std::unique_ptr<event> next_event(event_manager& context);
 
-class start : public event
-{
-public:
-    virtual std::unique_ptr<event> update(event_manager& context);
-};
+    private:
+        virtual std::unique_ptr<event> update(event_manager& context) = 0;
+    };
 
-class init_chip : public event
-{
-public:
-    virtual std::unique_ptr<event> update(event_manager& context);
-};
+    class start : public event
+    {
+    private:
+        virtual std::unique_ptr<event> update(event_manager& context);
+    };
 
-class init_deal : public event
-{
-public:
-    virtual std::unique_ptr<event> update(event_manager& context);
-};
+    class init_chip : public event
+    {
+    private:
+        virtual std::unique_ptr<event> update(event_manager& context);
+    };
 
-class bet_ante : public event
-{
-public:
-    virtual std::unique_ptr<event> update(event_manager& context);
-};
+    class init_deal : public event
+    {
+    private:
+        virtual std::unique_ptr<event> update(event_manager& context);
+    };
 
-class exchange : public event
-{
-public:
-    virtual std::unique_ptr<event> update(event_manager& context);
-};
+    class bet_ante : public event
+    {
+    private:
+        virtual std::unique_ptr<event> update(event_manager& context);
+    };
 
-class raise : public event
-{
-public:
-    virtual std::unique_ptr<event> update(event_manager& context);
-};
+    class exchange : public event
+    {
+    private:
+        virtual std::unique_ptr<event> update(event_manager& context);
+    };
 
-class call : public event
-{
-public:
-    virtual std::unique_ptr<event> update(event_manager& context);
-};
+    class raise : public event
+    {
+    private:
+        virtual std::unique_ptr<event> update(event_manager& context);
+    };
 
-class payoff : public event
-{
-public:
-    virtual std::unique_ptr<event> update(event_manager& context);
-};
+    class call : public event
+    {
+    private:
+        virtual std::unique_ptr<event> update(event_manager& context);
+    };
 
-class player_win : public event
-{
-public:
-    virtual std::unique_ptr<event> update(event_manager& context);
-};
+    class payoff : public event
+    {
+    private:
+        virtual std::unique_ptr<event> update(event_manager& context);
+    };
 
-class ai_win : public event
-{
-public:
-    virtual std::unique_ptr<event> update(event_manager& context);
-};
+    class player_win : public event
+    {
+    private:
+        virtual std::unique_ptr<event> update(event_manager& context);
+    };
 
-class end : public event
-{
-public:
-    virtual std::unique_ptr<event> update(event_manager& context);
-};
+    class ai_win : public event
+    {
+    private:
+        virtual std::unique_ptr<event> update(event_manager& context);
+    };
+
+    class end : public event
+    {
+    private:
+        virtual std::unique_ptr<event> update(event_manager& context);
+    };
+}

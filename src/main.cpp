@@ -1,7 +1,9 @@
 #include "controller/event_manager.hpp"
+#include "nctk/debug_stream.hpp"
 #include <curses.h>
 #include <fstream>
 #include <iostream>
+#include <string>
 #include <unistd.h>
 
 int main()
@@ -11,34 +13,21 @@ int main()
     try
     {
         initscr();
+        curs_set(0);
 
         event_manager game;
         game.play();
     }
     catch(const std::exception& e)
     {
-        std::cerr << "exception: " << typeid(e).name() << std::endl
-                  << e.what() << std::endl;
-
-        auto lvalue_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()); // bad know-how
-        std::ofstream("error.log", std::ios::app)
-            << std::ctime(&lvalue_time) << ": "  << std::endl
-            << typeid(e).name() << std::endl
-            << e.what() << std::endl;
-
+        nctk::debug_stream() << "exception: " << typeid(e).name() << std::endl
+                             << e.what() << std::endl;
         endwin();
         throw;
     }
     catch(...)
     {
-        std::cerr << "exception: " << std::endl
-                  << "unclear error" << std::endl;
-
-        auto lvalue_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-        std::ofstream("error.log", std::ios::app)
-            << std::ctime(&lvalue_time) << ": " << std::endl
-            << "unclear error" << std::endl;
-
+        nctk::debug_stream() << "unclear error" << std::endl;
         endwin();
         throw;
     }

@@ -22,21 +22,21 @@ void game_area::new_game(const std::deque<std::shared_ptr<card> >& new_player_ha
 
     for(const auto& h : new_player_hand)
     {
-        player_->push(std::make_shared<card_view>(h, deck_area_.under(), deck_area_.x()));
-        player_->draw();
+        player_->push(std::make_shared<card_view>(h, deck_area_.y(), deck_area_.x()));
     }
     for(const auto& h : new_ai_hand)
     {
-        ai_->push(std::make_shared<card_view>(h, 0, deck_area_.x()));
-        ai_->draw();
+        ai_->push(std::make_shared<card_view>(h, deck_area_.y(), deck_area_.x()));
     }
 }
 
 void game_area::draw()
 {
+    usleep(50000);
+    clear();
+    refresh();
     bool moving_is_done = true;
     moving_is_done &= deck_area_.draw() & message_.draw() & player_->draw() & ai_->draw();
-    usleep(50000);
     if(!moving_is_done)
     {
         this->draw();
@@ -47,7 +47,6 @@ void game_area::update_message(const std::string& contents)
 {
     message_.set_contents(contents);
     message_.align_window();
-    message_.draw();
 }
 
 std::shared_ptr<player_area> game_area::player_input()

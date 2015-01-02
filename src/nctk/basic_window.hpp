@@ -15,12 +15,13 @@ namespace nctk
         operator WINDOW*();
         operator const WINDOW*()const;
 
-        basic_window& set_contents(const std::string& input);
+        basic_window* set_contents(const std::string& input);
+        basic_window* add_contents(const std::string& input);
         void align_window();
         bool draw();
         void clear();
         void move_while_drawing(const size_t to_y, const size_t to_x);
-        void place_other_window_to_right_while_drawing(basic_window& take)const;
+        void place_to_right(basic_window& take)const;
 
         virtual char get_char();
         virtual std::string get_string();
@@ -53,7 +54,6 @@ namespace nctk
 
         bool increase_moving();
         size_t distination_y_, distination_x_;
-
         std::string contents_;
     };
 }
