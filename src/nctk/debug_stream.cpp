@@ -3,7 +3,7 @@
 namespace nctk
 {
     debug_streambuf::debug_streambuf()
-        : curses_output_(new_window(0, 0, getmaxy(stdscr) - 10, getmaxx(stdscr) - 20))
+        : curses_output_(0, 0, getmaxy(stdscr) - 10, getmaxx(stdscr) - 20)
         , file_output_("error.log", std::ios::app)
     {
         scrollok(curses_output_, true);
@@ -14,7 +14,7 @@ namespace nctk
         time_stamp_when_first();
         if(c != EOF)
         {
-            curses_output_.add_contents(std::string(1, static_cast<char>(c))); // std::string(繰り返し回数, 文字)
+            curses_output_ += std::string(1, static_cast<char>(c)); // std::string(繰り返し回数, 文字)
             file_output_ << static_cast<char>(c);
         }
         return c;
@@ -24,7 +24,7 @@ namespace nctk
     {
         time_stamp_when_first();
         const std::string message(s, n);
-        curses_output_.add_contents(message);
+        curses_output_ += message;
         file_output_ << message;
         return n;
     }

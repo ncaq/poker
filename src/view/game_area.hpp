@@ -25,5 +25,5 @@ private:
     undefined_card_view deck_area_; // ハリボテ
     std::shared_ptr<player_area> player_;
     std::shared_ptr<actor_area> ai_;
-    nctk::new_window message_;  // その時々の説明を表示するウインドウ
+    nctk::new_window<std::string> message_;  // その時々の説明を表示するウインドウ
 };

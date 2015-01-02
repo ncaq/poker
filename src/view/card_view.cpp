@@ -5,7 +5,7 @@
 #include <iostream>
 
 card_view::card_view(const std::shared_ptr<const card> base, const size_t y, const size_t x)
-    : nctk::new_window(9, 11, y, x)
+    : nctk::new_window<std::string>(9, 11, y, x)
 {
     const size_t split_begin_y = this->height() * (13 - base->rank());
     const size_t split_begin_x =

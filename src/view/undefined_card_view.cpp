@@ -2,7 +2,7 @@
 #include <fstream>
 
 undefined_card_view::undefined_card_view(const size_t y, const size_t x)
-    : new_window::new_window(9, 12, y, x)
+    : new_window(9, 12, y, x)
 {
     this->set_contents(immutable_contents_);
 }

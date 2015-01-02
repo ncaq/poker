@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-class card_view : public nctk::new_window
+class card_view : public nctk::new_window<std::string>
 {
 public:
     card_view(const std::shared_ptr<const card> base, const size_t y, const size_t x);
