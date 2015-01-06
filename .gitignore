@@ -1,31 +1,6 @@
-# Compiled Object files
-*.slo
-*.lo
+# object
 *.o
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-
-# Compiled File
-a.out
-main
-poker
-*.elf
-*.exe
-
-# Pre compile
-*.gch
-*.d
 *.deps
-
-# docments
-ncurses
 
 # gnu global
 GPATH
