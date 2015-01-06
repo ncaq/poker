@@ -14,6 +14,9 @@ public:
     bool operator==(const card& take)const;
     bool operator!=(const card& take)const;
 
+    std::string readable()const;
+    size_t rotated_rank()const; // 1を14として計算する
+
     suit_t suit()const;
     size_t rank()const;
 

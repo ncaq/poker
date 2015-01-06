@@ -8,14 +8,11 @@ event_manager::event_manager()
 void event_manager::play()
 {
     this->init();
-    
-    nctk::form to_wait("press any key to exit:");
-    to_wait.get_char();
 }
 
 void event_manager::init()
 {
-    this->gui_->init_game(this->poker_->player_ptr(), this->poker_->ai_ptr());
+    this->gui_->init_game(this->poker_);
     this->poker_->set_controller(this->gui_->player_input());
 
     this->new_deal(); // c++11ではstd::make_uniqueは使えない
@@ -24,34 +21,12 @@ void event_manager::init()
 void event_manager::new_deal()
 {
     this->gui_->draw();
+    if(this->game_count_ < 3 && !this->poker_->done())
+    {
+        this->poker_->new_deal();
+        this->gui_->new_deal();
 
-    this->poker_->new_deal();
-    this->gui_->new_deal();
-
-    this->bet_ante();
-}
-
-void event_manager::bet_ante()
-{
-    this->gui_->draw();
-    if(this->game_count_ < 5)
-    {            
-        lead winner = this->poker_->bet_ante();
-        if(winner == lead::nothing)
-        {
-            this->exchange();
-        }
-        else
-        {
-            if(winner == lead::player_lead)
-            {
-                this->player_win();
-            }
-        }
-        if(winner == lead::ai_lead)
-        {
-            this->ai_win();
-        }
+        this->bet_ante();
     }
     else
     {
@@ -60,16 +35,27 @@ void event_manager::bet_ante()
         {
             this->half();
         }
-        if(winner == lead::player_lead)
+        else if(winner == lead::player_lead)
         {
             this->player_win();
         }
-        if(winner == lead::ai_lead)
+        else if(winner == lead::ai_lead)
         {
             this->ai_win();
         }
+        else
+        {
+            throw std::range_error("lead is not nothing or player_lead or ai_lead.");
+        }
     }
-    throw std::range_error("lead is not nothing or player_lead or ai_lead.");
+}
+
+void event_manager::bet_ante()
+{
+    this->gui_->draw();
+
+    this->poker_->bet_ante();
+    this->exchange();
 }
 
 void event_manager::exchange()
@@ -113,9 +99,18 @@ void event_manager::payoff(const lead no_fold_actor)
     this->gui_->draw();
 
     this->poker_->payoff(no_fold_actor);
+    this->gui_->report(no_fold_actor);
+
+    this->gui_->draw();
+    nctk::form to_wait("press any key to next game:");
+    to_wait.draw();
+    to_wait.get_char();
+
     ++this->game_count_;
 
-    this->bet_ante();
+    this->gui_->update_message("new game");
+
+    this->new_deal();
 }
 
 void event_manager::player_win()
@@ -148,4 +143,8 @@ void event_manager::half()
 void event_manager::end()
 {
     this->gui_->draw();
+    
+    nctk::form to_wait("press any key to exit:");
+    to_wait.draw();
+    to_wait.get_char();
 }

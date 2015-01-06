@@ -5,20 +5,9 @@
 class ai : public actor
 {
 public:
-    virtual std::deque<bool> select_changing_cards()
-    {
-        return {0, 1};          // todo
-    };
-
-    virtual void raise()
-    {
-        this->pay(5);               // todo
-    }
-
-    virtual bool call(const size_t )
-    {
-        return true;            // todo
-    }
+    virtual std::deque<bool> select_changing_cards();
+    virtual void raise();
+    virtual bool call(const size_t );
 
 private:
 };

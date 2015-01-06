@@ -21,13 +21,15 @@ public:
     void set_controller(std::shared_ptr<player_area> controller);
 
     void new_deal();
-    lead bet_ante();
+    void bet_ante();
     void exchange();
     void raise();
     lead call();
     void payoff(const lead no_fold_actor);
 
-    lead current_lead();
+    lead comp_hand()const;
+    bool done()const;
+    lead current_lead()const;
 
     std::shared_ptr<player> player_ptr()const;
     std::shared_ptr<ai> ai_ptr()const;

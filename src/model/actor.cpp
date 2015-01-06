@@ -4,14 +4,29 @@
 actor::~actor()
 {};
 
-void actor::new_deal(std::deque<std::shared_ptr<card> > hand)
+void actor::new_deal(std::deque<std::shared_ptr<card> >& deck)
 {
-    hand_ = hand;
+    if(hand_.empty())
+    {
+        for(size_t i = 0; i < 5; ++i)
+        {
+            hand_.push_back(deck.front());
+            deck.pop_front();
+        }
+    }
+    else
+    {
+        this->exchange_select_cards(deck, {true, true, true, true, true});
+    }
 }
 
 void actor::exchange(std::deque<std::shared_ptr<card> >& deck)
 {
-    auto selected = this->select_changing_cards();
+    this->exchange_select_cards(deck, this->select_changing_cards());
+}
+
+void actor::exchange_select_cards(std::deque<std::shared_ptr<card> >& deck, const std::deque<bool>& selected)
+{
     std::deque<std::shared_ptr<card> > stash;
     const size_t changed_size = std::count(selected.begin(), selected.end(), true);
     std::move(deck.begin(), deck.begin() + changed_size, std::back_inserter(stash));
@@ -29,17 +44,17 @@ void actor::exchange(std::deque<std::shared_ptr<card> >& deck)
     std::copy(stash.begin(), stash.end(), std::back_inserter(deck));
 }
 
-bool actor::pay(const size_t size)
+void actor::pay(const size_t size)
 {
-    if(*chip_ < size)
+    if(*this->chip_ < size)
     {
-        return true;
+        *this->pool_chip_ += *this->chip_;
+        *this->chip_ = 0;
     }
     else
     {
-        *chip_ -= size;
-        *pool_chip_ += size;
-        return false;
+        *this->chip_ -= size;
+        *this->pool_chip_ += size;
     }
 }
 

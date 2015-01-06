@@ -39,6 +39,7 @@ void actor_area::set_hide_cards(bool hide)
 
 void actor_area::new_deal(const std::shared_ptr<nctk::new_window<std::string> > deck_area)
 {
+    hand_.clear();
     for(const std::shared_ptr<card>& h : this->model()->hand())
     {
         this->push(std::make_shared<card_view>(h, deck_area->y(), deck_area->x(), this->default_hide_setting()));
@@ -85,6 +86,11 @@ void actor_area::adjust_exchange()
         }
     }
     this->sort_hand();
+}
+
+std::string actor_area::show_down()const
+{
+    return model_->show_down().readable();
 }
 
 std::shared_ptr<const actor> actor_area::model()const

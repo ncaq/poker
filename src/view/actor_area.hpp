@@ -20,6 +20,8 @@ public:
     void sort_hand();           // 見栄え重視で挿入ソートする
     void adjust_exchange();
 
+    std::string show_down()const;
+
     virtual bool default_hide_setting()const = 0;
     virtual size_t hand_y_top()const = 0;
 

@@ -32,35 +32,14 @@ void poker_mediator::set_controller(std::shared_ptr<player_area> controller)
 
 void poker_mediator::new_deal()
 {
-    {
-        std::deque<std::shared_ptr<card> > player_stash;
-        for(size_t i = 0; i < 5 && !deck_.empty(); ++i, deck_.pop_front())
-        {
-            player_stash.push_back(deck_.front());
-        }
-        player_->new_deal(player_stash);
-    }
-    {
-        std::deque<std::shared_ptr<card> > ai_stash;
-        for(size_t i = 0; i < 5 && !deck_.empty(); ++i, deck_.pop_front())
-        {
-            ai_stash.push_back(deck_.front());
-        }
-        ai_->new_deal(ai_stash);
-    }
+    player_->new_deal(this->deck_);
+    ai_->new_deal(this->deck_);
 }
 
-lead poker_mediator::bet_ante()
+void poker_mediator::bet_ante()
 {
-    if(player_->pay(ante))
-    {
-        return lead::ai_lead;
-    }
-    if(ai_->pay(ante))
-    {
-        return lead::player_lead;
-    }
-    return lead::nothing;
+    player_->pay(ante);
+    ai_->pay(ante);
 }
 
 void poker_mediator::exchange()
@@ -85,7 +64,7 @@ lead poker_mediator::call()
     {
         if(player_->call(*ai_->pool_chip()))
         {
-            player_->payoff(*player_->chip() - *ai_->chip());
+            player_->pay(*ai_->pool_chip() - *player_->pool_chip());
             return lead::nothing;
         }
         else
@@ -97,7 +76,7 @@ lead poker_mediator::call()
     {
         if(ai_->call(*player_->pool_chip()))
         {
-            ai_->payoff(*ai_->chip() - *player_->chip());
+            ai_->pay(*player_->pool_chip() - *ai_->pool_chip());
             return lead::nothing;
         }
         else
@@ -106,28 +85,36 @@ lead poker_mediator::call()
         }
     }
 }
-
+// #include "../nctk/debug_stream.hpp"
 void poker_mediator::payoff(const lead no_fold_actor)
 {
-    auto pay_to_player = [this](){auto pool = *player_->pool_chip() + *ai_->pool_chip();player_->payoff(pool);ai_->payoff(0);};
-    auto pay_to_ai     = [this](){auto pool = *player_->pool_chip() + *ai_->pool_chip();player_->payoff(0);ai_->payoff(pool);};
+    // static nctk::debug_stream dout;
+    auto pay_to_player = [this](){size_t pool = *player_->pool_chip() + *ai_->pool_chip();player_->payoff(pool);ai_->payoff(0);};
+    auto pay_to_ai     = [this](){size_t pool = *player_->pool_chip() + *ai_->pool_chip();player_->payoff(0);ai_->payoff(pool);};
     if(no_fold_actor == lead::nothing)
-    {        
-        auto player_hands = player_->show_down()
-            ,ai_hands     = ai_->show_down();
-        if(player_hands == ai_hands)
+    {
+        auto high_actor = this->comp_hand();
+        if(high_actor == lead::nothing)
         {
             player_->payoff(*player_->pool_chip());
             ai_->payoff(*ai_->pool_chip());
         }
         else
         {
-            if(ai_hands < player_hands)
+            if(high_actor == lead::player_lead)
             {
+                // dout <<
+                //     "player" << std::endl <<
+                //     "player:" << *player_->pool_chip() << std::endl <<
+                //     "ai: " << *ai_->pool_chip() << std::endl;
                 pay_to_player();
             }
             else
             {
+                // dout <<
+                //     "ai" << std::endl <<
+                //     "player:" << *player_->pool_chip() << std::endl <<
+                //     "ai: " << *ai_->pool_chip() << std::endl;
                 pay_to_ai();
             }
         }
@@ -142,7 +129,35 @@ void poker_mediator::payoff(const lead no_fold_actor)
     }
 }
 
-lead poker_mediator::current_lead()
+lead poker_mediator::comp_hand()const
+{
+    auto player_hands = this->player_->show_down()
+        ,ai_hands     = this->ai_->show_down();
+    if(player_hands == ai_hands)
+    {
+        return lead::nothing;
+    }
+    else
+    {
+        if(ai_hands < player_hands)
+        {
+            return lead::player_lead;
+        }
+        else
+        {
+            return lead::ai_lead;
+        }
+    }
+}
+
+bool poker_mediator::done()const
+{
+    return
+        *this->player_->chip() == 0 ||
+        *this->ai_->chip() == 0;
+}
+
+lead poker_mediator::current_lead()const
 {
     if(*this->player_->chip() == *this->ai_->chip())
     {

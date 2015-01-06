@@ -11,9 +11,10 @@ class actor
 public:
     virtual ~actor() = 0;
 
-    void new_deal(std::deque<std::shared_ptr<card> > hand);
+    void new_deal(std::deque<std::shared_ptr<card> >& deck);
     void exchange(std::deque<std::shared_ptr<card> >& deck);
-    bool pay(const size_t size); // true: 金額不足
+    void exchange_select_cards(std::deque<std::shared_ptr<card> >& deck, const std::deque<bool>& selected);
+    void pay(const size_t size); // true: 金額不足
     void payoff(const size_t paid_chip);
     poker_hands show_down();
     void sort();

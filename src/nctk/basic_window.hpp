@@ -119,7 +119,7 @@ namespace nctk
                                  [](const std::string a, std::string b)
                                  {
                                      return a.size() < b.size();
-                                 })->size());
+                                 })->size() + 1);
         }
 
         size_t y()const
