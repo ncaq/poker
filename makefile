@@ -9,6 +9,7 @@ CXXFLAGS	+= -std=c++11 -stdlib=libc++ -Wall -Wextra -Werror -pipe
 CXXRELEASE	+= -O2 -fomit-frame-pointer #default
 CXXDEBUG	+= -O0 -fno-inline -ggdb
 LDFLAGS		+= -lncursesw
+LDSTATIC	+= -Lncurses-5.9/lib/ -static
 
 SRCS := $(shell find . -iregex ".*\.cpp")
 OBJS := $(SRCS:%.cpp=%.o)
@@ -19,6 +20,7 @@ DEPS := $(SRCS:%.cpp=%.deps)
 .DEFAULT: all
 
 all: CXXFLAGS += $(CXXRELEASE)
+all: LDFLAGS += $(LDSTATIC)
 all: $(program)
 
 debug: CXXFLAGS += $(CXXDEBUG)

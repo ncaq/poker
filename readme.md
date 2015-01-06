@@ -17,5 +17,17 @@
 
 * clang++ (c++11をサポートしたバージョン)
 * libc++ (<codecvt>をサポートしたバージョン)
-* GNUツール(GNU, cygwin ..)
+* boost
+* GNUツール(make, find, sed ..)
 * ncurses
+
+# クレジット
+
+## boost
+
+[Boost Software License](http://www.boost.org/users/license.html)
+
+## ncurses
+
+``` {include="ncurses-5.9/AUTHORS"}
+```
