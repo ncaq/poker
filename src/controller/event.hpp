@@ -6,7 +6,7 @@ class event_manager;
 
 namespace event
 {
-    class event
+    class event                 // Stateパターンを使ってみる
     {
     public:
         virtual ~event() = 0;
@@ -22,13 +22,7 @@ namespace event
         virtual std::unique_ptr<event> update(event_manager& context);
     };
 
-    class init_chip : public event
-    {
-    private:
-        virtual std::unique_ptr<event> update(event_manager& context);
-    };
-
-    class init_deal : public event
+    class new_deal : public event
     {
     private:
         virtual std::unique_ptr<event> update(event_manager& context);

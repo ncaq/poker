@@ -1,13 +1,10 @@
-#include "../view/player_area.hpp"
 #include "ai.hpp"
 #include "card.hpp"
 #include "player.hpp"
 #include "poker_mediator.hpp"
-#include <algorithm>
-#include <random>
 
 poker_mediator::poker_mediator()
-    : player_()
+    : player_(std::make_shared<player>())
     , ai_(std::make_shared<ai>())
 {
     // 山札にカードを振り分ける
@@ -28,12 +25,12 @@ poker_mediator::poker_mediator()
     // std::random_shuffleはstd::rand()使ってるのでC++14から非推奨になる
 }
 
-void poker_mediator::set_player_input(std::shared_ptr<player_area> player_input)
+void poker_mediator::set_controller(std::shared_ptr<player_area> controller)
 {
-    player_.reset(new player(player_input));
+    this->player_->set_controller(controller);
 }
 
-void poker_mediator::init_deal()
+void poker_mediator::new_deal()
 {
     {
         std::deque<std::shared_ptr<card> > player_stash;
@@ -41,7 +38,7 @@ void poker_mediator::init_deal()
         {
             player_stash.push_back(deck_.front());
         }
-        player_->init_deal(player_stash);
+        player_->new_deal(player_stash);
     }
     {
         std::deque<std::shared_ptr<card> > ai_stash;
@@ -49,7 +46,7 @@ void poker_mediator::init_deal()
         {
             ai_stash.push_back(deck_.front());
         }
-        ai_->init_deal(ai_stash);
+        ai_->new_deal(ai_stash);
     }
 }
 
@@ -129,12 +126,12 @@ void poker_mediator::payoff()
     }
 }
 
-std::deque<std::shared_ptr<card> > poker_mediator::player_hand()const
+std::shared_ptr<const player> poker_mediator::player_ptr()const
 {
-    return player_->hand();
+    return this->player_;
 }
 
-std::deque<std::shared_ptr<card> > poker_mediator::ai_hand()const
+std::shared_ptr<const ai> poker_mediator::ai_ptr()const
 {
-    return ai_->hand();
+    return this->ai_;
 }

@@ -4,28 +4,33 @@
 #include <deque>
 #include <memory>
 
+class actor;
 class game_area;
 
 class actor_area
 {
 public:
-    actor_area(game_area& whole_area);
+    actor_area(game_area& whole_area, std::shared_ptr<const actor> m);
     virtual ~actor_area();
 
-    bool draw();
+    virtual bool draw();
+    virtual void set_hide_cards(bool hide);
+    void new_deal(const nctk::new_window<std::string>& deck_area);
     void push(std::shared_ptr<card_view> card);
+    void sort_hand();           // 見栄え重視で挿入ソートする
+    void exchange();
     void swap(const std::shared_ptr<card>& c, const size_t index); // todo:
-    void clear();
 
+    virtual bool default_hide_setting()const;
     virtual size_t hand_y_top()const;
-
-    std::deque<std::shared_ptr<card_view> > hand()const;
 
 protected:
     game_area& whole()const;
+    std::shared_ptr<const actor> model()const;
 
-private:
     std::deque<std::shared_ptr<card_view> > hand_;
 
+private:
     game_area& whole_area_;
+    std::shared_ptr<const actor> model_;
 };

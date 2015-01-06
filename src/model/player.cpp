@@ -1,11 +1,10 @@
 #include "../view/player_area.hpp"
 #include "player.hpp"
 
-player::player(std::shared_ptr<player_area> player_input)
-    : player_input_(player_input)
-{}
-
-player::~player(){}
+void player::set_controller(std::shared_ptr<player_area> controller)
+{
+    this->player_input_ = controller;
+}
 
 std::deque<bool> player::select_changing_cards()
 {

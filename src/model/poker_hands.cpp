@@ -1,3 +1,4 @@
+#include "card.hpp"
 #include "poker_hands.hpp"
 #include <numeric>
 

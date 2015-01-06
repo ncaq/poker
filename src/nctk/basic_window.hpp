@@ -16,10 +16,11 @@ namespace nctk
     class basic_window
     {
     public:
-        basic_window(WINDOW* win)
+        basic_window(WINDOW* win, const std::shared_ptr<ShowAble> init = std::make_shared<ShowAble>())
             : window_ptr_(win)
             , distination_y_(getbegy(win)) // コンストラクタに入らないとインスタンス関数は使えない
             , distination_x_(getbegx(win))
+            , contents_(init)
         {}
 
         virtual ~basic_window()
@@ -27,17 +28,17 @@ namespace nctk
             delwin(window_ptr_);
         }
 
-        void set_reference(const std::shared_ptr<ShowAble>& input)
-        {
-            this->contents_.reset(input);
-        }
-
-        void set_contents(const ShowAble& input)
+        void set_contents(const ShowAble input)
         {
             this->contents_ = std::make_shared<ShowAble>(input);
         }
 
-        bool draw()
+        void set_reference(const std::shared_ptr<ShowAble> input)
+        {
+            this->contents_.reset(input);
+        }
+
+        virtual bool draw()
         {
             bool done = this->increase_moving();
             waddstr(*this, this->show_contents().data());

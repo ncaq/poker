@@ -3,13 +3,13 @@
 #include "game_area.hpp"
 #include "player_area.hpp"
 
-player_area::player_area(game_area& whole_area_)
-    : actor_area::actor_area(whole_area_)
+player_area::player_area(game_area& whole_area, std::shared_ptr<const actor> m)
+    : actor_area(whole_area, m)
 {};
 
 std::deque<bool> player_area::select_changing_cards()
 {
-    nctk::window_selecter_horizontally<card_view> cursors(this->hand());
+    nctk::window_selecter_horizontally<card_view> cursors(this->hand_);
     int key = 0;
     nctk::form input("");
     do
@@ -43,6 +43,19 @@ size_t player_area::raise()
 bool player_area::call()
 {
     return (nctk::form("Do you call? [y/n]:").get_string().at(0) == 'y');
+}
+
+void player_area::set_hide_cards(bool)
+{
+    for(auto& h : this->hand_)
+    {
+        h->set_hide(false);
+    }
+}
+
+bool player_area::default_hide_setting()const
+{
+    return false;
 }
 
 size_t player_area::hand_y_top()const

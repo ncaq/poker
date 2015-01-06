@@ -1,9 +1,10 @@
 #include "actor.hpp"
+#include "card.hpp"
 
 actor::~actor()
 {};
 
-void actor::init_deal(std::deque<std::shared_ptr<card> > hand)
+void actor::new_deal(std::deque<std::shared_ptr<card> > hand)
 {
     hand_ = hand;
 }

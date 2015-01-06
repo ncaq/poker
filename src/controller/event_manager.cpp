@@ -1,4 +1,6 @@
+#include "../model/poker_mediator.hpp"
 #include "../nctk/form.hpp"
+#include "../view/game_area.hpp"
 #include "event.hpp"
 #include "event_manager.hpp"
 
@@ -6,7 +8,6 @@ event_manager::event_manager()
     : game_area_(std::make_shared<game_area>())
     , poker_(std::make_shared<poker_mediator>())
 {
-    poker_->set_player_input(game_area_->player_input());
 }
 
 void event_manager::play()

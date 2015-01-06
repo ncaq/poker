@@ -1,8 +1,9 @@
 #pragma once
 
-#include "../model/poker_mediator.hpp"
-#include "../view/game_area.hpp"
 #include <memory>
+
+class game_area;
+class poker_mediator;
 
 class event_manager
 {

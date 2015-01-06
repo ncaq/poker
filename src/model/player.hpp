@@ -8,8 +8,7 @@ class player_area;
 class player : public actor
 {
 public:
-    player(std::shared_ptr<player_area> player_input);
-    virtual ~player();
+    void set_controller(std::shared_ptr<player_area> controller);
 
     virtual std::deque<bool> select_changing_cards();
     virtual size_t raise();

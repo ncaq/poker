@@ -21,7 +21,7 @@ namespace nctk
     private:
         void time_stamp_when_first();
 
-        new_window<std::string> curses_output_;
+        std::unique_ptr<new_window<std::string> > curses_output_;
         std::ofstream file_output_;
 
         static bool started_;

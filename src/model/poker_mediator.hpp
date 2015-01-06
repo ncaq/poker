@@ -1,8 +1,10 @@
 #pragma once
 
+#include <algorithm>
 #include <deque>
 #include <functional>
 #include <memory>
+#include <random>
 
 enum class game_state
 {playing, player_win, ai_win};
@@ -16,17 +18,17 @@ class poker_mediator
 {
 public:
     poker_mediator();
-    void set_player_input(std::shared_ptr<player_area> player_input);
-    void init_deal();
+    void set_controller(std::shared_ptr<player_area> controller);
 
+    void new_deal();
     game_state bet_ante();
     void exchange();
     void raise();
     void call();
     void payoff();
 
-    std::deque<std::shared_ptr<card> > player_hand()const;
-    std::deque<std::shared_ptr<card> > ai_hand()const;
+    std::shared_ptr<const player> player_ptr()const;
+    std::shared_ptr<const ai> ai_ptr()const;
 
 private:
     std::deque<std::shared_ptr<card> > deck_;     // 山札

@@ -1,8 +1,9 @@
 #pragma once
 
-#include "card.hpp"
 #include <deque>
 #include <memory>
+
+class card;
 
 enum poker_hands_type
 {

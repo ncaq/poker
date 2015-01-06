@@ -3,10 +3,13 @@
 namespace nctk
 {
     debug_streambuf::debug_streambuf()
-        : curses_output_(0, 0, getmaxy(stdscr) - 10, getmaxx(stdscr) - 20)
-        , file_output_("error.log", std::ios::app)
     {
-        scrollok(curses_output_, true);
+        try
+        {
+            curses_output_.reset(new new_window<std::string>(0, 0, getmaxy(stdscr) - 10, getmaxx(stdscr) - 20));
+            file_output_ = std::ofstream("error.log", std::ios::app);
+            scrollok(*curses_output_, true);
+        }catch(...){}
     }
 
     int debug_streambuf::overflow(const int c)
@@ -14,7 +17,10 @@ namespace nctk
         time_stamp_when_first();
         if(c != EOF)
         {
-            curses_output_ += std::string(1, static_cast<char>(c)); // std::string(繰り返し回数, 文字)
+            try                 // endwinしてるような状況だと書き込めない.そこは諦める.
+            {
+                *curses_output_ += std::string(1, static_cast<char>(c)); // std::string(繰り返し回数, 文字)
+            }catch(...){}
             file_output_ << static_cast<char>(c);
         }
         return c;
@@ -24,14 +30,21 @@ namespace nctk
     {
         time_stamp_when_first();
         const std::string message(s, n);
-        curses_output_ += message;
+        try
+        {
+            *curses_output_ += message;
+        }catch(...){}
         file_output_ << message;
         return n;
     }
 
     int debug_streambuf::sync()
     {
-        curses_output_.draw();
+        try
+        {            
+            curses_output_->draw();
+        }catch(...){}
+
         file_output_.flush();
         return 0;
     }

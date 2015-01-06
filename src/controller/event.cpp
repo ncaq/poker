@@ -1,3 +1,5 @@
+#include "../model/poker_mediator.hpp"
+#include "../view/game_area.hpp"
 #include "event.hpp"
 #include "event_manager.hpp"
 
@@ -12,20 +14,17 @@ namespace event
         return std::move(stash);
     }
 
-    std::unique_ptr<event> start::update(event_manager&)
+    std::unique_ptr<event> start::update(event_manager& context)
     {
-        return std::unique_ptr<event>(new init_chip()); // c++11ではstd::make_uniqueはありません
+        context.gui()->init_game(context.poker()->player_ptr(), context.poker()->ai_ptr());
+        context.poker()->set_controller(context.gui()->player_input());
+        return std::unique_ptr<event>(new new_deal()); // c++11ではstd::make_uniqueは使えない
     }
 
-    std::unique_ptr<event> init_chip::update(event_manager&)
+    std::unique_ptr<event> new_deal::update(event_manager& context)
     {
-        return std::unique_ptr<event>(new init_deal());
-    }
-
-    std::unique_ptr<event> init_deal::update(event_manager& context)
-    {
-        context.poker()->init_deal();
-        context.gui()->new_game(context.poker()->player_hand(), context.poker()->ai_hand());
+        context.poker()->new_deal();
+        context.gui()->new_deal();
         return std::unique_ptr<event>(new bet_ante());
     }
 
@@ -53,7 +52,7 @@ namespace event
     std::unique_ptr<event> exchange::update(event_manager& context)
     {
         context.poker()->exchange();
-        // todo: gui
+        context.gui()->exchange();
         return std::unique_ptr<event>(new raise());
     }
 

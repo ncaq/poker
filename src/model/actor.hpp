@@ -1,16 +1,17 @@
 #pragma once
 
-#include "card.hpp"
 #include "poker_hands.hpp"
 #include <deque>
 #include <memory>
+
+class card;
 
 class actor
 {
 public:
     virtual ~actor() = 0;
 
-    void init_deal(std::deque<std::shared_ptr<card> > hand);
+    void new_deal(std::deque<std::shared_ptr<card> > hand);
     void exchange(std::deque<std::shared_ptr<card> > deck);
     bool pay(const size_t size); // true: 金額不足
     void payoff(const size_t paying_chip);

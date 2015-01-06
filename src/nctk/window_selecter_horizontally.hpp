@@ -25,12 +25,10 @@ namespace nctk
     {
     public:
         window_selecter_horizontally(const std::deque<std::shared_ptr<T> >& hs)
-            :hover_cursor_(0)
+            : list_(hs)
+            , selected_(list_.size(), false)
+            , hover_cursor_(0)
         {
-            for(const auto& h : hs)
-            {
-                hand_.push_back(std::make_pair(h, false));
-            }
         }
 
         void draw()const
@@ -40,35 +38,34 @@ namespace nctk
                 {
                     return arrow_view(y, x);
                 };
-            for(const auto& h : hand_)
+            for(size_t i = 0; i < list_.size(); ++i)
             {
-                auto under_area = h.first->make_under(make_arrow_view);
-                if(h.second)
+                if(selected_.at(i))
                 {
-                    under_area.draw();
+                    list_.at(i)->make_under(make_arrow_view).draw();
                 }
             }
-            if(hover_cursor_ < hand_.size())
+            if(hover_cursor_ < list_.size())
             {
-                hand_.at(hover_cursor_).first->make_under(make_arrow_view).draw();
+                list_.at(hover_cursor_)->make_under(make_arrow_view).draw();
             }
         }
 
         void toggle()
         {
-            if(hand_.at(hover_cursor_).second) // 登録済み
+            if(selected_.at(hover_cursor_)) // 登録済み
             {
-                hand_.at(hover_cursor_).second = false;
+                selected_.at(hover_cursor_) = false;
             }
             else
             {
-                hand_.at(hover_cursor_).second = true;
+                selected_.at(hover_cursor_) = true;
             }
         }
 
         void shift_to_right()
         {
-            if(hover_cursor_ < hand_.size() - 1)
+            if(hover_cursor_ < list_.size() - 1)
             {
                 ++hover_cursor_;
             }
@@ -86,7 +83,7 @@ namespace nctk
             }
             else
             {
-                hover_cursor_ = hand_.size() - 1;
+                hover_cursor_ = list_.size() - 1;
             }
         }
 
@@ -97,19 +94,12 @@ namespace nctk
 
         std::deque<bool> selected_array()const
         {
-            std::deque<bool> result;
-            std::transform(hand_.begin(), hand_.end(), std::back_inserter(result),
-                           [](const may_select_box m)
-                           {
-                               return m.second;
-                           });
-            return result;
+            return selected_;
         }
 
     private:
-        using selected = bool;
-        using may_select_box = std::pair<const std::shared_ptr<T>, selected>;
-        std::deque<may_select_box> hand_;
+        const std::deque<std::shared_ptr<T> >& list_;
+        std::deque<bool> selected_;
         size_t hover_cursor_;
     };
 }
