@@ -30,11 +30,12 @@ namespace nctk
 
         void set_reference(const std::shared_ptr<ShowAble> input)
         {
-            this->contents_.reset(input);
+            this->contents_ = input;
         }
 
         virtual bool draw()
         {
+            wclear(*this);
             bool done = this->increase_moving();
             waddstr(*this, this->show_contents().data());
             wrefresh(*this);

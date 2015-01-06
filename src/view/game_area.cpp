@@ -1,5 +1,6 @@
 #include "../model/ai.hpp"
 #include "../model/player.hpp"
+#include "ai_area.hpp"
 #include "game_area.hpp"
 #include "player_area.hpp"
 #include <numeric>
@@ -7,10 +8,11 @@
 
 game_area::game_area()
     : deck_area_(std::make_shared<card_view>(std::make_shared<card>(suit_t::spade, 1), 9, 0))
+    , pool_chip_(0, 0, 10, 13)
     , message_(0, 0, 15, 13)
 {
     deck_area_->set_hide(true);
-    update_message(
+    this->update_message(
         R"(up: select card to change
 right and left: move cursor
 down or enter: done selecting)"); // 初期メッセージは操作説明
@@ -18,18 +20,27 @@ down or enter: done selecting)"); // 初期メッセージは操作説明
 
 void game_area::init_game(std::shared_ptr<player> player_model, std::shared_ptr<ai> ai_model)
 {
-    this->player_ = std::make_shared<player_area>(*this, player_model);
-    this->ai_ = std::make_shared<actor_area>(*this, ai_model);
+    this->player_ = std::make_shared<player_area>(*this, player_model, std::make_shared<nctk::new_window<std::string> >(0, 0, 11, 13));
+    this->ai_ = std::make_shared<ai_area>(*this, ai_model, std::make_shared<nctk::new_window<std::string> >(0, 0, 12, 13));
 }
 
 bool game_area::draw()
 {
-    usleep(50000);
+    usleep(100000);
     clear();
     refresh();
-    return (deck_area_->draw() & message_.draw() & player_->draw() & ai_->draw()) ?
-        true :
-        this->draw();
+    bool done = true;
+    done = deck_area_->draw() && done;
+    done = message_.draw() && done;
+    done = player_->draw() && done;
+    done = ai_->draw() && done;
+    if(done)
+    {        
+        return true;
+    }else
+    {
+        return this->draw();
+    }
 }
 
 void game_area::update_message(const std::string& contents)

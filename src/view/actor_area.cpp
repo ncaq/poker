@@ -2,21 +2,31 @@
 #include "actor_area.hpp"
 #include "game_area.hpp"
 
-actor_area::actor_area(game_area& whole_area, std::shared_ptr<actor> m)
+actor_area::actor_area(game_area& whole_area, std::shared_ptr<actor> m, std::shared_ptr<nctk::new_window<std::string> > chip_notation_area, const std::string& chip_notation)
     : whole_area_(whole_area)
     , model_(m)
-{}
+    , chip_notation_(chip_notation_area)
+{
+    this->chip_notation_->set_contents(chip_notation);
+    this->chip_notation_->align_window();
+    this->chip_ = this->chip_notation_->make_right<std::shared_ptr<nctk::new_window<size_t> > >([](const size_t y, const size_t x){return std::make_shared<nctk::new_window<size_t> >(0, 0, y, x);});
+    this->chip_->set_reference(this->model_->chip());
+    this->chip_->align_window();
+}
 
 actor_area::~actor_area()
 {}
 
 bool actor_area::draw()
 {
-    return std::all_of(this->hand_.begin(), this->hand_.end(),
-                       [](const std::shared_ptr<card_view> h)
-                       {
-                           return h->draw();
-                       });
+    bool result = true;
+    for(auto& h : this->hand_)
+    {        
+        result = h->draw() && result;
+    }
+    result = this->chip_notation_->draw() && result;
+    result = this->chip_->draw() && result;
+    return result;
 }
 
 void actor_area::set_hide_cards(bool hide)
@@ -61,12 +71,10 @@ void actor_area::sort_hand()
     }
     this->model_->sort();       // modelの方もsortしておかないとadjust_exchangeで差分が取れない
 }
-#include "../nctk/debug_stream.hpp"
+
 void actor_area::adjust_exchange()
 {
     auto new_hand = this->model_->hand();
-    static nctk::debug_stream dout;
-    dout << "suit: " << new_hand.at(0)->suit() << ", rank: " << new_hand.at(0)-> rank() << std::endl;;
     for(size_t scaned = 0; scaned < this->hand_.size(); ++scaned)
     {
         auto new_card = std::make_shared<card_view>(new_hand.at(scaned), this->whole().deck_area()->y(), this->whole().deck_area()->x(), this->default_hide_setting());
@@ -77,16 +85,6 @@ void actor_area::adjust_exchange()
         }
     }
     this->sort_hand();
-}
-
-bool actor_area::default_hide_setting()const
-{
-    return true;
-}
-
-size_t actor_area::hand_y_top()const
-{
-    return 0;
 }
 
 game_area& actor_area::whole()const

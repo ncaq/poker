@@ -107,12 +107,12 @@ void poker_mediator::payoff()
         ,ai_hands     = ai_->show_down();
     if(player_hands == ai_hands)
     {
-        player_->payoff(player_->pool_chip());
-        ai_->payoff(ai_->pool_chip());
+        player_->payoff(*player_->pool_chip());
+        ai_->payoff(*ai_->pool_chip());
     }
     else
     {
-        auto pool = player_->pool_chip() + ai_->pool_chip();
+        auto pool = *player_->pool_chip() + *ai_->pool_chip();
         if(player_hands < ai_hands)
         {
             player_->payoff(0);

@@ -5,8 +5,8 @@
 #include <deque>
 #include <memory>
 
-class actor_area;
 class ai;
+class ai_area;
 class player;
 class player_area;
 
@@ -27,6 +27,7 @@ public:
 private:
     std::shared_ptr<card_view> deck_area_; // ハリボテ
     std::shared_ptr<player_area> player_;
-    std::shared_ptr<actor_area> ai_;
+    std::shared_ptr<ai_area> ai_;
+    nctk::new_window<size_t> pool_chip_;
     nctk::new_window<std::string> message_;  // その時々の説明を表示するウインドウ
 };

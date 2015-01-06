@@ -3,8 +3,8 @@
 #include "game_area.hpp"
 #include "player_area.hpp"
 
-player_area::player_area(game_area& whole_area, std::shared_ptr<actor> m)
-    : actor_area(whole_area, m)
+player_area::player_area(game_area& whole_area, std::shared_ptr<actor> m, std::shared_ptr<nctk::new_window<std::string> > chip_area)
+    : actor_area(whole_area, m, chip_area, "player chip: ")
 {};
 
 std::deque<bool> player_area::select_changing_cards()

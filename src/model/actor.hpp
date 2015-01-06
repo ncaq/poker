@@ -22,13 +22,13 @@ public:
     virtual size_t raise() = 0; // 0: raiseしない
     virtual bool call() = 0;
 
-    size_t chip()const;
-    size_t pool_chip()const;
+    std::shared_ptr<size_t> chip()const;
+    std::shared_ptr<size_t> pool_chip()const;
     std::deque<std::shared_ptr<card> > hand()const;
 
 private:
     std::deque<std::shared_ptr<card> > hand_;
 
-    size_t chip_ = 100;
-    size_t pool_chip_ = 0;
+    std::shared_ptr<size_t> chip_ = std::make_shared<size_t>(100);
+    std::shared_ptr<size_t> pool_chip_ = std::make_shared<size_t>(0);
 };
