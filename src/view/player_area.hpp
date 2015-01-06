@@ -9,7 +9,7 @@ public:
 
     virtual std::deque<bool> select_changing_cards();
     virtual size_t raise();
-    virtual bool call();
+    virtual bool call(const size_t ai_pool);
 
     virtual void set_hide_cards(bool);
     virtual bool default_hide_setting()const;

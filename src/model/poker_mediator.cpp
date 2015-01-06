@@ -50,17 +50,17 @@ void poker_mediator::new_deal()
     }
 }
 
-game_state poker_mediator::bet_ante()
+lead poker_mediator::bet_ante()
 {
     if(player_->pay(ante))
     {
-        return game_state::ai_win;
+        return lead::ai_lead;
     }
     if(ai_->pay(ante))
     {
-        return game_state::player_win;
+        return lead::player_lead;
     }
-    return game_state::playing;
+    return lead::nothing;
 }
 
 void poker_mediator::exchange()
@@ -71,58 +71,90 @@ void poker_mediator::exchange()
 
 void poker_mediator::raise()
 {
-    if(player_->pool_chip() == ai_->pool_chip())
-    {
-        return;
-    }
-    else if(player_->pool_chip() < ai_->pool_chip())
-    {
-        player_->raise();
-    }
-    else
-    {
-        ai_->raise();
-    }
+    player_->raise();
+    ai_->raise();
 }
 
-void poker_mediator::call()
+lead poker_mediator::call()
 {
-    if(player_->pool_chip() == ai_->pool_chip())
+    if(*player_->pool_chip() == *ai_->pool_chip())
     {
-        return;
+        return lead::nothing;
     }
-    else if(player_->pool_chip() < ai_->pool_chip())
+    else if(*player_->pool_chip() < *ai_->pool_chip())
     {
-        player_->call();
-    }
-    else
-    {
-        ai_->call();
-    }
-}
-
-void poker_mediator::payoff()
-{
-    auto player_hands = player_->show_down()
-        ,ai_hands     = ai_->show_down();
-    if(player_hands == ai_hands)
-    {
-        player_->payoff(*player_->pool_chip());
-        ai_->payoff(*ai_->pool_chip());
-    }
-    else
-    {
-        auto pool = *player_->pool_chip() + *ai_->pool_chip();
-        if(player_hands < ai_hands)
+        if(player_->call(*ai_->pool_chip()))
         {
-            player_->payoff(0);
-            ai_->payoff(pool);
+            player_->payoff(*player_->chip() - *ai_->chip());
+            return lead::nothing;
         }
         else
         {
-            player_->payoff(pool);
-            ai_->payoff(0);
+            return lead::ai_lead;
         }
+    }
+    else
+    {
+        if(ai_->call(*player_->pool_chip()))
+        {
+            ai_->payoff(*ai_->chip() - *player_->chip());
+            return lead::nothing;
+        }
+        else
+        {
+            return lead::player_lead;
+        }
+    }
+}
+
+void poker_mediator::payoff(const lead no_fold_actor)
+{
+    auto pay_to_player = [this](){auto pool = *player_->pool_chip() + *ai_->pool_chip();player_->payoff(pool);ai_->payoff(0);};
+    auto pay_to_ai     = [this](){auto pool = *player_->pool_chip() + *ai_->pool_chip();player_->payoff(0);ai_->payoff(pool);};
+    if(no_fold_actor == lead::nothing)
+    {        
+        auto player_hands = player_->show_down()
+            ,ai_hands     = ai_->show_down();
+        if(player_hands == ai_hands)
+        {
+            player_->payoff(*player_->pool_chip());
+            ai_->payoff(*ai_->pool_chip());
+        }
+        else
+        {
+            if(ai_hands < player_hands)
+            {
+                pay_to_player();
+            }
+            else
+            {
+                pay_to_ai();
+            }
+        }
+    }
+    else if(no_fold_actor == lead::player_lead)
+    {
+        pay_to_player();
+    }
+    else
+    {
+        pay_to_ai();
+    }
+}
+
+lead poker_mediator::current_lead()
+{
+    if(*this->player_->chip() == *this->ai_->chip())
+    {
+        return lead::nothing;
+    }
+    else if(*this->ai_->chip() < *this->player_->chip())
+    {
+        return lead::player_lead;
+    }
+    else
+    {
+        return lead::ai_lead;
     }
 }
 

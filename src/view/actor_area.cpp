@@ -87,12 +87,12 @@ void actor_area::adjust_exchange()
     this->sort_hand();
 }
 
-game_area& actor_area::whole()const
-{
-    return whole_area_;
-}
-
 std::shared_ptr<const actor> actor_area::model()const
 {
     return model_;
+}
+
+game_area& actor_area::whole()const
+{
+    return whole_area_;
 }

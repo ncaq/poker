@@ -60,6 +60,11 @@ namespace nctk
             return std::string(buffer);
         }
 
+        int get_int()
+        {
+            return boost::lexical_cast<int>(this->get_string());
+        }
+
         void move_while_drawing(const size_t to_y, const size_t to_x)
         {
             this->distination_y_ = to_y;

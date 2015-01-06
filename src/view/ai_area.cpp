@@ -4,7 +4,7 @@
 #include "game_area.hpp"
 
 ai_area::ai_area(game_area& whole_area, std::shared_ptr<actor> m, std::shared_ptr<nctk::new_window<std::string> > chip_area)
-    : actor_area(whole_area, m, chip_area, "ai chip:     ")
+    : actor_area(whole_area, m, chip_area, "ai     chip: ")
 {};
 
 bool ai_area::default_hide_setting()const

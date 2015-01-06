@@ -37,12 +37,51 @@ std::deque<bool> player_area::select_changing_cards()
 
 size_t player_area::raise()
 {
-    return std::stoi(nctk::form("please input raise chip size. [0 <= x <= 20]:").get_string());
+    auto prompt = nctk::form("please input raise chip size. [0 <= x <= 20]:");
+    prompt.draw();
+    int chip_size;
+    try
+    {
+        chip_size = prompt.get_int();
+    }catch(...)
+    {
+        prompt.clear();
+        return this->raise();
+    }
+    if(0 <= chip_size && chip_size <= 20)
+    {
+        return chip_size;
+    }
+    else
+    {
+        prompt.clear();
+        return this->raise();
+    }
 }
 
-bool player_area::call()
+bool player_area::call(const size_t ai_pool)
 {
-    return (nctk::form("Do you call? [y/n]:").get_string().at(0) == 'y');
+    auto prompt = nctk::form("ai bet is " + boost::lexical_cast<std::string>(ai_pool) + "." + "Do you call? [y/n]:");
+    prompt.draw();
+    char answer;
+    try
+    {
+        answer = prompt.get_char();
+    }catch(...)
+    {
+        prompt.clear();
+        return this->call(ai_pool);
+    }
+    if(answer == 'y')
+    {
+        return true;
+    }
+    if(answer == 'n')
+    {
+        return false;
+    }
+    prompt.clear();
+    return this->call(ai_pool);
 }
 
 void player_area::set_hide_cards(bool)

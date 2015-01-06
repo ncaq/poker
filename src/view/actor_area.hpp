@@ -23,9 +23,10 @@ public:
     virtual bool default_hide_setting()const = 0;
     virtual size_t hand_y_top()const = 0;
 
+    std::shared_ptr<const actor> model()const;
+
 protected:
     game_area& whole()const;
-    std::shared_ptr<const actor> model()const;
 
     std::deque<std::shared_ptr<card_view> > hand_;
 

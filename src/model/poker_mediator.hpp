@@ -6,8 +6,8 @@
 #include <memory>
 #include <random>
 
-enum class game_state
-{playing, player_win, ai_win};
+enum class lead
+{nothing, player_lead, ai_lead};
 
 class ai;
 class card;
@@ -21,11 +21,13 @@ public:
     void set_controller(std::shared_ptr<player_area> controller);
 
     void new_deal();
-    game_state bet_ante();
+    lead bet_ante();
     void exchange();
     void raise();
-    void call();
-    void payoff();
+    lead call();
+    void payoff(const lead no_fold_actor);
+
+    lead current_lead();
 
     std::shared_ptr<player> player_ptr()const;
     std::shared_ptr<ai> ai_ptr()const;

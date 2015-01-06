@@ -11,12 +11,12 @@ std::deque<bool> player::select_changing_cards()
     return player_input_->select_changing_cards();
 }
 
-size_t player::raise()
+void player::raise()
 {
-    return player_input_->raise();
+    this->pay(player_input_->raise());
 }
 
-bool player::call()
+bool player::call(const size_t enemy_pool)
 {
-    return player_input_->call();
+    return player_input_->call(enemy_pool);
 }

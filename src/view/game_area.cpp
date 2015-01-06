@@ -26,14 +26,18 @@ void game_area::init_game(std::shared_ptr<player> player_model, std::shared_ptr<
 
 bool game_area::draw()
 {
+    this->pool_chip_.set_contents("pool   chip: " + (boost::lexical_cast<std::string>(*this->player_->model()->pool_chip() + *this->ai_->model()->pool_chip())));
+    this->pool_chip_.align_window();
+
     usleep(100000);
     clear();
     refresh();
     bool done = true;
-    done = deck_area_->draw() && done;
-    done = message_.draw() && done;
-    done = player_->draw() && done;
-    done = ai_->draw() && done;
+    done = this->deck_area_->draw() && done;
+    done = this->player_->draw() && done;
+    done = this->ai_->draw() && done;
+    done = this->message_.draw() && done;
+    done = this->pool_chip_.draw() && done;
     if(done)
     {        
         return true;

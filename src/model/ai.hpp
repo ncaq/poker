@@ -10,12 +10,12 @@ public:
         return {0, 1};          // todo
     };
 
-    virtual size_t raise()
+    virtual void raise()
     {
-        return 5;               // todo
+        this->pay(5);               // todo
     }
 
-    virtual bool call()
+    virtual bool call(const size_t )
     {
         return true;            // todo
     }

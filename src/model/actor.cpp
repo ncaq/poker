@@ -43,9 +43,9 @@ bool actor::pay(const size_t size)
     }
 }
 
-void actor::payoff(const size_t paying_chip)
+void actor::payoff(const size_t paid_chip)
 {
-    *chip_ += paying_chip;
+    *chip_ += paid_chip;
     *pool_chip_ = 0;
 }
 
