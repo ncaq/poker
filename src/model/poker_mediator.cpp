@@ -126,12 +126,12 @@ void poker_mediator::payoff()
     }
 }
 
-std::shared_ptr<const player> poker_mediator::player_ptr()const
+std::shared_ptr<player> poker_mediator::player_ptr()const
 {
     return this->player_;
 }
 
-std::shared_ptr<const ai> poker_mediator::ai_ptr()const
+std::shared_ptr<ai> poker_mediator::ai_ptr()const
 {
     return this->ai_;
 }

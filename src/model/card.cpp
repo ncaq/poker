@@ -25,6 +25,11 @@ bool card::operator==(const card& take)const
     return this->suit() == take.suit() && this->rank() == take.rank();
 }
 
+bool card::operator!=(const card& take)const
+{
+    return this->suit() != take.suit() || this->rank() != take.rank();
+}
+
 suit_t card::suit()const
 {
     return this->suit_;

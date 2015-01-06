@@ -5,7 +5,7 @@
 class player_area : public actor_area
 {
 public:
-    player_area(game_area& whole_area, std::shared_ptr<const actor> m);
+    player_area(game_area& whole_area, std::shared_ptr<actor> m);
 
     virtual std::deque<bool> select_changing_cards();
     virtual size_t raise();

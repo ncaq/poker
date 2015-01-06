@@ -3,7 +3,7 @@
 #include "game_area.hpp"
 #include "player_area.hpp"
 
-player_area::player_area(game_area& whole_area, std::shared_ptr<const actor> m)
+player_area::player_area(game_area& whole_area, std::shared_ptr<actor> m)
     : actor_area(whole_area, m)
 {};
 

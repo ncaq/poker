@@ -17,16 +17,11 @@ namespace nctk
     {
     public:
         basic_window(WINDOW* win, const std::shared_ptr<ShowAble> init = std::make_shared<ShowAble>())
-            : window_ptr_(win)
+            : window_ptr_(win, delwin)
             , distination_y_(getbegy(win)) // コンストラクタに入らないとインスタンス関数は使えない
             , distination_x_(getbegx(win))
             , contents_(init)
         {}
-
-        virtual ~basic_window()
-        {
-            delwin(window_ptr_);
-        }
 
         void set_contents(const ShowAble input)
         {
@@ -104,7 +99,7 @@ namespace nctk
 
         void resize(const size_t h, const size_t w)
         {
-            wresize(window_ptr_, h, w);
+            wresize(window_ptr_.get(), h, w);
         }
 
         void align_window()
@@ -164,12 +159,12 @@ namespace nctk
 
         operator WINDOW*()
         {
-            return window_ptr_;
+            return window_ptr_.get();
         }
 
         operator const WINDOW*()const
         {
-            return window_ptr_;
+            return window_ptr_.get();
         }
 
     private:
@@ -224,7 +219,7 @@ namespace nctk
             return (this->y() == this->distination_y_ && this->x() == this->distination_x_);
         }
 
-        WINDOW* window_ptr_;
+        std::shared_ptr<WINDOW> window_ptr_;
         size_t distination_y_, distination_x_;
         std::shared_ptr<ShowAble> contents_;
     };

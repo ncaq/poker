@@ -6,17 +6,17 @@
 #include <unistd.h>
 
 game_area::game_area()
-    : deck_area_(std::make_shared<card>(suit_t::spade, 1), 9, 0)
+    : deck_area_(std::make_shared<card_view>(std::make_shared<card>(suit_t::spade, 1), 9, 0))
     , message_(0, 0, 15, 13)
 {
-    deck_area_.set_hide(true);
+    deck_area_->set_hide(true);
     update_message(
         R"(up: select card to change
 right and left: move cursor
 down or enter: done selecting)"); // 初期メッセージは操作説明
 }
 
-void game_area::init_game(std::shared_ptr<const player> player_model, std::shared_ptr<const ai> ai_model)
+void game_area::init_game(std::shared_ptr<player> player_model, std::shared_ptr<ai> ai_model)
 {
     this->player_ = std::make_shared<player_area>(*this, player_model);
     this->ai_ = std::make_shared<actor_area>(*this, ai_model);
@@ -27,7 +27,7 @@ bool game_area::draw()
     usleep(50000);
     clear();
     refresh();
-    return (deck_area_.draw() & message_.draw() & player_->draw() & ai_->draw()) ?
+    return (deck_area_->draw() & message_.draw() & player_->draw() & ai_->draw()) ?
         true :
         this->draw();
 }
@@ -48,12 +48,18 @@ void game_area::new_deal()
     while(!this->draw()){}
 }
 
-void game_area::exchange()
+void game_area::adjust_exchange()
 {
-    
+    this->player_->adjust_exchange();
+    this->ai_->adjust_exchange();
 }
 
 std::shared_ptr<player_area> game_area::player_input()
 {
     return player_;
+}
+
+std::shared_ptr<card_view> game_area::deck_area()const
+{
+    return deck_area_;
 }

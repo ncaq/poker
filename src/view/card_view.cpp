@@ -4,9 +4,10 @@
 #include <fstream>
 #include <iostream>
 
-card_view::card_view(const std::shared_ptr<card> base, const size_t y, const size_t x)
+card_view::card_view(const std::shared_ptr<card> base, const size_t y, const size_t x, const bool hide)
     : nctk::new_window<std::string>(9, 11, y, x)
     , model_(base)
+    , hide_(hide)
 {
     const size_t split_begin_y = this->height() * (13 - base->rank());
     const size_t split_begin_x =
@@ -15,18 +16,28 @@ card_view::card_view(const std::shared_ptr<card> base, const size_t y, const siz
         (base->suit() == suit_t::heart)   ? 22 :
         (base->suit() == suit_t::spade)   ? 33 :
         throw std::range_error("suit_t is range out");
-    this->set_contents(this->contents_cache_ = sprite_.split(this->height(), this->width(), split_begin_y, split_begin_x));
-}
 
-void card_view::set_hide(bool hide)
-{
-    if(hide)
+    this->card_contents_cache_ = sprite_.split(this->height(), this->width(), split_begin_y, split_begin_x);
+    if(this->hide_)
     {
         this->set_contents(hide_card_view_);
     }
     else
     {
-        this->set_contents(this->contents_cache_);
+        this->set_contents(this->card_contents_cache_);
+    }
+}
+
+void card_view::set_hide(bool hide)
+{
+    this->hide_ = hide;
+    if(this->hide_)
+    {
+        this->set_contents(hide_card_view_);
+    }
+    else
+    {
+        this->set_contents(this->card_contents_cache_);
     }
 }
 
@@ -38,6 +49,11 @@ bool card_view::operator<(const card_view& take)const
 bool card_view::operator==(const card_view& take)const
 {
     return *this->model_ == *take.model_;
+}
+
+bool card_view::operator!=(const card_view& take)const
+{
+    return *this->model_ != *take.model_;
 }
 
 card_view::image_cell card_view::sprite_ = card_view::image_cell("cards.txt");
@@ -70,6 +86,11 @@ const std::string card_view::hide_card_view_ = std::string(std::istreambuf_itera
 
 void swap(card_view& a, card_view& b, std::function<bool()> draw_callback)
 {
+    {    
+        card_view t = a;
+        a = b;
+        b = t;
+    }
     a.move_while_drawing(b.y(), b.x());
     b.move_while_drawing(a.y(), a.x());
     while(!draw_callback()){}

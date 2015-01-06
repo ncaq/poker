@@ -52,7 +52,7 @@ namespace event
     std::unique_ptr<event> exchange::update(event_manager& context)
     {
         context.poker()->exchange();
-        context.gui()->exchange();
+        context.gui()->adjust_exchange();
         return std::unique_ptr<event>(new raise());
     }
 

@@ -2,7 +2,7 @@
 
 #include <string>
 
-enum class suit_t
+enum suit_t
 {spade, heart, club, diamond};
 
 class card
@@ -12,6 +12,7 @@ public:
 
     bool operator<(const card& take)const;
     bool operator==(const card& take)const;
+    bool operator!=(const card& take)const;
 
     suit_t suit()const;
     size_t rank()const;

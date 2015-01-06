@@ -12,10 +12,11 @@ public:
     virtual ~actor() = 0;
 
     void new_deal(std::deque<std::shared_ptr<card> > hand);
-    void exchange(std::deque<std::shared_ptr<card> > deck);
+    void exchange(std::deque<std::shared_ptr<card> >& deck);
     bool pay(const size_t size); // true: 金額不足
     void payoff(const size_t paying_chip);
     poker_hands show_down();
+    void sort();
 
     virtual std::deque<bool> select_changing_cards() = 0;
     virtual size_t raise() = 0; // 0: raiseしない

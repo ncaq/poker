@@ -9,16 +9,18 @@
 class card_view : public nctk::new_window<std::string>
 {
 public:
-    card_view(const std::shared_ptr<card> base, const size_t y, const size_t x);
+    card_view(const std::shared_ptr<card> base, const size_t y, const size_t x, const bool hide = false);
 
     void set_hide(bool hide);
 
     bool operator<(const card_view& take)const;
     bool operator==(const card_view& take)const;
+    bool operator!=(const card_view& take)const;
 
 private:
     std::shared_ptr<card> model_;
-    std::string contents_cache_;
+    std::string card_contents_cache_;
+    bool hide_;
 
     class image_cell
     {

@@ -27,8 +27,8 @@ public:
     void call();
     void payoff();
 
-    std::shared_ptr<const player> player_ptr()const;
-    std::shared_ptr<const ai> ai_ptr()const;
+    std::shared_ptr<player> player_ptr()const;
+    std::shared_ptr<ai> ai_ptr()const;
 
 private:
     std::deque<std::shared_ptr<card> > deck_;     // 山札

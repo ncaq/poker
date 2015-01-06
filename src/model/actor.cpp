@@ -9,7 +9,7 @@ void actor::new_deal(std::deque<std::shared_ptr<card> > hand)
     hand_ = hand;
 }
 
-void actor::exchange(std::deque<std::shared_ptr<card> > deck)
+void actor::exchange(std::deque<std::shared_ptr<card> >& deck)
 {
     auto selected = this->select_changing_cards();
     std::deque<std::shared_ptr<card> > stash;
@@ -52,6 +52,11 @@ void actor::payoff(const size_t paying_chip)
 poker_hands actor::show_down()
 {
     return poker_hands(hand_);
+}
+
+void actor::sort()
+{
+    std::sort(this->hand_.begin(), this->hand_.end(),[](const std::shared_ptr<card> a, const std::shared_ptr<card>b){return *a < *b;});
 }
 
 size_t actor::chip()const
