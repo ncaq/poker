@@ -124,22 +124,22 @@ namespace nctk
 
         size_t y()const
         {
-            return getbegy(window_ptr_); // Preprocessor Macroなのが原因なのか,型変換が効かない
+            return getbegy(window_ptr_.get()); // Preprocessor Macroなのが原因なのか,型変換が効かない
         }
 
         size_t x()const
         {
-            return getbegx(window_ptr_);
+            return getbegx(window_ptr_.get());
         }
 
         size_t height()const
         {
-            return getmaxy(window_ptr_);
+            return getmaxy(window_ptr_.get());
         }
 
         size_t width()const
         {
-            return getmaxx(window_ptr_);
+            return getmaxx(window_ptr_.get());
         }
 
         size_t under()const
