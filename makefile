@@ -15,13 +15,16 @@ SRCS := $(shell find . -iregex ".*\.cpp")
 OBJS := $(SRCS:%.cpp=%.o)
 DEPS := $(SRCS:%.cpp=%.deps)
 
-.PHONY:	all debug run clean
+.PHONY:	all static debug run clean
 
 .DEFAULT: all
 
 all: CXXFLAGS += $(CXXRELEASE)
-all: LDFLAGS += $(LDSTATIC)
 all: $(program)
+
+static: LDFLAGS += $(LDSTATIC)
+static: CXXFLAGS += $(CXXRELEASE)
+static: $(program)
 
 debug: CXXFLAGS += $(CXXDEBUG)
 debug: $(program)
