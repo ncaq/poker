@@ -3,11 +3,12 @@
 namespace nctk
 {
     debug_streambuf::debug_streambuf()
+        : std::streambuf()
+        , file_output_("error.log", std::ios::app)
     {
         try
         {
             curses_output_.reset(new new_window<std::string>(0, 0, getmaxy(stdscr) - 10, getmaxx(stdscr) - 20));
-            file_output_ = std::ofstream("error.log", std::ios::app);
             scrollok(*curses_output_, true);
         }catch(...){}
     }

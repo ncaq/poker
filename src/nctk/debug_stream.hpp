@@ -1,6 +1,7 @@
 #pragma once
 
 #include "new_window.hpp"
+#include <chrono>
 #include <curses.h>
 #include <fstream>
 #include <iostream>

@@ -4,12 +4,12 @@ else
 	program := poker.elf
 endif
 
-CXX			= clang++
-CXXFLAGS	+= -std=c++11 -stdlib=libc++ -Wall -Wextra -Werror -pipe
+CXX			= g++
+CXXFLAGS	+= -std=c++11 -Wall -Wextra -Werror -pipe
 CXXRELEASE	+= -O2 -fomit-frame-pointer #default
 CXXDEBUG	+= -O0 -fno-inline -ggdb
 LDFLAGS		+= -lncursesw
-LDSTATIC	+= -Lncurses-5.9/lib/ -static
+LDSTATIC	+= -static
 
 SRCS := $(shell find . -iregex ".*\.cpp")
 OBJS := $(SRCS:%.cpp=%.o)
