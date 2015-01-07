@@ -11,7 +11,7 @@ public:
     void set_controller(std::shared_ptr<player_area> controller);
 
     virtual std::deque<bool> select_changing_cards();
-    virtual void raise();
+    virtual size_t raise();
     virtual bool call(const size_t enemy_pool);
 
 private:

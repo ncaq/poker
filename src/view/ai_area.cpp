@@ -9,7 +9,7 @@ ai_area::ai_area(game_area& whole_area, std::shared_ptr<actor> m, std::shared_pt
 
 bool ai_area::default_hide_setting()const
 {
-    return true;
+    return false;
 }
 
 size_t ai_area::hand_y_top()const

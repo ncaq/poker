@@ -50,8 +50,8 @@ void poker_mediator::exchange()
 
 void poker_mediator::raise()
 {
-    player_->raise();
-    ai_->raise();
+    player_->pay(std::min<size_t>(std::max<size_t>(0, player_->raise()), 20));
+    ai_    ->pay(std::min<size_t>(std::max<size_t>(0, ai_    ->raise()), 20));
 }
 
 lead poker_mediator::call()
@@ -89,8 +89,8 @@ lead poker_mediator::call()
 void poker_mediator::payoff(const lead no_fold_actor)
 {
     // static nctk::debug_stream dout;
-    auto pay_to_player = [this](){size_t pool = *player_->pool_chip() + *ai_->pool_chip();player_->payoff(pool);ai_->payoff(0);};
-    auto pay_to_ai     = [this](){size_t pool = *player_->pool_chip() + *ai_->pool_chip();player_->payoff(0);ai_->payoff(pool);};
+    auto pay_to_player = [this](){player_->payoff(this->sum_pool());ai_    ->payoff(0);};
+    auto pay_to_ai     = [this](){ai_    ->payoff(this->sum_pool());player_->payoff(0);};
     if(no_fold_actor == lead::nothing)
     {
         auto high_actor = this->comp_hand();
@@ -148,6 +148,13 @@ lead poker_mediator::comp_hand()const
             return lead::ai_lead;
         }
     }
+}
+
+size_t poker_mediator::sum_pool()const
+{
+    return
+        *this->player_->pool_chip() +
+        *this->ai_->pool_chip();
 }
 
 bool poker_mediator::done()const

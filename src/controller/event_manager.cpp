@@ -98,13 +98,14 @@ void event_manager::payoff(const lead no_fold_actor)
 {
     this->gui_->draw();
 
-    this->poker_->payoff(no_fold_actor);
     this->gui_->report(no_fold_actor);
 
     this->gui_->draw();
     nctk::form to_wait("press any key to next game:");
     to_wait.draw();
     to_wait.get_char();
+
+    this->poker_->payoff(no_fold_actor);
 
     ++this->game_count_;
 

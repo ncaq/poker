@@ -1,4 +1,3 @@
-#include "card.hpp"
 #include "poker_hands.hpp"
 #include <numeric>
 
@@ -8,24 +7,6 @@ poker_hands::poker_hands(const std::deque<std::shared_ptr<card> >& cards)
     std::sort(stash_cards.begin(), stash_cards.end(), [](const std::shared_ptr<card> a, const std::shared_ptr<card> b){return *a < *b;});
     this->sorted_cards_ = stash_cards;
     this->type_ = poker_hands::from_cards(sorted_cards_);
-}
-
-bool poker_hands::operator==(const poker_hands& take)
-{
-    return this->type_ == take.type_ &&
-        *this->sorted_cards_.back() == *take.sorted_cards_.back();
-}
-
-bool poker_hands::operator<(const poker_hands& take)
-{
-    if(this->type_ == take.type_)
-    {
-        return *this->sorted_cards_.back() < *take.sorted_cards_.back();
-    }
-    else
-    {
-        return this->type_ < take.type_;
-    }
 }
 
 std::string poker_hands::readable()const
@@ -46,6 +27,34 @@ std::string poker_hands::readable()const
     }
     std::string top_card = sorted_cards_.back()->readable();
     return "hand: " + hands + ", top card: " + top_card;
+}
+
+const std::deque<std::shared_ptr<card> >& poker_hands::sorted_cards()const
+{
+    return this->sorted_cards_;
+}
+
+poker_hands_type poker_hands::type()const
+{
+    return this->type_;
+}
+
+bool poker_hands::operator==(const poker_hands& take)
+{
+    return this->type_ == take.type_ &&
+        *this->sorted_cards_.back() == *take.sorted_cards_.back();
+}
+
+bool poker_hands::operator<(const poker_hands& take)
+{
+    if(this->type_ == take.type_)
+    {
+        return *this->sorted_cards_.back() < *take.sorted_cards_.back();
+    }
+    else
+    {
+        return this->type_ < take.type_;
+    }
 }
 
 poker_hands_type poker_hands::from_cards(const std::deque<std::shared_ptr <card> >& sorted_cards)

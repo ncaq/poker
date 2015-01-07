@@ -28,7 +28,11 @@ void game_area::init_game(std::shared_ptr<poker_mediator> model)
 
 bool game_area::draw()
 {
-    this->pool_chip_.set_contents("pool   chip:  " + (boost::lexical_cast<std::string>(*this->player_->model()->pool_chip() + *this->ai_->model()->pool_chip())));
+    this->pool_chip_.set_contents(
+        "pool   chip:  " + boost::lexical_cast<std::string>(*this->player_->model()->pool_chip() + *this->ai_->model()->pool_chip()) +
+        " (player: " + boost::lexical_cast<std::string>(*this->player_->model()->pool_chip()) +
+        ", ai: " + boost::lexical_cast<std::string>(*this->ai_->model()->pool_chip()) +
+        ")");
     this->pool_chip_.align_window();
 
     usleep(100000);
@@ -79,14 +83,15 @@ void game_area::report(const lead no_fold_actor)
     lead high_card_actor = this->model_->comp_hand();
     std::string card_report;
     std::string pay_report;
+    std::string to_pay_chip = boost::lexical_cast<std::string>(this->model_->sum_pool());
     if(high_card_actor == lead::nothing)
     {
         card_report = "hand is draw. ";
         switch(no_fold_actor)
         {
-        case lead::nothing:     pay_report = "chip is returned.";break;
-        case lead::player_lead: pay_report = "but, chip is yours.";break;
-        case lead::ai_lead:     pay_report = "but, chip is dropped.";break;
+        case lead::nothing:     pay_report = "chip is returned."                         ;break;
+        case lead::player_lead: pay_report = "but, chip " + to_pay_chip + " is yours."   ;break;
+        case lead::ai_lead:     pay_report = "but, chip " + to_pay_chip + " is dropped." ;break;
         }
     }
     else if(high_card_actor == lead::player_lead)
@@ -94,9 +99,9 @@ void game_area::report(const lead no_fold_actor)
         card_report = "your hand is higher ai's. ";
         switch(no_fold_actor)
         {
-        case lead::nothing:     pay_report = "so, chip is yours.";break;
-        case lead::player_lead: pay_report = "chip is yours.";break;
-        case lead::ai_lead:     pay_report = "but, chip is dropped.";break;
+        case lead::nothing:     pay_report = "so, chip "  + to_pay_chip + " is yours."   ;break;
+        case lead::player_lead: pay_report = "chip "      + to_pay_chip + " is yours."   ;break;
+        case lead::ai_lead:     pay_report = "but, chip " + to_pay_chip + " is dropped." ;break;
         }
     }
     else if(high_card_actor == lead::ai_lead)
@@ -104,9 +109,9 @@ void game_area::report(const lead no_fold_actor)
         card_report = "your hand is lower ai's. ";
         switch(no_fold_actor)
         {
-        case lead::nothing:     pay_report = "so, chip is dropped.";break;
-        case lead::player_lead: pay_report = "but, chip is yours.";break;
-        case lead::ai_lead:     pay_report = "chip is dropped.";break;
+        case lead::nothing:     pay_report = "so, chip "  + to_pay_chip + " is dropped." ;break;
+        case lead::player_lead: pay_report = "but, chip " + to_pay_chip + " is yours."   ;break;
+        case lead::ai_lead:     pay_report = "chip "      + to_pay_chip + " is dropped." ;break;
         }
     }
 

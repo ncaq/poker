@@ -28,6 +28,7 @@ public:
     void payoff(const lead no_fold_actor);
 
     lead comp_hand()const;
+    size_t sum_pool()const;
     bool done()const;
     lead current_lead()const;
 
@@ -40,4 +41,4 @@ private:
     std::shared_ptr<ai> ai_;
 };
 
-constexpr size_t ante = 5;
+constexpr size_t ante = 15;

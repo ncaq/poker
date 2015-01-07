@@ -3,8 +3,7 @@
 #include <algorithm>
 #include <deque>
 #include <memory>
-
-class card;
+#include "card.hpp"
 
 enum poker_hands_type
 {
@@ -24,10 +23,12 @@ class poker_hands
 public:
     poker_hands(const std::deque<std::shared_ptr<card> >& cards);
 
+    std::string readable()const;
+    const std::deque<std::shared_ptr<card> >& sorted_cards()const;
+    poker_hands_type type()const;
+
     bool operator==(const poker_hands& take);
     bool operator< (const poker_hands& take);
-
-    std::string readable()const;
 
     static poker_hands_type from_cards(const std::deque<std::shared_ptr <card> >& sorted_cards);
 
