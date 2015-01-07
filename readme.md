@@ -33,6 +33,11 @@ poker.elfを実行
 * ncurses
 * GNUツール(make, find, xargs, sed ..)
 
+## 手順
+
+make runで動きます
+make staticでstaticビルド,staticビルドにはlibncursesw.aが必要
+
 # クレジット
 
 ## boost
