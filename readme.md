@@ -7,7 +7,7 @@ poker.exeを**mintty(cygwinのターミナルエミュレータ)**で実行し�
 
 ## GNU/Linux
 
-poker.elfを実行
+poker.elfを実行.
 
 # ゲームの流れ
 

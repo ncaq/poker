@@ -4,9 +4,9 @@ else
 	program := poker.elf
 endif
 
-CXX			= g++
+CXX			:= g++
 CXXFLAGS	+= -std=c++11 -Wall -Wextra -Werror -pipe
-CXXRELEASE	+= -O2 -fomit-frame-pointer #default
+CXXRELEASE	+= -O2
 CXXDEBUG	+= -O0 -fno-inline -ggdb
 LDFLAGS		+= -lncursesw
 LDSTATIC	+= -static
