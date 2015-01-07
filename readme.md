@@ -28,5 +28,5 @@
 
 ## ncurses
 
-``` {include="ncurses-5.9/AUTHORS"}
+``` {include="ncurses_README"}
 ```

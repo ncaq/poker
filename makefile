@@ -33,7 +33,7 @@ clean:
 	find . -regextype posix-extended -iregex '.*\.(o|deps)'|xargs $(RM) -v
 
 $(program): $(OBJS)
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJS) $(LDFLAGS)
 
 %.deps: %.cpp
 	$(CXX) $(CXXFLAGS) -MM $< | sed $(addprefix "$(addprefix s/.*:/,$(subst .deps,.o,$(subst /,\/,$@:))),/)" > $@
