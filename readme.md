@@ -6,9 +6,10 @@
 
 ### Windows
 
+cygwinが必要です.
 poker.batを実行するか,
 poker.exeを**mintty(cygwinのターミナルエミュレータ)**で実行してください.
-**cmd.exe(コマンドプロンプト)では動きません!**
+**恐らくcmd.exe(コマンドプロンプト)では動きません!**
 
 ### GNU/Linux
 
@@ -57,7 +58,8 @@ boostはソースコード配布時以外,ライセンス表記は不要です�
 
 ## ncurses
 
-ncursesを静的リンクしています.
+ncursesを使っています.
+ncursesはMITライセンスで配布されています.
 
-``` {include="ncurses_README"}
+``` {include="README_ncurses"}
 ```
