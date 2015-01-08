@@ -96,11 +96,11 @@ bool ai::call(const size_t enemy_pool)
     }
     else
     {
-        if(current_hands_type == two_pair && enemy_pool <= std::normal_distribution<>(10, 0.5)(random))
+        if(current_hands_type == two_pair && enemy_pool <= std::normal_distribution<>(30, 0.5)(random))
         {
             return true;
         }
-        else if(current_hands_type == one_pair && enemy_pool <= std::normal_distribution<>(5, 0.5)(random))
+        else if(current_hands_type == one_pair && enemy_pool <= std::normal_distribution<>(15, 0.4)(random))
         {
             return true;
         }
