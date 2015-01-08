@@ -56,7 +56,7 @@ bool card_view::operator!=(const card_view& take)const
     return *this->model_ != *take.model_;
 }
 
-card_view::image_cell card_view::sprite_ = card_view::image_cell("cards.txt");
+card_view::image_cell card_view::sprite_ = card_view::image_cell("resource/cards.txt");
 
 card_view::image_cell::image_cell(const std::string& path)
 {
@@ -79,7 +79,7 @@ std::string card_view::image_cell::split(const size_t l, const size_t c, const s
     return result;
 }
 
-std::ifstream ifs("hide_card.txt");
+std::ifstream ifs("resource/hide_card.txt");
 const std::string card_view::hide_card_view_ = std::string(std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>());
 
 void swap(card_view& a, card_view& b, std::function<bool()> draw_callback)
