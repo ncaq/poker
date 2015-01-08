@@ -12,9 +12,11 @@
 
 int main()
 {
+    // utf-8表示するのに必要である
     setlocale(LC_ALL, "");
 
 #ifdef _WIN32
+    // chcp 65001
     SetConsoleOutputCP(CP_UTF8);
 #endif
 

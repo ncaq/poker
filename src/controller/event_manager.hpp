@@ -5,6 +5,11 @@
 #include "../view/game_area.hpp"
 #include <memory>
 
+/*!
+  eventを進めていくclass
+  単純に関数転移する
+ */
+
 class event_manager
 {
 public:
