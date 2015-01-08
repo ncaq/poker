@@ -1,13 +1,20 @@
 # 遊び方
 
-## Windows
+## 起動方法
 
+### Windows
+
+poker.batを実行するか,
 poker.exeを**mintty(cygwinのターミナルエミュレータ)**で実行してください.
 **cmd.exe(コマンドプロンプト)では動きません!**
 
-## GNU/Linux
+### GNU/Linux
 
 poker.elfを実行.
+
+## 操作方法
+
+左右キーでカーソル移動,上キーでカード選択,下キーで選択決定
 
 # ゲームの流れ
 
@@ -31,7 +38,7 @@ poker.elfを実行.
 * >=gcc-4.8.3
 * boost
 * ncurses
-* GNUツール(make, find, xargs, sed ..)
+* GNUツール(cygwinで揃う)(make, find, xargs, sed ..)
 
 ## 手順
 
@@ -42,9 +49,13 @@ make staticでstaticビルド,staticビルドにはlibncursesw.aが必要
 
 ## boost
 
-[Boost Software License](http://www.boost.org/users/license.html)
+boostはソースコード配布時以外,ライセンス表記は不要ですが,リンクを書いておきます.
+
+[](http://www.boost.org/users/license.html)
 
 ## ncurses
+
+ncursesを静的リンクしています.
 
 ``` {include="ncurses_README"}
 ```
