@@ -9,3 +9,7 @@ GTAGS
 
 # log
 *.log
+
+# doxygen
+
+html/
