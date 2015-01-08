@@ -25,7 +25,7 @@ private:
     void half();
     void end();
 
-    std::shared_ptr<game_area> gui_;
+    std::shared_ptr<game_area> tui_;
     std::shared_ptr<poker_mediator> poker_;
 
     size_t game_count_ = 0;
