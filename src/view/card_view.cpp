@@ -63,7 +63,6 @@ card_view::image_cell::image_cell(const std::string& path)
     std::ifstream ifs(path);
 
     std::string buffer;
-    // std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> cv;
     while(std::getline(ifs, buffer))
     {
         lines_.push_back(boost::locale::conv::utf_to_utf<char32_t>(buffer));
@@ -73,7 +72,6 @@ card_view::image_cell::image_cell(const std::string& path)
 std::string card_view::image_cell::split(const size_t l, const size_t c, const size_t y, const size_t x)
 {
     std::string result;
-    // std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> cv;
     for(size_t i = y; i < y + l; ++i)
     {
         result +=  boost::locale::conv::utf_to_utf<char>(lines_.at(i).substr(x, c));
