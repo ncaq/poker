@@ -13,9 +13,9 @@ void event_manager::play()
 void event_manager::init()
 {
     this->tui_->init_game(this->poker_);
-    this->poker_->set_controller(this->tui_->player_input());
+    this->poker_->set_controller(this->tui_->player_());
 
-    this->new_deal(); // c++11ではstd::make_uniqueは使えない
+    this->new_deal();
 }
 
 void event_manager::new_deal()

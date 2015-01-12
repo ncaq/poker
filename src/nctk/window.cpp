@@ -13,12 +13,6 @@ namespace nctk
 
     window::~window(){};
 
-    void window::clear()
-    {
-        wclear(*this);
-        wrefresh(*this);
-    }
-
     bool window::draw()
     {
         bool done = true;
@@ -36,19 +30,24 @@ namespace nctk
         return done;
     }
 
-    void window::insert(const std::shared_ptr<window> child, const std::string name)
-    {
-        this->children_.insert({name, child});
-    }
-
-    std::shared_ptr<window> window::at(const std::string& name)
+    std::shared_ptr<window> window::at(const std::string& name)const
     {
         return this->children_.at(name);
+    }
+
+    void window::insert(const std::string& name, const std::shared_ptr<window> child)
+    {
+        this->children_.insert(std::make_pair(name, child));
     }
 
     void window::erase(const std::string& name)
     {
         this->children_.erase(name);
+    }
+
+    void window::clear()
+    {
+        this->children_.clear();
     }
 
     std::string window::get_string()

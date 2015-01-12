@@ -6,10 +6,10 @@
 
 namespace nctk
 {
-    class arrow_view : public window
+    class arrow_window : public window
     {
     public:
-        arrow_view(const size_t y, const size_t x)
+        arrow_window(const size_t y, const size_t x)
             : window(6, 12, y, x, [](){return immutable_contents_;})
         {}
 
@@ -19,7 +19,7 @@ namespace nctk
     };
 
     template <typename T>
-    class window_selecter_horizontally
+    class window_selecter_horizontally : public window
     {
     public:
         window_selecter_horizontally(const std::deque<std::shared_ptr<T> >& hs)
@@ -29,24 +29,26 @@ namespace nctk
         {
         }
 
-        void draw()const
+        virtual bool draw()
         {
-            std::function<arrow_view(const size_t, const size_t)> make_arrow_view =
-                [this](const size_t y, const size_t x)
+            this->clear();
+            std::function<std::shared_ptr<arrow_window>(const size_t, const size_t)>
+                make_arrow_window = [](const size_t y, const size_t x)
                 {
-                    return arrow_view(y, x);
+                    return std::make_shared<arrow_window>(y, x);
                 };
             for(size_t i = 0; i < list_.size(); ++i)
             {
                 if(selected_.at(i))
                 {
-                    list_.at(i)->make_under(make_arrow_view).draw();
+                    this->insert(std::to_string(i), list_.at(i)->make_under(make_arrow_window));
                 }
             }
             if(hover_cursor_ < list_.size())
             {
-                list_.at(hover_cursor_)->make_under(make_arrow_view).draw();
+                this->insert("hover" + std::to_string(hover_cursor_), list_.at(hover_cursor_)->make_under(make_arrow_window));
             }
+            return window::draw();
         }
 
         void toggle()

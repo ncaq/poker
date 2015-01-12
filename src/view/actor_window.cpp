@@ -6,15 +6,15 @@ actor_window::actor_window(main_window& whole_window, std::shared_ptr<actor> m, 
     : whole_window_(whole_window)
     , model_(m)
 {
-    this->insert(chip_notation_window, "chip_notation");
+    this->insert("chip_notation", chip_notation_window);
     this->at("chip_notation")->set_contents(chip_description);
     this->at("chip_notation")->align_window();
-    this->insert(this->at("chip_notation")->make_right<std::shared_ptr<nctk::window> >
+    this->insert("chip",
+                 this->at("chip_notation")->make_right<std::shared_ptr<nctk::window> >
                  ([](const size_t y, const size_t x)
                   {
                       return std::make_shared<nctk::window>(0, 0, y, x);
-                  }),
-                 "chip");
+                  }));
     this->at("chip")->set_contents(this->model_->chip());
     this->at("chip")->align_window();
 }
@@ -85,7 +85,7 @@ main_window& actor_window::whole()const
 
 void actor_window::push_card(std::shared_ptr<card_window> card)
 {
-    this->insert(card, "card_" + std::to_string(this->hand_.size()));
+    this->insert("card_" + std::to_string(this->hand_.size()), card);
     this->hand_.push_back(card);
     if(this->hand_.size() == 1)
     {

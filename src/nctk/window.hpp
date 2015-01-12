@@ -24,13 +24,13 @@ namespace nctk
 
         template<typename ShowAble>
         void set_contents(const ShowAble& input);
-        void clear();
 
         virtual bool draw();
-
-        void insert(const std::shared_ptr<window> child, const std::string name = "");
-        std::shared_ptr<window> at(const std::string& name);
-        void erase(const std::string& name);
+        
+        virtual std::shared_ptr<window> at(const std::string& name)const;
+        virtual void insert(const std::string& name, const std::shared_ptr<window> child);
+        virtual void erase(const std::string& name);
+        virtual void clear();
 
         std::string get_string();
         char get_char();

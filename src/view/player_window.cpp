@@ -9,30 +9,29 @@ player_window::player_window(main_window& whole_window, std::shared_ptr<actor> m
 
 std::deque<bool> player_window::select_changing_cards()
 {
-    nctk::window_selecter_horizontally<card_window> cursors(this->hand_);
+    this->insert("cursors", std::make_shared<nctk::window_selecter_horizontally<card_window> >(this->hand_));
     int key = 0;
     nctk::form input("");
     do
     {
         this->whole().draw();
-        cursors.draw();
 
         key = input.get_char();
 
         if(key == 5)             // right
         {
-            cursors.shift_to_right();
+            std::dynamic_pointer_cast<nctk::window_selecter_horizontally<card_window>>(this->at("cursors"))->shift_to_right();
         }
         else if(key == 4)       // left
         {
-            cursors.shift_to_left();
+            std::dynamic_pointer_cast<nctk::window_selecter_horizontally<card_window>>(this->at("cursors"))->shift_to_left();
         }
         else if(key == 3)        // up
         {
-            cursors.toggle();
+            std::dynamic_pointer_cast<nctk::window_selecter_horizontally<card_window>>(this->at("cursors"))->toggle();
         }
     }while(key != '\n' && key != 2);
-    return cursors.selected_array();
+    return std::dynamic_pointer_cast<nctk::window_selecter_horizontally<card_window>>(this->at("cursors"))->selected_array();
 }
 
 size_t player_window::raise()
