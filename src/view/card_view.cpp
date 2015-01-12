@@ -1,5 +1,4 @@
 #include "card_view.hpp"
-#include <boost/locale.hpp>
 #include <curses.h>
 #include <fstream>
 #include <iostream>
@@ -65,7 +64,7 @@ card_view::image_cell::image_cell(const std::string& path)
     std::string buffer;
     while(std::getline(ifs, buffer))
     {
-        lines_.push_back(boost::locale::conv::utf_to_utf<char32_t>(buffer));
+        lines_.push_back(std::u32string(buffer.begin(), buffer.end()));
     }
 }
 
@@ -74,7 +73,8 @@ std::string card_view::image_cell::split(const size_t l, const size_t c, const s
     std::string result;
     for(size_t i = y; i < y + l; ++i)
     {
-        result +=  boost::locale::conv::utf_to_utf<char>(lines_.at(i).substr(x, c));
+        const auto& buffer =  lines_.at(i).substr(x, c);
+        result += std::string(buffer.begin(), buffer.end());
     }
     return result;
 }
