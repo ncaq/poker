@@ -4,7 +4,6 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-#include <unistd.h>
 
 #ifdef _WIN32
 #include <windows.h>

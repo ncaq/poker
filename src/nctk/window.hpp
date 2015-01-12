@@ -5,7 +5,7 @@
 #include <functional>
 #include <memory>
 #include <string>
-#include <unistd.h>
+#include <unordered_map>
 #include <vector>
 
 namespace nctk
@@ -19,12 +19,16 @@ namespace nctk
     {
     public:
         window(const size_t lines, const size_t cols, const size_t y, const size_t x, const std::function<std::string()> init = [](){return "";});
+        virtual ~window();
 
         template<typename ShowAble>
         void set_contents(const ShowAble& input);
         void clear();
 
-        virtual bool draw();
+        bool draw();
+
+        void add(const std::string& name, const std::shared_ptr<window> child);
+        std::shared_ptr<window> lookup(const std::string& name);
 
         std::string get_string();
         char get_char();
@@ -63,6 +67,8 @@ namespace nctk
         std::shared_ptr<WINDOW> window_ptr_;
         size_t distination_y_, distination_x_;
         std::function<std::string()> contents_;
+
+        std::unordered_map<std::string, std::shared_ptr<window> > children_;
     };
 
     template<typename ShowAble>

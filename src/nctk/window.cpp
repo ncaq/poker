@@ -9,6 +9,8 @@ namespace nctk
         , contents_(init)
     {}
 
+    window::~window(){};
+
     void window::clear()
     {
         wclear(*this);
@@ -20,8 +22,22 @@ namespace nctk
         wclear(*this);
         bool done = this->increase_moving();
         waddstr(*this, this->show_contents().data());
+        for(auto& child : this->children_)
+        {
+            done = child.second->draw() & done;
+        }
         wrefresh(*this);
         return done;
+    }
+
+    void window::add(const std::string& name, const std::shared_ptr<window> child)
+    {
+        this->children_.insert({name, child});
+    }
+
+    std::shared_ptr<window> window::lookup(const std::string& name)
+    {
+        return this->children_.at(name);
     }
 
     std::string window::get_string()
