@@ -12,13 +12,13 @@ enum class lead
 class ai;
 class card;
 class player;
-class player_area;
+class player_window;
 
 class poker_mediator
 {
 public:
     poker_mediator();
-    void set_controller(std::shared_ptr<player_area> controller);
+    void set_controller(std::shared_ptr<player_window> controller);
 
     void new_deal();
     void bet_ante();

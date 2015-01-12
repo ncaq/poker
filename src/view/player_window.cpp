@@ -1,13 +1,13 @@
 #include "../nctk/form.hpp"
 #include "../nctk/window_selecter_horizontally.hpp"
-#include "game_area.hpp"
-#include "player_area.hpp"
+#include "main_window.hpp"
+#include "player_window.hpp"
 
-player_area::player_area(game_area& whole_area, std::shared_ptr<actor> m, std::shared_ptr<nctk::window> chip_area)
-    : actor_window(whole_area, m, chip_area, "player chip: ")
+player_window::player_window(main_window& whole_window, std::shared_ptr<actor> m, std::shared_ptr<nctk::window> chip_window)
+    : actor_window(whole_window, m, chip_window, "player chip: ")
 {};
 
-std::deque<bool> player_area::select_changing_cards()
+std::deque<bool> player_window::select_changing_cards()
 {
     nctk::window_selecter_horizontally<card_window> cursors(this->hand_);
     int key = 0;
@@ -35,7 +35,7 @@ std::deque<bool> player_area::select_changing_cards()
     return cursors.selected_array();
 }
 
-size_t player_area::raise()
+size_t player_window::raise()
 {
     auto prompt = nctk::form("please input raise chip size. [0 <= x <= 20]:");
     prompt.draw();
@@ -59,7 +59,7 @@ size_t player_area::raise()
     }
 }
 
-bool player_area::call(const size_t ai_pool)
+bool player_window::call(const size_t ai_pool)
 {
     auto prompt = nctk::form("ai bet is " + std::to_string(ai_pool) + "." + "Do you call? [y/n]:");
     prompt.draw();
@@ -84,7 +84,7 @@ bool player_area::call(const size_t ai_pool)
     return this->call(ai_pool);
 }
 
-void player_area::set_hide_cards(bool)
+void player_window::set_hide_cards(bool)
 {
     for(auto& h : this->hand_)
     {
@@ -92,12 +92,12 @@ void player_area::set_hide_cards(bool)
     }
 }
 
-bool player_area::default_hide_setting()const
+bool player_window::default_hide_setting()const
 {
     return false;
 }
 
-size_t player_area::hand_y_top()const
+size_t player_window::hand_y_top()const
 {
     return 18;
 }

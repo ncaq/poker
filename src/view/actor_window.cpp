@@ -1,9 +1,9 @@
 #include "../model/actor.hpp"
 #include "actor_window.hpp"
-#include "game_area.hpp"
+#include "main_window.hpp"
 
-actor_window::actor_window(game_area& whole_area, std::shared_ptr<actor> m, std::shared_ptr<nctk::window> chip_notation_window, const std::string& chip_description)
-    : whole_area_(whole_area)
+actor_window::actor_window(main_window& whole_window, std::shared_ptr<actor> m, std::shared_ptr<nctk::window> chip_notation_window, const std::string& chip_description)
+    : whole_window_(whole_window)
     , model_(m)
 {
     this->insert(chip_notation_window, "chip_notation");
@@ -22,12 +22,12 @@ actor_window::actor_window(game_area& whole_area, std::shared_ptr<actor> m, std:
 actor_window::~actor_window()
 {}
 
-void actor_window::new_deal(const std::shared_ptr<nctk::window> deck_area)
+void actor_window::new_deal(const std::shared_ptr<nctk::window> deck_window)
 {
     this->clear_hand();
     for(const std::shared_ptr<card>& h : this->model()->hand())
     {
-        this->push_card(std::make_shared<card_window>(h, deck_area->y(), deck_area->x(), this->default_hide_setting()));
+        this->push_card(std::make_shared<card_window>(h, deck_window->y(), deck_window->x(), this->default_hide_setting()));
     }
 }
 
@@ -36,7 +36,7 @@ void actor_window::adjust_exchange()
     auto new_hand = this->model_->hand();
     for(size_t scaned = 0; scaned < this->hand_.size(); ++scaned)
     {
-        auto new_card = std::make_shared<card_window>(new_hand.at(scaned), this->whole().deck_area()->y(), this->whole().deck_area()->x(), this->default_hide_setting());
+        auto new_card = std::make_shared<card_window>(new_hand.at(scaned), this->whole().deck_window()->y(), this->whole().deck_window()->x(), this->default_hide_setting());
         if(*this->hand_.at(scaned) != *new_card)
         {
             this->hand_.at(scaned)->set_hide(true);
@@ -78,9 +78,9 @@ std::shared_ptr<const actor> actor_window::model()const
     return model_;
 }
 
-game_area& actor_window::whole()const
+main_window& actor_window::whole()const
 {
-    return whole_area_;
+    return whole_window_;
 }
 
 void actor_window::push_card(std::shared_ptr<card_window> card)

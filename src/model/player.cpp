@@ -1,7 +1,7 @@
-#include "../view/player_area.hpp"
+#include "../view/player_window.hpp"
 #include "player.hpp"
 
-void player::set_controller(std::shared_ptr<player_area> controller)
+void player::set_controller(std::shared_ptr<player_window> controller)
 {
     this->player_input_ = controller;
 }

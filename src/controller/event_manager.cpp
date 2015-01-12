@@ -1,7 +1,7 @@
 #include "event_manager.hpp"
 
 event_manager::event_manager()
-    : tui_(std::make_shared<game_area>())
+    : tui_(std::make_shared<main_window>())
     , poker_(std::make_shared<poker_mediator>())
 {}
 

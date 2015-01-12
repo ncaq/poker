@@ -25,7 +25,7 @@ poker_mediator::poker_mediator()
     // std::random_shuffleはstd::rand()使ってるのでC++14から非推奨になる
 }
 
-void poker_mediator::set_controller(std::shared_ptr<player_area> controller)
+void poker_mediator::set_controller(std::shared_ptr<player_window> controller)
 {
     this->player_->set_controller(controller);
 }
