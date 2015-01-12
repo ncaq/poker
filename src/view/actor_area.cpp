@@ -2,15 +2,15 @@
 #include "actor_area.hpp"
 #include "game_area.hpp"
 
-actor_area::actor_area(game_area& whole_area, std::shared_ptr<actor> m, std::shared_ptr<nctk::new_window<std::string> > chip_notation_area, const std::string& chip_notation)
+actor_area::actor_area(game_area& whole_area, std::shared_ptr<actor> m, std::shared_ptr<nctk::window> chip_notation_area, const std::string& chip_notation)
     : whole_area_(whole_area)
     , model_(m)
     , chip_notation_(chip_notation_area)
 {
     this->chip_notation_->set_contents(chip_notation);
     this->chip_notation_->align_window();
-    this->chip_ = this->chip_notation_->make_right<std::shared_ptr<nctk::new_window<size_t> > >([](const size_t y, const size_t x){return std::make_shared<nctk::new_window<size_t> >(0, 0, y, x);});
-    this->chip_->set_reference(this->model_->chip());
+    this->chip_ = this->chip_notation_->make_right<std::shared_ptr<nctk::window> >([](const size_t y, const size_t x){return std::make_shared<nctk::window>(0, 0, y, x);});
+    this->chip_->set_contents(this->model_->chip());
     this->chip_->align_window();
 }
 
@@ -37,7 +37,7 @@ void actor_area::set_hide_cards(bool hide)
     }
 }
 
-void actor_area::new_deal(const std::shared_ptr<nctk::new_window<std::string> > deck_area)
+void actor_area::new_deal(const std::shared_ptr<nctk::window> deck_area)
 {
     hand_.clear();
     for(const std::shared_ptr<card>& h : this->model()->hand())

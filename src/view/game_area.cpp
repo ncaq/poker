@@ -22,16 +22,16 @@ down or enter: done selecting)"); // 初期メッセージは操作説明
 void game_area::init_game(std::shared_ptr<poker_mediator> model)
 {
     this->model_ = model;
-    this->player_ = std::make_shared<player_area>(*this, this->model_->player_ptr(), std::make_shared<nctk::new_window<std::string> >(0, 0, 11, 13));
-    this->ai_ = std::make_shared<ai_area>(*this, this->model_->ai_ptr(), std::make_shared<nctk::new_window<std::string> >(0, 0, 12, 13));
+    this->player_ = std::make_shared<player_area>(*this, this->model_->player_ptr(), std::make_shared<nctk::window>(0, 0, 11, 13));
+    this->ai_ = std::make_shared<ai_area>(*this, this->model_->ai_ptr(), std::make_shared<nctk::window>(0, 0, 12, 13));
 }
 
 bool game_area::draw()
 {
     this->pool_chip_.set_contents(
-        "pool   chip:  " + boost::lexical_cast<std::string>(*this->player_->model()->pool_chip() + *this->ai_->model()->pool_chip()) +
-        " (player: " + boost::lexical_cast<std::string>(*this->player_->model()->pool_chip()) +
-        ", ai: " + boost::lexical_cast<std::string>(*this->ai_->model()->pool_chip()) +
+        "pool   chip:  " + std::to_string(*this->player_->model()->pool_chip() + *this->ai_->model()->pool_chip()) +
+        " (player: " + std::to_string(*this->player_->model()->pool_chip()) +
+        ", ai: " + std::to_string(*this->ai_->model()->pool_chip()) +
         ")");
     this->pool_chip_.align_window();
 
@@ -83,7 +83,7 @@ void game_area::report(const lead no_fold_actor)
     lead high_card_actor = this->model_->comp_hand();
     std::string card_report;
     std::string pay_report;
-    std::string to_pay_chip = boost::lexical_cast<std::string>(this->model_->sum_pool());
+    std::string to_pay_chip = std::to_string(this->model_->sum_pool());
     if(high_card_actor == lead::nothing)
     {
         card_report = "hand is draw. ";

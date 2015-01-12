@@ -3,7 +3,7 @@
 #include "game_area.hpp"
 #include "player_area.hpp"
 
-player_area::player_area(game_area& whole_area, std::shared_ptr<actor> m, std::shared_ptr<nctk::new_window<std::string> > chip_area)
+player_area::player_area(game_area& whole_area, std::shared_ptr<actor> m, std::shared_ptr<nctk::window> chip_area)
     : actor_area(whole_area, m, chip_area, "player chip: ")
 {};
 
@@ -61,7 +61,7 @@ size_t player_area::raise()
 
 bool player_area::call(const size_t ai_pool)
 {
-    auto prompt = nctk::form("ai bet is " + boost::lexical_cast<std::string>(ai_pool) + "." + "Do you call? [y/n]:");
+    auto prompt = nctk::form("ai bet is " + std::to_string(ai_pool) + "." + "Do you call? [y/n]:");
     prompt.draw();
     char answer;
     try

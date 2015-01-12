@@ -10,12 +10,12 @@ class game_area;
 class actor_area
 {
 public:
-    actor_area(game_area& whole_area, std::shared_ptr<actor> m, std::shared_ptr<nctk::new_window<std::string> > chip_notation_area, const std::string& chip_notation);
+    actor_area(game_area& whole_area, std::shared_ptr<actor> m, std::shared_ptr<nctk::window> chip_notation_area, const std::string& chip_notation);
     virtual ~actor_area()=0;
 
     virtual bool draw();
     virtual void set_hide_cards(bool hide);
-    void new_deal(const std::shared_ptr<nctk::new_window<std::string> > deck_area);
+    void new_deal(const std::shared_ptr<nctk::window> deck_area);
     void push(std::shared_ptr<card_view> card);
     void sort_hand();           // 見栄え重視で挿入ソートする
     void adjust_exchange();
@@ -36,6 +36,6 @@ private:
     game_area& whole_area_;
     std::shared_ptr<actor> model_;
 
-    std::shared_ptr<nctk::new_window<std::string> > chip_notation_;
-    std::shared_ptr<nctk::new_window<size_t> > chip_;
+    std::shared_ptr<nctk::window> chip_notation_;
+    std::shared_ptr<nctk::window> chip_;
 };

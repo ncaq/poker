@@ -1,20 +1,20 @@
 #pragma once
 
-#include "new_window.hpp"
+#include "window.hpp"
 #include <deque>
 #include <fstream>
 
 namespace nctk
 {
-    class arrow_view : public new_window<std::string>
+    class arrow_view : public window
     {
     public:
         arrow_view(const size_t y, const size_t x)
-            : new_window(6, 12, y, x)
+            : window(6, 12, y, x)
         {
             this->set_contents(immutable_contents_);
         }
-        
+
     private:
         static std::ifstream ifs;
         static const std::string immutable_contents_;

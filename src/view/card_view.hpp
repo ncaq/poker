@@ -1,12 +1,12 @@
 #pragma once
 
 #include "../model/card.hpp"
-#include "../nctk/new_window.hpp"
+#include "../nctk/window.hpp"
 #include <functional>
 #include <string>
 #include <vector>
 
-class card_view : public nctk::new_window<std::string>
+class card_view : public nctk::window
 {
 public:
     card_view(const std::shared_ptr<card> base, const size_t y, const size_t x, const bool hide = false);

@@ -1,14 +1,16 @@
 #pragma once
 
-#include "new_window.hpp"
 #include <chrono>
 #include <curses.h>
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <string>
 
 namespace nctk
 {
+    class window;
+    
     class debug_streambuf : public std::streambuf
     {
     public:
@@ -22,7 +24,7 @@ namespace nctk
     private:
         void time_stamp_when_first();
 
-        std::unique_ptr<new_window<std::string> > curses_output_;
+        std::unique_ptr<window> curses_output_;
         std::ofstream file_output_;
 
         static bool started_;

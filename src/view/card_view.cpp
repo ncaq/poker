@@ -5,7 +5,7 @@
 #include <iostream>
 
 card_view::card_view(const std::shared_ptr<card> base, const size_t y, const size_t x, const bool hide)
-    : nctk::new_window<std::string>(9, 11, y, x)
+    : nctk::window(9, 11, y, x)
     , model_(base)
     , hide_(hide)
 {

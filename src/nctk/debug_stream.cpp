@@ -1,4 +1,5 @@
 #include "debug_stream.hpp"
+#include "window.hpp"
 
 namespace nctk
 {
@@ -8,7 +9,7 @@ namespace nctk
     {
         try
         {
-            curses_output_.reset(new new_window<std::string>(0, 0, getmaxy(stdscr) - 10, getmaxx(stdscr) - 20));
+            curses_output_.reset(new window(0, 0, getmaxy(stdscr) - 10, getmaxx(stdscr) - 20));
             scrollok(*curses_output_, true);
         }catch(...){}
     }

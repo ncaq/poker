@@ -28,8 +28,8 @@ public:
     std::deque<std::shared_ptr<card> > hand()const;
 
 private:
-    std::deque<std::shared_ptr<card> > hand_;
-
     std::shared_ptr<size_t> chip_ = std::make_shared<size_t>(100);
     std::shared_ptr<size_t> pool_chip_ = std::make_shared<size_t>(0);
+
+    std::deque<std::shared_ptr<card> > hand_;
 };

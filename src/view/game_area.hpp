@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../model/poker_mediator.hpp"
-#include "../nctk/new_window.hpp"
+#include "../nctk/window.hpp"
 #include "card_view.hpp"
 #include <deque>
 #include <memory>
@@ -25,11 +25,11 @@ public:
     std::shared_ptr<card_view> deck_area()const;
 
 private:
-    std::shared_ptr<card_view> deck_area_; // ハリボテ
+    std::shared_ptr<card_view> deck_area_; //!< ハリボテ
     std::shared_ptr<player_area> player_;
     std::shared_ptr<ai_area> ai_;
-    nctk::new_window<std::string> pool_chip_;
-    nctk::new_window<std::string> message_;  // その時々の説明を表示するウインドウ
+    nctk::window pool_chip_;
+    nctk::window message_;     //!< その時々の説明を表示するウインドウ
 
     std::shared_ptr<poker_mediator> model_;
 };
