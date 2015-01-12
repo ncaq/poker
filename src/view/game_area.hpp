@@ -2,7 +2,7 @@
 
 #include "../model/poker_mediator.hpp"
 #include "../nctk/window.hpp"
-#include "card_view.hpp"
+#include "card_window.hpp"
 #include <deque>
 #include <memory>
 
@@ -22,10 +22,10 @@ public:
     void report(const lead no_fold_actor);
 
     std::shared_ptr<player_area> player_input();
-    std::shared_ptr<card_view> deck_area()const;
+    std::shared_ptr<card_window> deck_area()const;
 
 private:
-    std::shared_ptr<card_view> deck_area_; //!< ハリボテ
+    std::shared_ptr<card_window> deck_area_; //!< ハリボテ
     std::shared_ptr<player_area> player_;
     std::shared_ptr<ai_area> ai_;
     nctk::window pool_chip_;

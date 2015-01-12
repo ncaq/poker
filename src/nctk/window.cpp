@@ -2,6 +2,8 @@
 
 namespace nctk
 {
+    window::window(){};
+
     window::window(const size_t lines, const size_t cols, const size_t y, const size_t x, const std::function<std::string()> init)
         : window_ptr_(newwin(lines, cols, y, x), delwin)
         , distination_y_(getbegy(window_ptr_)) // コンストラクタに入らないとインスタンス関数は使えない
@@ -19,25 +21,34 @@ namespace nctk
 
     bool window::draw()
     {
-        wclear(*this);
-        bool done = this->increase_moving();
-        waddstr(*this, this->show_contents().data());
+        bool done = true;
+        if(this->window_ptr_ && this->contents_)
+        {
+            done = this->increase_moving() && done;
+            wclear(*this);
+            waddstr(*this, this->show_contents().data());
+            wrefresh(*this);
+        }
         for(auto& child : this->children_)
         {
-            done = child.second->draw() & done;
+            done = child.second->draw() && done;
         }
-        wrefresh(*this);
         return done;
     }
 
-    void window::add(const std::string& name, const std::shared_ptr<window> child)
+    void window::insert(const std::shared_ptr<window> child, const std::string name)
     {
         this->children_.insert({name, child});
     }
 
-    std::shared_ptr<window> window::lookup(const std::string& name)
+    std::shared_ptr<window> window::at(const std::string& name)
     {
         return this->children_.at(name);
+    }
+
+    void window::erase(const std::string& name)
+    {
+        this->children_.erase(name);
     }
 
     std::string window::get_string()
@@ -92,7 +103,9 @@ namespace nctk
 
     std::string window::show_contents()const
     {
-        return this->contents_();
+        return (this->contents_) ?
+            this->contents_() :
+            "";
     }
 
     size_t window::under()const

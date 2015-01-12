@@ -10,16 +10,14 @@ namespace nctk
     {
     public:
         arrow_view(const size_t y, const size_t x)
-            : window(6, 12, y, x)
-        {
-            this->set_contents(immutable_contents_);
-        }
+            : window(6, 12, y, x, [](){return immutable_contents_;})
+        {}
 
     private:
         static std::ifstream ifs;
         static const std::string immutable_contents_;
     };
-    
+
     template <typename T>
     class window_selecter_horizontally
     {

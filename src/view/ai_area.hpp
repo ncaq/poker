@@ -1,8 +1,8 @@
 #pragma once
 
-#include "actor_area.hpp"
+#include "actor_window.hpp"
 
-class ai_area : public actor_area
+class ai_area : public actor_window
 {
 public:
     ai_area(game_area& whole_area, std::shared_ptr<actor> m, std::shared_ptr<nctk::window> chip_area);

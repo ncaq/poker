@@ -4,12 +4,12 @@
 #include "player_area.hpp"
 
 player_area::player_area(game_area& whole_area, std::shared_ptr<actor> m, std::shared_ptr<nctk::window> chip_area)
-    : actor_area(whole_area, m, chip_area, "player chip: ")
+    : actor_window(whole_area, m, chip_area, "player chip: ")
 {};
 
 std::deque<bool> player_area::select_changing_cards()
 {
-    nctk::window_selecter_horizontally<card_view> cursors(this->hand_);
+    nctk::window_selecter_horizontally<card_window> cursors(this->hand_);
     int key = 0;
     nctk::form input("");
     do

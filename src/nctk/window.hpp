@@ -3,9 +3,9 @@
 #include <cmath>
 #include <curses.h>
 #include <functional>
+#include <map>
 #include <memory>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 namespace nctk
@@ -18,6 +18,7 @@ namespace nctk
     class window
     {
     public:
+        window();
         window(const size_t lines, const size_t cols, const size_t y, const size_t x, const std::function<std::string()> init = [](){return "";});
         virtual ~window();
 
@@ -25,10 +26,11 @@ namespace nctk
         void set_contents(const ShowAble& input);
         void clear();
 
-        bool draw();
+        virtual bool draw();
 
-        void add(const std::string& name, const std::shared_ptr<window> child);
-        std::shared_ptr<window> lookup(const std::string& name);
+        void insert(const std::shared_ptr<window> child, const std::string name = "");
+        std::shared_ptr<window> at(const std::string& name);
+        void erase(const std::string& name);
 
         std::string get_string();
         char get_char();
@@ -68,7 +70,7 @@ namespace nctk
         size_t distination_y_, distination_x_;
         std::function<std::string()> contents_;
 
-        std::unordered_map<std::string, std::shared_ptr<window> > children_;
+        std::map<std::string, std::shared_ptr<window> > children_;
     };
 
     template<typename ShowAble>

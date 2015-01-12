@@ -1,6 +1,7 @@
 #include "../model/actor.hpp"
 #include "../model/ai.hpp"
 #include "../model/player.hpp"
+#include "../nctk/window.hpp"
 #include "ai_area.hpp"
 #include "game_area.hpp"
 #include "player_area.hpp"
@@ -8,7 +9,7 @@
 #include <unistd.h>
 
 game_area::game_area()
-    : deck_area_(std::make_shared<card_view>(std::make_shared<card>(suit_t::spade, 1), 9, 0))
+    : deck_area_(std::make_shared<card_window>(std::make_shared<card>(suit_t::spade, 1), 9, 0))
     , pool_chip_(0, 0, 10, 13)
     , message_(0, 0, 14, 13)
 {
@@ -126,7 +127,7 @@ std::shared_ptr<player_area> game_area::player_input()
     return player_;
 }
 
-std::shared_ptr<card_view> game_area::deck_area()const
+std::shared_ptr<card_window> game_area::deck_area()const
 {
     return deck_area_;
 }
