@@ -1,8 +1,9 @@
 #include "../model/actor.hpp"
 #include "../model/ai.hpp"
 #include "../model/player.hpp"
-#include "../nctk/window.hpp"
+#include "../nctk/display.hpp"
 #include "ai_window.hpp"
+#include "card_window.hpp"
 #include "main_window.hpp"
 #include "player_window.hpp"
 #include <numeric>
@@ -10,7 +11,9 @@
 
 main_window::main_window()
 {
-    this->insert("deck",    std::make_shared<card_window>(std::make_shared<card>(suit_t::spade, 1), 9, 0, true));
+    nctk::display::init();
+
+    this->insert("deck",    std::make_shared<card_window> (card(suit_t::spade, 1), 9, 0, true));
     this->insert("pool",    std::make_shared<nctk::window>(0, 0, 10, 13));
     this->insert("message", std::make_shared<nctk::window>(0, 0, 14, 13));
     this->update_message(
@@ -22,42 +25,31 @@ down or enter: done selecting)"); // 初期メッセージは操作説明
 void main_window::init_game(std::shared_ptr<poker_mediator> model)
 {
     this->model_ = model;
-    this->insert("player", std::make_shared<player_window>(*this, this->model_->player_ptr(), std::make_shared<nctk::window>(0, 0, 11, 13)));
-    this->insert("ai",     std::make_shared<ai_window>    (*this, this->model_->ai_ptr(),     std::make_shared<nctk::window>(0, 0, 12, 13)));
+    this->insert("player", std::make_shared<player_window>(this->model_->player_ref(), *this, std::make_shared<nctk::window>(0, 0, 11, 13)));
+    this->insert("ai",     std::make_shared<ai_window>    (this->model_->ai_ref(),     *this, std::make_shared<nctk::window>(0, 0, 12, 13)));
     this->at("pool")->set_contents(
-        "pool   chip:  " + std::to_string(*this->player_()->model()->pool_chip()  +
-                                          *this->ai_()    ->model()->pool_chip()) +
-        " (player: "     + std::to_string(*this->player_()->model()->pool_chip()) +
-        ", ai: "         + std::to_string(*this->ai_()    ->model()->pool_chip()) +
+        "pool   chip:  " + std::to_string(*this->player_()->model().pool()  +
+                                          *this->ai_()    ->model().pool()) +
+        " (player: "     + std::to_string(*this->player_()->model().pool()) +
+        ", ai: "         + std::to_string(*this->ai_()    ->model().pool()) +
         ")");
 }
 
 bool main_window::draw()
 {
     usleep(100000);
-    ::clear();
-    refresh();
     this->at("pool")->align_window();
-    return window::draw();
+    if(window::draw())
+    {
+        nctk::display::flush();
+        return true;
+    }
+    else
+    {
+        nctk::display::flush();
+        return this->draw();
+    }
 }
-// bool main_window::draw()
-// {
-//     clear();
-//     refresh();
-//     bool done = true;
-//     done = this->deck_window_->draw() && done;
-//     done = this->player_->draw() && done;
-//     done = this->ai_->draw() && done;
-//     done = this->message_.draw() && done;
-//     done = this->pool_chip_.draw() && done;
-//     if(done)
-//     {        
-//         return true;
-//     }else
-//     {
-//         return this->draw();
-//     }
-// }
 
 void main_window::update_message(const std::string& contents)
 {
@@ -129,15 +121,15 @@ void main_window::report(const lead no_fold_actor)
 
 std::shared_ptr<card_window> main_window::deck_window()const
 {
-    return std::dynamic_pointer_cast<card_window>(this->at("deck"));
+    return this->at<card_window>("deck");
 }
 
 std::shared_ptr<player_window> main_window::player_()
 {
-    return std::dynamic_pointer_cast<player_window>(this->at("player"));
+    return this->at<player_window>("player");
 }
 
 std::shared_ptr<ai_window> main_window::ai_()
 {
-    return std::dynamic_pointer_cast<ai_window>(this->at("ai"));
+    return this->at<ai_window>("ai");
 }

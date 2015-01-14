@@ -2,12 +2,15 @@
 
 namespace nctk
 {
-    window::window(){};
+    window::window(){}
 
-    window::window(const size_t lines, const size_t cols, const size_t y, const size_t x, const std::function<std::string()> init)
-        : window_ptr_(newwin(lines, cols, y, x), delwin)
-        , distination_y_(getbegy(window_ptr_)) // コンストラクタに入らないとインスタンス関数は使えない
-        , distination_x_(getbegx(window_ptr_))
+    window::window(const size_t line, const size_t colu, const size_t y, const size_t x, const std::function<std::string()> init)
+        : line_(line)
+        , colu_(colu)
+        , y_(y)
+        , x_(x)
+        , to_y_(y_) // コンストラクタに入らないとインスタンス関数は使えない
+        , to_x_(x_)
         , contents_(init)
     {}
 
@@ -16,28 +19,16 @@ namespace nctk
     bool window::draw()
     {
         bool done = true;
-        if(this->window_ptr_ && this->contents_)
+        if(this->contents_)
         {
             done = this->increase_moving() && done;
-            wclear(*this);
-            waddstr(*this, this->show_contents().data());
-            wrefresh(*this);
+            display::write(*this);
         }
         for(auto& child : this->children_)
         {
             done = child.second->draw() && done;
         }
         return done;
-    }
-
-    std::shared_ptr<window> window::at(const std::string& name)const
-    {
-        return this->children_.at(name);
-    }
-
-    void window::insert(const std::string& name, const std::shared_ptr<window> child)
-    {
-        this->children_.insert(std::make_pair(name, child));
     }
 
     void window::erase(const std::string& name)
@@ -50,32 +41,15 @@ namespace nctk
         this->children_.clear();
     }
 
-    std::string window::get_string()
-    {
-        char buffer[256] = {};
-        wgetnstr(*this, buffer, 255);
-        return std::string(buffer);
-    }
-
-    char window::get_char()
-    {
-        return wgetch(*this);
-    }
-
-    int window::get_int()
-    {
-        return std::stoi(this->get_string());
-    }
-
     void window::move_while_drawing(const size_t to_y, const size_t to_x)
     {
-        this->distination_y_ = to_y;
-        this->distination_x_ = to_x;
+        this->to_y_ = to_y;
+        this->to_x_ = to_x;
     }
 
     void window::place_to_right(window& take)const
     {
-        take.move_while_drawing(this->distination_y_, this->right());
+        take.move_while_drawing(this->to_y_, this->right());
     }
 
     void window::align_window()
@@ -97,7 +71,8 @@ namespace nctk
 
     void window::resize(const size_t h, const size_t w)
     {
-        wresize(window_ptr_.get(), h, w);
+        this->line_ = h;
+        this->colu_ = w;
     }
 
     std::string window::show_contents()const
@@ -109,17 +84,28 @@ namespace nctk
 
     size_t window::under()const
     {
-        return this->distination_y_ + this->height();
+        return this->y_ + this->line();
+    }
+
+    size_t window::to_under()const
+    {
+        return this->to_y_ + this->line();
     }
 
     size_t window::right()const
     {
-        return this->distination_x_ + this->width();
+        return this->x_ + this->colu();
+    }
+
+    size_t window::to_right()const
+    {
+        return this->to_x_ + this->colu();
     }
 
     void window::yx(const size_t y, const size_t x)
     {
-        mvwin(*this, y, x);
+        this->y_ = y;
+        this->x_ = x;
     }
 
     void window::y(const size_t y)
@@ -132,84 +118,92 @@ namespace nctk
         this->yx(this->y(), x);
     }
 
+    size_t window::line()const
+    {
+        return this->line_;
+    }
+
+    size_t window::colu()const
+    {
+        return this->colu_;
+    }
+
     size_t window::y()const
     {
-        return getbegy(window_ptr_.get()); // Preprocessor Macroなのが原因なのか,型変換が効かない
+        return this->y_;
     }
 
     size_t window::x()const
     {
-        return getbegx(window_ptr_.get());
+        return this->x_;
     }
 
-    size_t window::height()const
+    window& window::operator=(const window& take)
     {
-        return getmaxy(window_ptr_.get());
-    }
-
-    size_t window::width()const
-    {
-        return getmaxx(window_ptr_.get());
-    }
-
-    window::operator WINDOW*()
-    {
-        return this->window_ptr_.get();
-    }
-
-    window::operator const WINDOW*()const
-    {
-        return this->window_ptr_.get();
+        window(take.line(), take.colu(), take.y(), take.x(), take.contents_);
+        return *this;
     }
 
     bool window::increase_moving()
     {
-        const int sy = (static_cast<int>(distination_y_) - static_cast<int>(this->y())) / 5;
-        const int sx = (static_cast<int>(distination_x_) - static_cast<int>(this->x())) / 5;
+        const int sy = (static_cast<int>(to_y_) - static_cast<int>(this->y())) / 5;
+        const int sx = (static_cast<int>(to_x_) - static_cast<int>(this->x())) / 5;
         if(std::signbit(sy))
         {
-            if(distination_y_ < this->y() + sy)
+            if(to_y_ < this->y() + sy)
             {
                 this->y(this->y() + sy - 1);
             }
             else
             {
-                this->y(distination_y_);
+                this->y(to_y_);
             }
         }
         else
         {
-            if(this->y() + sy < distination_y_)
+            if(this->y() + sy < to_y_)
             {
                 this->y(this->y() + sy + 1);
             }
             else
             {
-                this->y(distination_y_);
+                this->y(to_y_);
             }
         }
         if(std::signbit(sx))
         {
-            if(distination_x_ < this->x() + sx)
+            if(to_x_ < this->x() + sx)
             {
                 this->x(this->x() + sx - 1);
             }
             else
             {
-                this->x(distination_x_);
+                this->x(to_x_);
             }
         }
         else
         {
-            if(this->x() + sx < distination_x_)
+            if(this->x() + sx < to_x_)
             {
                 this->x(this->x() + sx + 1);
             }
             else
             {
-                this->x(distination_x_);
+                this->x(to_x_);
             }
         }
-        return (this->y() == this->distination_y_ && this->x() == this->distination_x_);
+        return (this->y() == this->to_y_ && this->x() == this->to_x_);
+    }
+
+    void swap_and_move(window& a, window& b, std::function<bool()> draw_callback)
+    {
+        {
+            auto t = a;
+            a = b;
+            b = t;
+        }
+        a.move_while_drawing(b.y(), b.x());
+        b.move_while_drawing(a.y(), a.x());
+        while(!draw_callback()){}
     }
 }

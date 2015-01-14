@@ -15,6 +15,6 @@ public:
     virtual bool call(const size_t enemy_pool);
 
 private:
-    std::random_device init_seed;
+    static std::random_device init_seed;
     std::mt19937 random;
 };

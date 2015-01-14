@@ -1,7 +1,7 @@
 #pragma once
 
+#include "display.hpp"
 #include <cmath>
-#include <curses.h>
 #include <functional>
 #include <map>
 #include <memory>
@@ -19,22 +19,24 @@ namespace nctk
     {
     public:
         window();
-        window(const size_t lines, const size_t cols, const size_t y, const size_t x, const std::function<std::string()> init = [](){return "";});
+        window(const size_t line, const size_t colu, const size_t y, const size_t x, const std::function<std::string()> init = nullptr);
         virtual ~window();
 
         template<typename ShowAble>
         void set_contents(const ShowAble& input);
 
         virtual bool draw();
-        
-        virtual std::shared_ptr<window> at(const std::string& name)const;
-        virtual void insert(const std::string& name, const std::shared_ptr<window> child);
+
+        using child_iterator = typename std::map<std::string, std::shared_ptr<window> >::iterator;
+
+        template<typename WindowChild = window>
+        std::shared_ptr<WindowChild> at(const std::string& name)const;
+
+        template<typename WindowChild>
+        std::pair<child_iterator, bool> insert(const std::string& name, std::shared_ptr<WindowChild> w);
+
         virtual void erase(const std::string& name);
         virtual void clear();
-
-        std::string get_string();
-        char get_char();
-        int get_int();
 
         template <typename Window>
         Window make_under(std::function<Window(const size_t, const size_t)> maker)const;
@@ -48,30 +50,33 @@ namespace nctk
 
         std::string show_contents()const;
         size_t under()const;
+        size_t to_under()const;
         size_t right()const;
+        size_t to_right()const;
 
         void yx(const size_t y, const size_t x);
         void y(const size_t y);
         void x(const size_t x);
+        size_t line()const;
+        size_t colu()const;
         size_t y()const;
         size_t x()const;
-        size_t height()const;
-        size_t width()const;
 
+        window& operator=(const window& take);
         template<typename ShowAble>
         window& operator+=(const ShowAble& input);
-        operator WINDOW*();
-        operator const WINDOW*()const;
 
     private:
         bool increase_moving();
 
-        std::shared_ptr<WINDOW> window_ptr_;
-        size_t distination_y_, distination_x_;
-        std::function<std::string()> contents_;
+        size_t line_, colu_, y_, x_;
+        size_t to_y_, to_x_;
 
+        std::function<std::string()> contents_;
         std::map<std::string, std::shared_ptr<window> > children_;
     };
+
+    void swap_and_move(window& a, window& b, std::function<bool()> draw_callback);
 
     template<typename ShowAble>
     struct show_contents_function
@@ -115,16 +120,28 @@ namespace nctk
         this->contents_ = show_contents_function<ShowAble>::value(input);
     }
 
+    template<typename WindowChild>
+    std::shared_ptr<WindowChild> window::at(const std::string& name)const
+    {
+        return std::dynamic_pointer_cast<WindowChild>(this->children_.at(name));
+    }
+
+    template<typename WindowChild>
+    std::pair<window::child_iterator, bool> window::insert(const std::string& name, std::shared_ptr<WindowChild> w)
+    {
+        return this->children_.insert(std::make_pair(name, w));
+    }
+
     template<typename Window>
     Window window::make_under(std::function<Window(const size_t, const size_t)> maker)const
     {
-        return maker(this->under(), this->distination_x_);
+        return maker(this->to_under(), this->to_x_);
     }
 
     template<typename Window>
     Window window::make_right(std::function<Window(const size_t, const size_t)> maker)const
     {
-        return maker(this->distination_y_, this->right());
+        return maker(this->to_y_, this->to_right());
     }
 
     template<typename ShowAble>

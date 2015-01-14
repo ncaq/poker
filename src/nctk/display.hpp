@@ -1,7 +1,6 @@
 #pragma once
 
 #include <algorithm>
-#include <iostream>
 #include <string>
 #include <vector>
 
@@ -11,19 +10,30 @@ namespace nctk
 
     /*!
       ncursesに変わるバックエンド
+      static class.TUIでマルチディスプレイは考える必要ない.
     */
 
-    class display
+    class display final
     {
     public:
-        display();
-
-        void flush();
-        void write(const window& w);
+        static void init();
+        static void echo_mode(bool p);
+        static void write(const window& w);
+        static void flush();
+        static void clear();
+        static char get_key();
+        static void set_dialog(const std::string& description); //!< dialogは1つしか用意出来ないので上書きされます
+        static std::string get_dialog();
+        static void wait_input();
 
     private:
-        size_t lines_;
-        size_t colus_;
-        std::vector<std::string> buffer_;
+        static size_t line_;    //!< 描画可能領域.dialog分があるので実際に描画する領域はもう一つ上です
+        static size_t colu_;
+        // static size_t cursor_y_;
+        // static size_t cursor_x_;
+        static std::vector<std::string> buffer_;
+
+        static std::string form_description_;
+        static std::string user_input_;
     };
 }

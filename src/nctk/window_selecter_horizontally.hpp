@@ -33,7 +33,7 @@ namespace nctk
         {
             this->clear();
             std::function<std::shared_ptr<arrow_window>(const size_t, const size_t)>
-                make_arrow_window = [](const size_t y, const size_t x)
+                make_arrow_window = [this](const size_t y, const size_t x)
                 {
                     return std::make_shared<arrow_window>(y, x);
                 };

@@ -1,15 +1,16 @@
 #include "ai.hpp"
 #include "poker_hands.hpp"
 
+std::random_device ai::init_seed;
+
 ai::ai()
-    : init_seed()
-    , random(init_seed())
+    : random(init_seed())
 {}
 
 std::deque<bool> ai::select_changing_cards()
 {
     const poker_hands current_hands = this->show_down();
-    if(straight <= current_hands.type()) // 入れ替える余地がないならそのまま
+    if(poker::straight <= current_hands.type()) // 入れ替える余地がないならそのまま
     {
         return std::deque<bool>(5, false);
     }
@@ -61,22 +62,22 @@ std::deque<bool> ai::select_changing_cards()
 
 size_t ai::raise()
 {
-    const poker_hands_type current_hands_type = this->show_down().type();
-    if(full_house <= current_hands_type)
+    const poker::hands_type current_hands_type = this->show_down().type();
+    if(poker::full_house <= current_hands_type)
     {
         return std::binomial_distribution<>(20, 0.95)(random);
     }
-    else if(three_cards <= current_hands_type)
+    else if(poker::three_cards <= current_hands_type)
     {
         return std::binomial_distribution<>(20, 0.8)(random);
     }
     else
     {
-        if(two_pair <= current_hands_type)
+        if(poker::two_pair <= current_hands_type)
         {
             return std::normal_distribution<>(10, 0.5)(random);
         }
-        else if(one_pair <= current_hands_type)
+        else if(poker::one_pair <= current_hands_type)
         {
             return std::normal_distribution<>(5, 0.5)(random);
         }
@@ -89,18 +90,18 @@ size_t ai::raise()
 
 bool ai::call(const size_t enemy_pool)
 {
-    const poker_hands_type current_hands_type = this->show_down().type();
-    if(three_cards <= current_hands_type)
+    const poker::hands_type current_hands_type = this->show_down().type();
+    if(poker::three_cards <= current_hands_type)
     {
         return true;
     }
     else
     {
-        if(current_hands_type == two_pair && enemy_pool <= std::normal_distribution<>(30, 0.5)(random))
+        if(current_hands_type == poker::two_pair && enemy_pool <= std::normal_distribution<>(30, 0.5)(random))
         {
             return true;
         }
-        else if(current_hands_type == one_pair && enemy_pool <= std::normal_distribution<>(15, 0.4)(random))
+        else if(current_hands_type == poker::one_pair && enemy_pool <= std::normal_distribution<>(15, 0.4)(random))
         {
             return true;
         }

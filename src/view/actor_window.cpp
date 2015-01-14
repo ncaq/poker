@@ -2,20 +2,21 @@
 #include "actor_window.hpp"
 #include "main_window.hpp"
 
-actor_window::actor_window(main_window& whole_window, std::shared_ptr<actor> m, std::shared_ptr<nctk::window> chip_notation_window, const std::string& chip_description)
-    : whole_window_(whole_window)
+actor_window::actor_window(actor& m, main_window& whole_window, const std::shared_ptr<nctk::window> chip_notation_window, const std::string& chip_description)
+    : window()
     , model_(m)
+    , whole_(whole_window)
 {
     this->insert("chip_notation", chip_notation_window);
     this->at("chip_notation")->set_contents(chip_description);
     this->at("chip_notation")->align_window();
     this->insert("chip",
                  this->at("chip_notation")->make_right<std::shared_ptr<nctk::window> >
-                 ([](const size_t y, const size_t x)
+                 ([this](const size_t y, const size_t x)
                   {
                       return std::make_shared<nctk::window>(0, 0, y, x);
                   }));
-    this->at("chip")->set_contents(this->model_->chip());
+    this->at("chip")->set_contents(this->model_.chip());
     this->at("chip")->align_window();
 }
 
@@ -25,22 +26,40 @@ actor_window::~actor_window()
 void actor_window::new_deal(const std::shared_ptr<nctk::window> deck_window)
 {
     this->clear_hand();
-    for(const std::shared_ptr<card>& h : this->model()->hand())
+    const auto& new_hand = this->model_.hand_reffernce();
+    for(const std::shared_ptr<card>& h : new_hand)
     {
-        this->push_card(std::make_shared<card_window>(h, deck_window->y(), deck_window->x(), this->default_hide_setting()));
+        auto it = this->insert(
+            "card_" + std::to_string(this->hand_.size()),
+            std::make_shared<card_window>(*h, deck_window->y(), deck_window->x(), this->default_hide_setting())).first;
+
+        this->hand_.push_back(std::dynamic_pointer_cast<card_window>(it->second));
+
+        if(this->hand_.size() == 1)
+        {
+            this->hand_.front()->move_while_drawing(this->hand_y_top(), 0);
+        }
+        else
+        {
+            (*(this->hand_.end() - 2))->place_to_right(*this->hand_.back());
+        }
     }
 }
 
 void actor_window::adjust_exchange()
 {
-    auto new_hand = this->model_->hand();
+    auto& new_hand = this->model_.hand_reffernce();
     for(size_t scaned = 0; scaned < this->hand_.size(); ++scaned)
     {
-        auto new_card = std::make_shared<card_window>(new_hand.at(scaned), this->whole().deck_window()->y(), this->whole().deck_window()->x(), this->default_hide_setting());
+        auto new_card =
+            std::make_shared<card_window>(*new_hand.at(scaned),
+                                          this->whole_.deck_window()->y(),
+                                          this->whole_.deck_window()->x(),
+                                          this->default_hide_setting());
         if(*this->hand_.at(scaned) != *new_card)
         {
             this->hand_.at(scaned)->set_hide(true);
-            ::swap(*this->hand_.at(scaned), *new_card, [this](){return this->whole().draw();});
+            swap_and_move(*this->hand_.at(scaned), *new_card, [this](){return this->whole_.draw();});
         }
     }
     this->sort_hand();
@@ -55,14 +74,14 @@ void actor_window::sort_hand()
                                              {
                                                  return *a < *b;
                                              });
-        ::swap(*(*left), *(*min_card_itr), [this](){return this->whole().draw();}); // 座標もswap
+        swap_and_move(*(*left), *(*min_card_itr), [this](){return this->whole_.draw();}); // 座標もswap
     }
-    this->model_->sort();       // modelの方もsortしておかないとadjust_exchangeで差分が取れない
+    this->model_.sort();       // modelの方もsortしておかないとadjust_exchangeで差分が取れない
 }
 
 std::string actor_window::show_down()const
 {
-    return model_->show_down().readable();
+    return model_.show_down().readable();
 }
 
 void actor_window::set_hide_cards(bool hide)
@@ -73,28 +92,9 @@ void actor_window::set_hide_cards(bool hide)
     }
 }
 
-std::shared_ptr<const actor> actor_window::model()const
+const actor& actor_window::model()const
 {
-    return model_;
-}
-
-main_window& actor_window::whole()const
-{
-    return whole_window_;
-}
-
-void actor_window::push_card(std::shared_ptr<card_window> card)
-{
-    this->insert("card_" + std::to_string(this->hand_.size()), card);
-    this->hand_.push_back(card);
-    if(this->hand_.size() == 1)
-    {
-        this->hand_.front()->move_while_drawing(this->hand_y_top(), 0);
-    }
-    else
-    {
-        (*(this->hand_.end() - 2))->place_to_right(*this->hand_.back());
-    }
+    return this->model_;
 }
 
 void actor_window::clear_hand()

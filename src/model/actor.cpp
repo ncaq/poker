@@ -48,23 +48,23 @@ void actor::pay(const size_t size)
 {
     if(*this->chip_ < size)
     {
-        *this->pool_chip_ += *this->chip_;
+        *this->pool_ += *this->chip_;
         *this->chip_ = 0;
     }
     else
     {
         *this->chip_ -= size;
-        *this->pool_chip_ += size;
+        *this->pool_ += size;
     }
 }
 
 void actor::payoff(const size_t paid_chip)
 {
     *chip_ += paid_chip;
-    *pool_chip_ = 0;
+    *pool_ = 0;
 }
 
-poker_hands actor::show_down()
+poker_hands actor::show_down()const
 {
     return poker_hands(hand_);
 }
@@ -74,17 +74,17 @@ void actor::sort()
     std::sort(this->hand_.begin(), this->hand_.end(),[](const std::shared_ptr<card> a, const std::shared_ptr<card>b){return *a < *b;});
 }
 
+std::deque<std::shared_ptr<card> >& actor::hand_reffernce()
+{
+    return this->hand_;
+}
+
 std::shared_ptr<size_t> actor::chip()const
 {
     return chip_;
 }
 
-std::shared_ptr<size_t> actor::pool_chip()const
+std::shared_ptr<size_t> actor::pool()const
 {
-    return pool_chip_;
-}
-
-std::deque<std::shared_ptr<card> > actor::hand()const
-{
-    return hand_;
+    return pool_;
 }

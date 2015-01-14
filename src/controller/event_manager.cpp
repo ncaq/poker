@@ -1,3 +1,4 @@
+#include "../view/main_window.hpp"
 #include "event_manager.hpp"
 
 event_manager::event_manager()
@@ -6,11 +7,6 @@ event_manager::event_manager()
 {}
 
 void event_manager::play()
-{
-    this->init();
-}
-
-void event_manager::init()
 {
     this->tui_->init_game(this->poker_);
     this->poker_->set_controller(this->tui_->player_());
@@ -101,9 +97,8 @@ void event_manager::payoff(const lead no_fold_actor)
     this->tui_->report(no_fold_actor);
 
     this->tui_->draw();
-    nctk::form to_wait("press any key to next game:");
-    to_wait.draw();
-    to_wait.get_char();
+    nctk::display::set_dialog("press any key to next game:");
+    this->tui_->draw();
 
     this->poker_->payoff(no_fold_actor);
 
@@ -144,8 +139,7 @@ void event_manager::half()
 void event_manager::end()
 {
     this->tui_->draw();
-    
-    nctk::form to_wait("press any key to exit:");
-    to_wait.draw();
-    to_wait.get_char();
+
+    nctk::display::set_dialog("press any key to exit:");
+    this->tui_->draw();
 }

@@ -2,14 +2,16 @@
 
 #include "../model/card.hpp"
 #include "../nctk/window.hpp"
+#include <fstream>
 #include <functional>
+#include <iostream>
 #include <string>
 #include <vector>
 
 class card_window : public nctk::window
 {
 public:
-    card_window(const std::shared_ptr<card> base, const size_t y, const size_t x, const bool hide = false);
+    card_window(const card& m, const size_t y, const size_t x, const bool hide = false);
 
     void set_hide(bool hide);
 
@@ -18,9 +20,9 @@ public:
     bool operator!=(const card_window& take)const;
 
 private:
-    std::shared_ptr<card> model_;
-    std::string card_contents_cache_;
+    const card& model_;
     bool hide_;
+    std::string card_cache_;
 
     class image_cell
     {
@@ -33,7 +35,5 @@ private:
         std::vector<std::string> lines_;
     };
     static card_window::image_cell sprite_;
-    static const std::string hide_card_window_;
+    static const std::string hide_card_cache_;
 };
-
-void swap(card_window& a, card_window& b, std::function<bool()> draw_callback);

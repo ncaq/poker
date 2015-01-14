@@ -1,14 +1,14 @@
 #pragma once
 
 #include "../model/poker_mediator.hpp"
-#include "../nctk/form.hpp"
-#include "../view/main_window.hpp"
 #include <memory>
 
 /*!
   eventを進めていくclass
   単純に関数転移する
  */
+
+class main_window;
 
 class event_manager
 {
@@ -18,7 +18,6 @@ public:
     void play();
 
 private:
-    void init();
     void new_deal();
     void bet_ante();
     void exchange();

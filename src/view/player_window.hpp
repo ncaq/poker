@@ -5,7 +5,7 @@
 class player_window : public actor_window
 {
 public:
-    player_window(main_window& whole_window, std::shared_ptr<actor> m, std::shared_ptr<nctk::window> chip_window);
+    player_window(actor& m, main_window& whole_window, const std::shared_ptr<nctk::window> chip_notation_window);
 
     virtual std::deque<bool> select_changing_cards();
     virtual size_t raise();

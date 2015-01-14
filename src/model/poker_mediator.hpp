@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ai.hpp"
+#include "player.hpp"
 #include <algorithm>
 #include <deque>
 #include <functional>
@@ -9,9 +11,7 @@
 enum class lead
 {nothing, player_lead, ai_lead};
 
-class ai;
 class card;
-class player;
 class player_window;
 
 class poker_mediator
@@ -32,13 +32,13 @@ public:
     bool done()const;
     lead current_lead()const;
 
-    std::shared_ptr<player> player_ptr()const;
-    std::shared_ptr<ai> ai_ptr()const;
+    player& player_ref();
+    ai& ai_ref();
 
 private:
     std::deque<std::shared_ptr<card> > deck_;     // 山札
-    std::shared_ptr<player> player_;
-    std::shared_ptr<ai> ai_;
+    player player_;
+    ai     ai_;
 };
 
 constexpr size_t ante = 15;

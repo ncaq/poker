@@ -9,8 +9,8 @@ namespace nctk
     {
         try
         {
-            curses_output_.reset(new window(0, 0, getmaxy(stdscr) - 10, getmaxx(stdscr) - 20));
-            scrollok(*curses_output_, true);
+            // todo
+            // curses_output_.reset(new window(0, 0, getmaxy(stdscr) - 10, getmaxx(stdscr) - 20));
         }catch(...){}
     }
 

@@ -1,50 +1,48 @@
-#include "../nctk/form.hpp"
 #include "../nctk/window_selecter_horizontally.hpp"
 #include "main_window.hpp"
 #include "player_window.hpp"
 
-player_window::player_window(main_window& whole_window, std::shared_ptr<actor> m, std::shared_ptr<nctk::window> chip_window)
-    : actor_window(whole_window, m, chip_window, "player chip: ")
+player_window::player_window(actor& m, main_window& whole_window, const std::shared_ptr<nctk::window> chip_notation_window)
+    : actor_window(m, whole_window, chip_notation_window, "player chip: ")
 {};
 
 std::deque<bool> player_window::select_changing_cards()
 {
     this->insert("cursors", std::make_shared<nctk::window_selecter_horizontally<card_window> >(this->hand_));
     int key = 0;
-    nctk::form input("");
     do
     {
-        this->whole().draw();
+        this->whole_.draw();
 
-        key = input.get_char();
+        key = nctk::display::get_key();
 
-        if(key == 5)             // right
+        if(key == 67)           // right
         {
-            std::dynamic_pointer_cast<nctk::window_selecter_horizontally<card_window>>(this->at("cursors"))->shift_to_right();
+            this->at<nctk::window_selecter_horizontally<card_window> >("cursors")->shift_to_right();
         }
-        else if(key == 4)       // left
+        else if(key == 68)      // left
         {
-            std::dynamic_pointer_cast<nctk::window_selecter_horizontally<card_window>>(this->at("cursors"))->shift_to_left();
+            this->at<nctk::window_selecter_horizontally<card_window> >("cursors")->shift_to_left();
         }
-        else if(key == 3)        // up
+        else if(key == 65)       // up
         {
-            std::dynamic_pointer_cast<nctk::window_selecter_horizontally<card_window>>(this->at("cursors"))->toggle();
+            this->at<nctk::window_selecter_horizontally<card_window> >("cursors")->toggle();
         }
-    }while(key != '\n' && key != 2);
-    return std::dynamic_pointer_cast<nctk::window_selecter_horizontally<card_window>>(this->at("cursors"))->selected_array();
+    }while(key != '\n' && key != 66);
+    return this->at<nctk::window_selecter_horizontally<card_window> >("cursors")->selected_array();
 }
 
 size_t player_window::raise()
 {
-    auto prompt = nctk::form("please input raise chip size. [0 <= x <= 20]:");
-    prompt.draw();
     int chip_size;
     try
     {
-        chip_size = prompt.get_int();
+        nctk::display::set_dialog("please input raise chip size. [0 <= x <= 20]:");
+        this->whole_.draw();
+        chip_size = std::stoi(nctk::display::get_dialog());
     }catch(...)
     {
-        prompt.clear();
+        this->clear();
         return this->raise();
     }
     if(0 <= chip_size && chip_size <= 20)
@@ -53,33 +51,33 @@ size_t player_window::raise()
     }
     else
     {
-        prompt.clear();
+        this->clear();
         return this->raise();
     }
 }
 
 bool player_window::call(const size_t ai_pool)
 {
-    auto prompt = nctk::form("ai bet is " + std::to_string(ai_pool) + "." + "Do you call? [y/n]:");
-    prompt.draw();
-    char answer;
+    std::string answer;
     try
     {
-        answer = prompt.get_char();
+        nctk::display::set_dialog("ai bet is " + std::to_string(ai_pool) + "." + "Do you call? [y/n]:");
+        this->whole_.draw();
+        answer = nctk::display::get_dialog();
     }catch(...)
     {
-        prompt.clear();
+        this->clear();
         return this->call(ai_pool);
     }
-    if(answer == 'y')
+    if(answer.at(0) == 'y')
     {
         return true;
     }
-    if(answer == 'n')
+    if(answer.at(0) == 'n')
     {
         return false;
     }
-    prompt.clear();
+    this->clear();
     return this->call(ai_pool);
 }
 
