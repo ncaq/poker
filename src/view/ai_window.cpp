@@ -1,4 +1,4 @@
-#include "../nctk/window_selecter_horizontally.hpp"
+#include "../nctk/window_selecter_h.hpp"
 #include "ai_window.hpp"
 #include "main_window.hpp"
 

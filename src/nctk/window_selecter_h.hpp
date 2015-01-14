@@ -19,10 +19,10 @@ namespace nctk
     };
 
     template <typename T>
-    class window_selecter_horizontally : public window
+    class window_selecter_h : public window
     {
     public:
-        window_selecter_horizontally(const std::deque<std::shared_ptr<T> >& hs)
+        window_selecter_h(const std::deque<std::shared_ptr<T> >& hs)
             : list_(hs)
             , selected_(list_.size(), false)
             , hover_cursor_(0)
