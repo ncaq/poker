@@ -1,6 +1,7 @@
 #include "display.hpp"
 #include "window.hpp"
 #include <iostream>
+#include <thread>
 
 namespace nctk
 {
@@ -54,11 +55,13 @@ namespace nctk
     void display::flush()
     {
         display::clear();
+
         for(const auto& l : buffer_)
         {
             std::cout << l << '\n';
         }
         std::cout.flush();
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
         if(!form_description_.empty())
         {

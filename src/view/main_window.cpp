@@ -7,7 +7,6 @@
 #include "main_window.hpp"
 #include "player_window.hpp"
 #include <numeric>
-#include <unistd.h>
 
 main_window::main_window()
 {
@@ -37,7 +36,6 @@ void main_window::init_game(std::shared_ptr<poker_mediator> model)
 
 bool main_window::draw()
 {
-    usleep(100000);
     this->at("pool")->align_window();
     if(window::draw())
     {
