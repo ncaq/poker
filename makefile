@@ -5,7 +5,7 @@ else
 endif
 
 CXX			:= g++
-CXXFLAGS	+= -std=c++11 -Wall -Wextra -Werror -pipe
+CXXFLAGS	+= -std=c++11 -Wall -Wextra -pipe
 CXXRELEASE	+= -O2
 CXXDEBUG	+= -O0 -fno-inline -ggdb
 LDFLAGS		+= -lncursesw
