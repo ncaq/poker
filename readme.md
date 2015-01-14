@@ -47,7 +47,6 @@ poker.elfを実行.
 ## 必要なもの
 
 * >=gcc-4.8.3
-* ncurses
 * GNUツール(cygwinで揃う)(make, find, xargs, sed ..)
 
 ## 手順

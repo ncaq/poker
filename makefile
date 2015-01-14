@@ -8,7 +8,7 @@ CXX			:= g++
 CXXFLAGS	+= -std=c++11 -Wall -Wextra -pipe
 CXXRELEASE	+= -O2
 CXXDEBUG	+= -O0 -fno-inline -ggdb
-LDFLAGS		+= -lncursesw
+LDFLAGS		+= 
 LDSTATIC	+= -static
 
 SRCS := $(shell find . -iregex ".*\.cpp")
