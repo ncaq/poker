@@ -10,16 +10,14 @@ html/index.htmlにdoxygenのドキュメントがあります
 
 ### Windows
 
-**poker.batを実行してください.**
-
 **cygwinが必要です.**
 
-もしくは,poker.exeをmintty(cygwinのターミナルエミュレータ)で実行してください.
-
+poker.exeをmintty(cygwinのターミナルエミュレータ)で実行してください.
 おそらくcmd.exe(コマンドプロンプト)では動きません.
-
 cygwinのバージョンによっては動かない可能性があります.
-その場合はお手数ですがビルドをお願いします.
+poker_32bit.exeなら動く可能性があります.
+
+ビルド出来れば確実に動きます.
 
 ### GNU/Linux
 
