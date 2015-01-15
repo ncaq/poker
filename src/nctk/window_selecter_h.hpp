@@ -10,12 +10,11 @@ namespace nctk
     {
     public:
         arrow_window(const size_t y, const size_t x)
-            : window(6, 12, y, x, [](){return immutable_contents_;})
+            : window(y, x, [](){return immutable_contents_;})
         {}
 
     private:
-        static std::ifstream ifs;
-        static const std::string immutable_contents_;
+        static const std::vector<std::string> immutable_contents_;
     };
 
     template <typename T>
@@ -41,12 +40,12 @@ namespace nctk
             {
                 if(selected_.at(i))
                 {
-                    this->insert(std::to_string(i), list_.at(i)->make_under(make_arrow_window));
+                    this->insert(nctk::to_string(i), list_.at(i)->make_under(make_arrow_window));
                 }
             }
             if(hover_cursor_ < list_.size())
             {
-                this->insert("hover" + std::to_string(hover_cursor_), list_.at(hover_cursor_)->make_under(make_arrow_window));
+                this->insert("hover" + nctk::to_string(hover_cursor_), list_.at(hover_cursor_)->make_under(make_arrow_window));
             }
             return window::draw();
         }

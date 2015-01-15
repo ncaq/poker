@@ -9,15 +9,13 @@ actor_window::actor_window(actor& m, main_window& whole_window, const std::share
 {
     this->insert("chip_notation", chip_notation_window);
     this->at("chip_notation")->set_contents(chip_description);
-    this->at("chip_notation")->align_window();
     this->insert("chip",
                  this->at("chip_notation")->make_right<std::shared_ptr<nctk::window> >
                  ([this](const size_t y, const size_t x)
                   {
-                      return std::make_shared<nctk::window>(0, 0, y, x);
+                      return std::make_shared<nctk::window>(y, x);
                   }));
     this->at("chip")->set_contents(this->model_.chip());
-    this->at("chip")->align_window();
 }
 
 actor_window::~actor_window()
@@ -30,7 +28,7 @@ void actor_window::new_deal(const std::shared_ptr<nctk::window> deck_window)
     for(const std::shared_ptr<card>& h : new_hand)
     {
         auto it = this->insert(
-            "card_" + std::to_string(this->hand_.size()),
+            "card_" + nctk::to_string(this->hand_.size()),
             std::make_shared<card_window>(*h, deck_window->y(), deck_window->x(), this->default_hide_setting())).first;
 
         this->hand_.push_back(std::dynamic_pointer_cast<card_window>(it->second));
@@ -101,7 +99,7 @@ void actor_window::clear_hand()
 {
     for(size_t i = 0; i < hand_.size(); ++i)
     {
-        this->erase("card_" + std::to_string(i));
+        this->erase("card_" + nctk::to_string(i));
     }
     this->hand_.clear();
 }

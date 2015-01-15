@@ -15,11 +15,13 @@ namespace nctk
       tuiだとtextしか載せられないので,これ1つで十分
     */
 
+    std::vector<std::string> default_contents();
+
     class window
     {
     public:
         window();
-        window(const size_t line, const size_t colu, const size_t y, const size_t x, const std::function<std::string()> init = nullptr);
+        window(const size_t y, const size_t x, const std::function<std::vector<std::string>()> init = default_contents);
         virtual ~window();
 
         template<typename ShowAble>
@@ -45,10 +47,9 @@ namespace nctk
 
         void move_while_drawing(const size_t to_y, const size_t to_x);
         void place_to_right(window& take)const;
-        void align_window(); //!< 改行に合わせてwindowのサイズを再設定する.utf-8だと大きすぎになることはあるが,小さすぎになることはない
         void resize(const size_t h, const size_t w);
 
-        std::string show_contents()const;
+        std::vector<std::string> show_contents()const;
         size_t under()const;
         size_t to_under()const;
         size_t right()const;
@@ -57,8 +58,8 @@ namespace nctk
         void yx(const size_t y, const size_t x);
         void y(const size_t y);
         void x(const size_t x);
-        size_t line()const;
         size_t colu()const;
+        size_t line()const;
         size_t y()const;
         size_t x()const;
 
@@ -69,10 +70,12 @@ namespace nctk
     private:
         bool increase_moving();
 
-        size_t line_, colu_, y_, x_;
-        size_t to_y_, to_x_;
+        size_t y_ = 0;
+        size_t x_ = 0;
+        size_t to_y_ = 0;
+        size_t to_x_ = 0;
 
-        std::function<std::string()> contents_;
+        std::function<std::vector<std::string>()> contents_;
         std::map<std::string, std::shared_ptr<window> > children_;
     };
 
@@ -81,36 +84,54 @@ namespace nctk
     template<typename ShowAble>
     struct show_contents_function
     {
-        static std::function<std::string()> value(ShowAble s)
+        static std::function<std::vector<std::string>()> value(ShowAble s)
         {
-            return [s](){return std::to_string(s);};
+            return [s](){return std::vector<std::string>({nctk::to_string(s)});};
         }
     };
 
     template<typename ShowAble>
     struct show_contents_function<std::shared_ptr<ShowAble> >
     {
-        static std::function<std::string()> value(std::shared_ptr<ShowAble> s)
+        static std::function<std::vector<std::string>()> value(std::shared_ptr<ShowAble> s)
         {
-            return [s](){return std::to_string(*s);};
+            return [s](){return std::vector<std::string>({nctk::to_string(*s)});};
         }
     };
 
     template<>
-    struct show_contents_function<std::function<std::string()> >
+    struct show_contents_function<std::function<std::vector<std::string>()> >
     {
-        static std::function<std::string()> value(std::function<std::string()> s)
+        static std::function<std::vector<std::string>()> value(std::function<std::vector<std::string>()> s)
         {
             return s;
         }
     };
 
     template<>
-    struct show_contents_function<std::string>
+    struct show_contents_function<std::function<std::string()> >
     {
-        static std::function<std::string()> value(std::string s)
+        static std::function<std::vector<std::string>()> value(std::function<std::string()> s)
+        {
+            return [s](){return std::vector<std::string>({s()});};
+        }
+    };
+
+    template<>
+    struct show_contents_function<std::vector<std::string> >
+    {
+        static std::function<std::vector<std::string>()> value(std::vector<std::string> s)
         {
             return [s](){return s;};
+        }
+    };
+
+    template<>
+    struct show_contents_function<std::string>
+    {
+        static std::function<std::vector<std::string>()> value(std::string s)
+        {
+            return [s](){return std::vector<std::string>({s});};
         }
     };
 
@@ -144,10 +165,15 @@ namespace nctk
         return maker(this->to_y_, this->to_right());
     }
 
+    // template<typename ShowAble>
+    // window& window::operator+=(const ShowAble& input)
+    // {
+    //     this->set_contents(this->show_contents() + show_contents_function<ShowAble>::value(input)());
+    //     return *this;
+    // }
     template<typename ShowAble>
-    window& window::operator+=(const ShowAble& input)
+    window& window::operator+=(const ShowAble&)
     {
-        this->set_contents(this->show_contents() + show_contents_function<ShowAble>::value(input)());
         return *this;
     }
 }

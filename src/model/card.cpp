@@ -1,3 +1,4 @@
+#include "../nctk/alter.hpp"
 #include "card.hpp"
 
 card::card(const suit_t s, const size_t r)
@@ -36,7 +37,7 @@ std::string card::readable()const
         (this->suit() == suit_t::club   ) ? "club   " :
         (this->suit() == suit_t::diamond) ? "diamond" :
         throw std::range_error("undefined suit");
-    std::string rank_view = std::to_string(this->rank());
+    std::string rank_view = nctk::to_string(this->rank());
     return "suit: " + suit_view + ", rank: " + rank_view;
 }
 

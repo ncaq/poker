@@ -10,33 +10,36 @@
 
 main_window::main_window()
 {
-    nctk::display::init();
-
     this->insert("deck",    std::make_shared<card_window> (card(suit_t::spade, 1), 9, 0, true));
-    this->insert("pool",    std::make_shared<nctk::window>(0, 0, 10, 13));
-    this->insert("message", std::make_shared<nctk::window>(0, 0, 14, 13));
-    this->update_message(
-        R"(up: select card to change
-right and left: move cursor
-down or enter: done selecting)"); // 初期メッセージは操作説明
+    this->insert("pool",    std::make_shared<nctk::window>(10, 13));
+    this->insert("message", std::make_shared<nctk::window>(14, 13));
+    this->update_message({"up: select card to change",
+                "right and left: move cursor",
+                "down or enter: done selecting"
+                }); // 初期メッセージは操作説明
 }
 
 void main_window::init_game(std::shared_ptr<poker_mediator> model)
 {
     this->model_ = model;
-    this->insert("player", std::make_shared<player_window>(this->model_->player_ref(), *this, std::make_shared<nctk::window>(0, 0, 11, 13)));
-    this->insert("ai",     std::make_shared<ai_window>    (this->model_->ai_ref(),     *this, std::make_shared<nctk::window>(0, 0, 12, 13)));
-    this->at("pool")->set_contents(
-        "pool   chip:  " + std::to_string(*this->player_()->model().pool()  +
-                                          *this->ai_()    ->model().pool()) +
-        " (player: "     + std::to_string(*this->player_()->model().pool()) +
-        ", ai: "         + std::to_string(*this->ai_()    ->model().pool()) +
-        ")");
+    this->insert("player", std::make_shared<player_window>(this->model_->player_ref(), *this, std::make_shared<nctk::window>(11, 13)));
+    this->insert("ai",     std::make_shared<ai_window>    (this->model_->ai_ref(),     *this, std::make_shared<nctk::window>(12, 13)));
+
+    std::function<std::string()> pool_message_callback = [this]()
+        {
+            return 
+            "pool   chip:  " + nctk::to_string(*this->player_()->model().pool()  +
+                                               *this->ai_()    ->model().pool()) +
+            " (player: "     + nctk::to_string(*this->player_()->model().pool()) +
+            ", ai: "         + nctk::to_string(*this->ai_()    ->model().pool()) +
+            ")"
+            ;
+        };
+    this->at("pool")->set_contents(pool_message_callback);
 }
 
 bool main_window::draw()
 {
-    this->at("pool")->align_window();
     if(window::draw())
     {
         nctk::display::flush();
@@ -49,10 +52,9 @@ bool main_window::draw()
     }
 }
 
-void main_window::update_message(const std::string& contents)
+void main_window::update_message(const std::vector<std::string>& contents)
 {
     this->at("message")->set_contents(contents);
-    this->at("message")->align_window();
 }
 
 void main_window::new_deal()
@@ -79,7 +81,7 @@ void main_window::report(const lead no_fold_actor)
     lead high_card_actor = this->model_->comp_hand();
     std::string card_report;
     std::string pay_report;
-    std::string to_pay_chip = std::to_string(this->model_->sum_pool());
+    std::string to_pay_chip = nctk::to_string(this->model_->sum_pool());
     if(high_card_actor == lead::nothing)
     {
         card_report = "hand is draw. ";
@@ -111,10 +113,11 @@ void main_window::report(const lead no_fold_actor)
         }
     }
 
-    this->update_message(
-        "player: " + this->player_()->show_down() + "\n" +
-        "ai    : " + this->ai_()    ->show_down() + "\n" +
-        card_report + pay_report);
+    this->update_message({
+            {"player: " + this->player_()->show_down()},
+            {"ai    : " + this->ai_()    ->show_down()},
+            {card_report + pay_report}}
+        );
 }
 
 std::shared_ptr<card_window> main_window::deck_window()const

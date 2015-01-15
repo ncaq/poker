@@ -12,6 +12,7 @@ class card_window : public nctk::window
 {
 public:
     card_window(const card& m, const size_t y, const size_t x, const bool hide = false);
+    virtual ~card_window();
 
     void set_hide(bool hide);
 
@@ -20,20 +21,13 @@ public:
     bool operator!=(const card_window& take)const;
 
 private:
+    std::vector<std::string> split(const size_t index)const;
+
     const card& model_;
     bool hide_;
-    std::string card_cache_;
 
-    class image_cell
-    {
-    public:
-        image_cell(const std::string& path);
-
-        std::string split(const size_t index);
-
-    private:
-        std::vector<std::string> lines_;
-    };
-    static card_window::image_cell sprite_;
-    static const std::string hide_card_cache_;
+    std::vector<std::string> card_cache_;
+    static const std::vector<std::string> card_texture_;
+    static const std::vector<std::string> hide_card_cache_;
+    static constexpr size_t card_line_ = 9;
 };

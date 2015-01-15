@@ -1,6 +1,9 @@
 #pragma once
 
+#include "alter.hpp"
 #include <algorithm>
+#include <fstream>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -16,7 +19,6 @@ namespace nctk
     class display final
     {
     public:
-        static void init();
         static void echo_mode(bool p);
         static void write(const window& w);
         static void flush();
@@ -29,8 +31,6 @@ namespace nctk
     private:
         static size_t line_;    //!< 描画可能領域.dialog分があるので実際に描画する領域はもう一つ上です
         static size_t colu_;
-        // static size_t cursor_y_;
-        // static size_t cursor_x_;
         static std::vector<std::string> buffer_;
 
         static std::string form_description_;

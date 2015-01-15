@@ -16,7 +16,7 @@ public:
     void init_game(std::shared_ptr<poker_mediator> model);
 
     virtual bool draw();
-    void update_message(const std::string& contents);
+    void update_message(const std::vector<std::string>& contents);
 
     void new_deal();
     void adjust_exchange();

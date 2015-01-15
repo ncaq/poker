@@ -2,6 +2,5 @@
 
 namespace nctk
 {
-    std::ifstream arrow_window::ifs("resource/arrow.txt");
-    const std::string arrow_window::immutable_contents_ = std::string(std::istreambuf_iterator<char>(arrow_window::ifs), std::istreambuf_iterator<char>());
+    const std::vector<std::string> arrow_window::immutable_contents_ = read_texture("resource/arrow.txt");
 }

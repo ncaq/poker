@@ -2,15 +2,20 @@
 
 namespace nctk
 {
-    window::window(){}
+    std::vector<std::string> default_contents()
+    {
+        return std::vector<std::string>({""});
+    }
 
-    window::window(const size_t line, const size_t colu, const size_t y, const size_t x, const std::function<std::string()> init)
-        : line_(line)
-        , colu_(colu)
-        , y_(y)
+    window::window()
+        : contents_(default_contents)
+    {};
+
+    window::window(const size_t y, const size_t x, const std::function<std::vector<std::string>()> init)
+        : y_(y)
         , x_(x)
-        , to_y_(y_) // コンストラクタに入らないとインスタンス関数は使えない
-        , to_x_(x_)
+        , to_y_(y)
+        , to_x_(x)
         , contents_(init)
     {}
 
@@ -49,47 +54,24 @@ namespace nctk
 
     void window::place_to_right(window& take)const
     {
-        take.move_while_drawing(this->to_y_, this->right());
+        take.move_while_drawing(this->to_y_, this->to_right());
     }
 
-    void window::align_window()
-    {
-        size_t line_size = 1, max_col_size = 0, current_col_size = 0;
-        for(char c : this->show_contents())
-        {
-            ++current_col_size;
-            if(c == '\n')
-            {
-                max_col_size = std::max(max_col_size, current_col_size);
-                current_col_size = 0;
-                ++line_size;
-            }
-        }
-        max_col_size = std::max(max_col_size, current_col_size);
-        this->resize(line_size, max_col_size);
-    }
-
-    void window::resize(const size_t h, const size_t w)
-    {
-        this->line_ = h;
-        this->colu_ = w;
-    }
-
-    std::string window::show_contents()const
+    std::vector<std::string> window::show_contents()const
     {
         return (this->contents_) ?
             this->contents_() :
-            "";
+            std::vector<std::string>({""});
     }
 
     size_t window::under()const
     {
-        return this->y_ + this->line();
+        return this->y_ + this->show_contents().size();
     }
 
     size_t window::to_under()const
     {
-        return this->to_y_ + this->line();
+        return this->to_y_ + this->show_contents().size();
     }
 
     size_t window::right()const
@@ -118,14 +100,16 @@ namespace nctk
         this->yx(this->y(), x);
     }
 
-    size_t window::line()const
-    {
-        return this->line_;
-    }
-
     size_t window::colu()const
     {
-        return this->colu_;
+        const auto& cs = this->show_contents();
+        const auto& max_it = std::max_element(cs.begin(), cs.end(), [](const std::string& a, const std::string& b){return size_utf8(a) < size_utf8(b);});
+        return size_utf8(*max_it);
+    }
+
+    size_t window::line()const
+    {
+        return this->show_contents().size();
     }
 
     size_t window::y()const
@@ -140,7 +124,7 @@ namespace nctk
 
     window& window::operator=(const window& take)
     {
-        window(take.line(), take.colu(), take.y(), take.x(), take.contents_);
+        window(take.y(), take.x(), take.contents_);
         return *this;
     }
 

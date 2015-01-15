@@ -104,7 +104,7 @@ void event_manager::payoff(const lead no_fold_actor)
 
     ++this->game_count_;
 
-    this->tui_->update_message("new game");
+    this->tui_->update_message({"new game"});
 
     this->new_deal();
 }
@@ -113,7 +113,7 @@ void event_manager::player_win()
 {
     this->tui_->draw();
 
-    this->tui_->update_message("player win.");
+    this->tui_->update_message({"player win."});
 
     this->end();
 }
@@ -122,7 +122,7 @@ void event_manager::ai_win()
 {
     this->tui_->draw();
 
-    this->tui_->update_message("ai win.");
+    this->tui_->update_message({"ai win."});
 
     this->end();
 }
@@ -131,7 +131,7 @@ void event_manager::half()
 {
     this->tui_->draw();
 
-    this->tui_->update_message("half.");
+    this->tui_->update_message({"half."});
 
     this->end();
 }

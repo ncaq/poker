@@ -5,16 +5,11 @@
 
 namespace nctk
 {
-    size_t display::line_(80);            //!< terminfoとか使えないので端末の大きさが取得できないため,決め打ちをしておく
+    size_t display::line_(50);            //!< terminfoとか使えないので端末の大きさが取得できないため,決め打ちをしておく
     size_t display::colu_(80);
     std::vector<std::string> display::buffer_(display::line_, std::string(display::colu_, ' '));
     std::string display::form_description_;
     std::string display::user_input_;
-
-    void display::init()
-    {
-        echo_mode(false);
-    }
 
     void display::echo_mode(bool p)
     {
@@ -30,25 +25,12 @@ namespace nctk
 
     void display::write(const window& w)
     {
-        auto content_it = w.show_contents().begin();
-        for(size_t cursor_y = w.y();
-            cursor_y < w.under() && content_it != w.show_contents().end();
-            ++cursor_y)
+        const auto& split_text = w.show_contents();
+        size_t y = w.y();
+        for(const auto& t : split_text)
         {
-            for(size_t cursor_x = w.x();
-                cursor_x < w.right() && content_it != w.show_contents().end();
-                ++cursor_x, ++content_it)
-            {
-                if(*content_it != '\n')
-                {
-                    buffer_.at(cursor_y).at(cursor_x) = *content_it;
-                }
-                else
-                {
-                    ++content_it;
-                    break;
-                }
-            }
+            buffer_.at(y).replace(w.x(), w.colu(), t);
+            ++y;
         }
     }
 
@@ -61,7 +43,6 @@ namespace nctk
             std::cout << l << '\n';
         }
         std::cout.flush();
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
         if(!form_description_.empty())
         {
@@ -69,20 +50,20 @@ namespace nctk
         }
 
         std::fill_n(buffer_.begin(), line_, std::string(colu_, ' '));
+        std::this_thread::sleep_for(std::chrono::milliseconds(80));
     }
 
     void display::clear()
     {
-#ifdef unix
         std::system("clear");
-#elif _WIN32
-        std::system("cls");
-#endif
     }
 
     char display::get_key()
     {
-        return std::getchar();
+        echo_mode(false);
+        char c = std::getchar();
+        echo_mode(true);
+        return c;
     }
 
     void display::set_dialog(const std::string& description)
@@ -101,25 +82,7 @@ namespace nctk
     {
         std::cout << form_description_;
 
-        echo_mode(true);
         user_input_ = "";
         std::getline(std::cin, user_input_);
-        echo_mode(false);
     }
-
-    // std::string display::get_string(const window& w)
-    // {
-    //     echo_mode(true);
-
-    //     std::string input;
-    //     std::getline(std::cin, input);
-
-    //     echo_mode(false);
-    //     return input;
-    // }
-
-    // void set_cursor_to_under()
-    // {
-    //     std::cout.seekp
-    // }
 }

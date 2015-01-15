@@ -42,7 +42,6 @@ size_t player_window::raise()
         chip_size = std::stoi(nctk::display::get_dialog());
     }catch(...)
     {
-        this->clear();
         return this->raise();
     }
     if(0 <= chip_size && chip_size <= 20)
@@ -51,7 +50,6 @@ size_t player_window::raise()
     }
     else
     {
-        this->clear();
         return this->raise();
     }
 }
@@ -61,12 +59,11 @@ bool player_window::call(const size_t ai_pool)
     std::string answer;
     try
     {
-        nctk::display::set_dialog("ai bet is " + std::to_string(ai_pool) + "." + "Do you call? [y/n]:");
+        nctk::display::set_dialog("ai bet is " + nctk::to_string(ai_pool) + "." + "Do you call? [y/n]:");
         this->whole_.draw();
         answer = nctk::display::get_dialog();
     }catch(...)
     {
-        this->clear();
         return this->call(ai_pool);
     }
     if(answer.at(0) == 'y')
@@ -77,7 +74,6 @@ bool player_window::call(const size_t ai_pool)
     {
         return false;
     }
-    this->clear();
     return this->call(ai_pool);
 }
 
