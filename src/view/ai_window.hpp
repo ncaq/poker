@@ -2,6 +2,9 @@
 
 #include "actor_window.hpp"
 
+/*!
+  ai用のパラメータ
+ */
 class ai_window : public actor_window
 {
 public:

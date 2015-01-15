@@ -9,7 +9,11 @@
 namespace nctk
 {
     class window;
-    
+
+    /*!
+      error.logに例外を出力するようにしたのは良いものの,
+      何時のエラーがよくわからなくなってしまったので,時間を書いてもらう.
+     */
     class debug_streambuf : public std::streambuf
     {
     public:

@@ -6,6 +6,9 @@
 
 namespace nctk
 {
+    /*!
+      矢印の描画class.
+    */
     class arrow_window : public window
     {
     public:
@@ -15,6 +18,9 @@ namespace nctk
         static const std::vector<std::string> immutable_contents_;
     };
 
+    /*!
+      listの何かをpointして,その情報を返すclass.
+     */
     template<typename WindowDerived>
     class window_selecter_h : public window
     {

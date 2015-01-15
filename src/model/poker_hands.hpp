@@ -5,7 +5,7 @@
 #include <deque>
 #include <memory>
 
-namespace poker                 //<! std::flushと名前被ったので退避
+namespace poker                 //<! std::flushと名前が被ったので退避
 {
     enum hands_type
     {
@@ -21,17 +21,21 @@ namespace poker                 //<! std::flushと名前被ったので退避
     };
 }
 
+/*!
+  手札の役,強い方,よさ気な表示を出してくれます
+ */
+
 class poker_hands
 {
 public:
     poker_hands(const std::deque<std::shared_ptr<card> >& cards);
 
-    std::string readable()const;
+    std::string readable()const; //!< human readable
     const std::deque<std::shared_ptr<card> >& sorted_cards()const;
     poker::hands_type type()const;
 
     bool operator==(const poker_hands& take);
-    bool operator< (const poker_hands& take);
+    bool operator< (const poker_hands& take); //!< 役が同じなら,一番高いカードの価値で判定する
 
     static poker::hands_type from_cards(const std::deque<std::shared_ptr <card> >& sorted_cards);
 

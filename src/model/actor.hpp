@@ -6,6 +6,11 @@
 
 class card;
 
+/*!
+  pokerをやる人
+  基底クラス
+*/
+
 class actor
 {
 public:
@@ -19,13 +24,13 @@ public:
     poker_hands show_down()const;
     void sort();
 
-    virtual std::deque<bool> select_changing_cards() = 0;
+    virtual std::deque<bool> select_changing_cards() = 0; //!< playerとaiにはこれらを実装してもらいます
     virtual size_t raise() = 0;
     virtual bool call(const size_t enemy_pool) = 0;
 
     std::deque<std::shared_ptr<card> >& hand_reffernce();
 
-    std::shared_ptr<size_t> chip()const;
+    std::shared_ptr<size_t> chip()const; //!< windowに参照させたいのでshared_ptrです
     std::shared_ptr<size_t> pool()const;
 
 private:

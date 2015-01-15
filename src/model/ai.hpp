@@ -5,7 +5,12 @@
 #include <map>
 #include <random>
 
-class ai : public actor         // とりあえず乱数でごまかしている
+/*!
+  明らかに有利なときは大幅に賭ける.
+  他は優位性で平均と標準偏差を調整した正規分布.
+*/
+
+class ai : public actor
 {
 public:
     ai();

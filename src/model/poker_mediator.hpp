@@ -8,11 +8,18 @@
 #include <memory>
 #include <random>
 
+/*!
+  有利な方を表す
+*/
 enum class lead
 {nothing, player_lead, ai_lead};
 
 class card;
 class player_window;
+
+/*!
+  pokerのゲームロジックを制御する
+*/
 
 class poker_mediator
 {
@@ -27,10 +34,10 @@ public:
     lead call();
     void payoff(const lead no_fold_actor);
 
-    lead comp_hand()const;
+    lead comp_hand()const;      //!< どちらの手札が強いか
     size_t sum_pool()const;
-    bool done()const;
-    lead current_lead()const;
+    bool done()const;           //!< ゲーム終了判定
+    lead current_lead()const;   //!< 規定ゲーム数した場合の,判定勝ち判定
 
     player& player_ref();
     ai& ai_ref();

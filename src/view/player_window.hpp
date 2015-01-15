@@ -2,6 +2,9 @@
 
 #include "actor_window.hpp"
 
+/*!
+  キーボードから情報を取ってくる
+*/
 class player_window : public actor_window
 {
 public:

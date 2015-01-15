@@ -11,11 +11,11 @@
 namespace nctk
 {
     /*!
-      window兼widget
-      tuiだとtextしか載せられないので,これ1つで十分
+      window兼widget.
+      tuiだとtextしか載せられないので,これ1つで十分.
+      だと思ってたんだけど,やっぱりこれ設計失敗している.
+      しかし時間がなかったので妥協した.
     */
-
-    std::vector<std::string> default_contents();
 
     class window
     {
@@ -25,9 +25,9 @@ namespace nctk
         virtual ~window();
 
         template<typename ShowAble>
-        void set_contents(const ShowAble& input);
+        void set_contents(const ShowAble& input); //!< 参照はしない.std::shared_ptrはそのまま持つ.callback推奨
 
-        virtual bool draw();
+        virtual bool draw();    //!< children_もdraw()する
 
         template<typename WindowDerived>
         std::shared_ptr<WindowDerived> add(const std::shared_ptr<WindowDerived> w);
@@ -35,9 +35,8 @@ namespace nctk
         virtual void erase(const std::shared_ptr<window> w);
         virtual void clear();
 
-        void move_while_drawing(const size_t to_y, const size_t to_x);
-        void place_to_right(window& take)const;
-        void resize(const size_t h, const size_t w);
+        void move_while_drawing(const size_t to_y, const size_t to_x); //!< animationするように少しずつ移動する
+        void place_to_right(window& take)const;                        //!< このwindowの右にmove_while_drawing
 
         void yx(const size_t y, const size_t x);
         void y(const size_t y);
@@ -56,7 +55,7 @@ namespace nctk
         size_t to_right()const;
 
         virtual window& operator=(const window& take);
-        virtual bool operator<(const window& w)const; //!< インターフェイス用途なのでデフォルト実装に実用性はないです
+        virtual bool operator<(const window& w)const; //!< インターフェイス用途なのでデフォルト実装に実用性はない.operatorは仮想関数ディスパッチしてくれないので,扱いに注意
 
     private:
         bool increase_moving();
@@ -68,6 +67,8 @@ namespace nctk
 
         std::function<std::vector<std::string>()> contents_;
         std::set<std::shared_ptr<window> > children_;
+
+        static std::vector<std::string> default_contents();
     };
 
     template<typename ShowAble>

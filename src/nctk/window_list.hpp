@@ -5,6 +5,10 @@
 
 namespace nctk
 {
+    /*!
+      windowをまとめておくclass.
+      本当は多態性を使うつもりだったけれど,operatorがディスパッチしてくれないので,template classになりました.
+    */
     template<typename WindowDerived>
     class window_list : public window
     {

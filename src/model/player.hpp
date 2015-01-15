@@ -5,10 +5,13 @@
 
 class player_window;
 
+/*!
+  操作対象
+ */
 class player : public actor
 {
 public:
-    void set_controller(std::shared_ptr<player_window> controller);
+    void set_controller(std::shared_ptr<player_window> controller); //!< windowからの入力が必要となるのでsetします
 
     virtual std::deque<bool> select_changing_cards();
     virtual size_t raise();

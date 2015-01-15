@@ -8,13 +8,16 @@
 #include <string>
 #include <vector>
 
+/*
+  cardの見た目を制御
+*/
 class card_window : public nctk::window
 {
 public:
     card_window(const card& m, const size_t y, const size_t x, const bool hide = false);
     virtual ~card_window();
 
-    void set_hide(bool hide);
+    void set_hide(bool hide);   //!< 数字を見えなくする
 
     virtual bool operator<(const card_window& take)const;
     virtual bool operator==(const card_window& take)const;

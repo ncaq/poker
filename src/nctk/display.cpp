@@ -5,7 +5,7 @@
 
 namespace nctk
 {
-    size_t display::line_(50);            //!< terminfoとか使えないので端末の大きさが取得できないため,決め打ちをしておく
+    size_t display::line_(50);            //!< terminfoとか使えないので端末の大きさが取得できないため,決め打ちになる
     size_t display::colu_(80);
     std::vector<std::string> display::buffer_(display::line_, std::string(display::colu_, ' '));
     std::string display::form_description_;
@@ -15,11 +15,11 @@ namespace nctk
     {
         if(p)
         {
-            return std::system("/bin/stty echo icanon");
+            return std::system("/bin/stty echo icanon"); //! std::systemはcstdlibに定義されているらしい
         }
         else
         {
-            return std::system("/bin/stty -echo -icanon"); //!< get_char()が改行を待たないようになる
+            return std::system("/bin/stty -echo -icanon");
         }
     }
 

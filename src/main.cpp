@@ -1,13 +1,13 @@
 #include "controller/event_manager.hpp"
 #include "nctk/debug_stream.hpp"
+#include <clocale>
 #include <fstream>
 #include <iostream>
 #include <string>
 
-int main()
+int main()                      //!< main関数は例外キャッチ用です.event_managerがメイン処理をします
 {
-    // 特定の環境でutf-8表示するのに必要
-    setlocale(LC_ALL, "");
+    std::setlocale(LC_ALL, ""); //! 特定の環境でutf-8表示するのに必要
 
     try
     {

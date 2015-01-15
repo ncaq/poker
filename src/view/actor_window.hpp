@@ -9,6 +9,9 @@
 class actor;
 class main_window;
 
+/*!
+  手札の管理
+ */
 class actor_window : public nctk::window
 {
 public:

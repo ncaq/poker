@@ -2,11 +2,6 @@
 
 namespace nctk
 {
-    std::vector<std::string> default_contents()
-    {
-        return std::vector<std::string>({""});
-    }
-
     window::window()
         : contents_(default_contents)
     {};
@@ -193,5 +188,10 @@ namespace nctk
             }
         }
         return (this->y() == this->to_y_ && this->x() == this->to_x_);
+    }
+
+    std::vector<std::string> window::default_contents()
+    {
+        return std::vector<std::string>({""});
     }
 }

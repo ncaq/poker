@@ -1,3 +1,9 @@
+/*!
+  @file alter.hpp
+  cygwinのgccがバグってるのでto_stringを適当に再実装
+  後は何処に置けばよいかわからないようなutils
+ */
+
 #pragma once
 
 #include <algorithm>

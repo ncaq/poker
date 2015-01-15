@@ -1,5 +1,9 @@
 # readme
 
+# ドキュメント
+
+html/index.htmlにdoxygenのドキュメントがあります
+
 # 遊び方
 
 ## 起動方法

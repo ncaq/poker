@@ -9,6 +9,9 @@ class ai_window;
 class card_window;
 class player_window;
 
+/*!
+  このゲームのmainウインドウ
+*/
 class main_window : public nctk::window
 {
 public:
