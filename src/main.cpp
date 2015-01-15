@@ -1,3 +1,8 @@
+/*!
+  @file main.cpp
+  main関数は例外キャッチ用です.event_managerがメイン処理をします
+ */
+
 #include "controller/event_manager.hpp"
 #include "nctk/debug_stream.hpp"
 #include <clocale>
@@ -5,7 +10,7 @@
 #include <iostream>
 #include <string>
 
-int main()                      //!< main関数は例外キャッチ用です.event_managerがメイン処理をします
+int main()                      
 {
     std::setlocale(LC_ALL, ""); //! 特定の環境でutf-8表示するのに必要
 
