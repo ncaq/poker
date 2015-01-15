@@ -1,11 +1,10 @@
 ifeq ($(OS), Windows_NT)
-	CXX		:= i686-pc-cygwin-g++.exe
 	program := poker.exe
 else
-	CXX		:= g++
 	program := poker.elf
 endif
 
+CXX			:= g++
 CXXFLAGS	+= -std=c++11 -Wall -Wextra -pipe
 CXXRELEASE	+= -O2
 CXXDEBUG	+= -O0 -fno-inline -ggdb
