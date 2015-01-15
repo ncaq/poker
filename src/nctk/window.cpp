@@ -24,21 +24,18 @@ namespace nctk
     bool window::draw()
     {
         bool done = true;
-        if(this->contents_)
-        {
-            done = this->increase_moving() && done;
-            display::write(*this);
-        }
+        done = this->increase_moving() && done;
+        display::write(*this);
         for(auto& child : this->children_)
         {
-            done = child.second->draw() && done;
+            done = child->draw() && done;
         }
         return done;
     }
 
-    void window::erase(const std::string& name)
+    void window::erase(const std::shared_ptr<window> w)
     {
-        this->children_.erase(name);
+        this->children_.erase(w);
     }
 
     void window::clear()
@@ -62,26 +59,6 @@ namespace nctk
         return (this->contents_) ?
             this->contents_() :
             std::vector<std::string>({""});
-    }
-
-    size_t window::under()const
-    {
-        return this->y_ + this->show_contents().size();
-    }
-
-    size_t window::to_under()const
-    {
-        return this->to_y_ + this->show_contents().size();
-    }
-
-    size_t window::right()const
-    {
-        return this->x_ + this->colu();
-    }
-
-    size_t window::to_right()const
-    {
-        return this->to_x_ + this->colu();
     }
 
     void window::yx(const size_t y, const size_t x)
@@ -117,9 +94,39 @@ namespace nctk
         return this->y_;
     }
 
+    size_t window::to_y()const
+    {
+        return this->to_y_;
+    }
+
     size_t window::x()const
     {
         return this->x_;
+    }
+
+    size_t window::to_x()const
+    {
+        return this->to_x_;
+    }
+
+    size_t window::under()const
+    {
+        return this->y_ + this->show_contents().size();
+    }
+
+    size_t window::to_under()const
+    {
+        return this->to_y_ + this->show_contents().size();
+    }
+
+    size_t window::right()const
+    {
+        return this->x_ + this->colu();
+    }
+
+    size_t window::to_right()const
+    {
+        return this->to_x_ + this->colu();
     }
 
     window& window::operator=(const window& take)
@@ -128,8 +135,17 @@ namespace nctk
         return *this;
     }
 
+    bool window::operator<(const window& take)const
+    {
+        return this->x() < take.x();
+    }
+
     bool window::increase_moving()
     {
+        if(this->y() == this->to_y_ && this->x() == this->to_x_)
+        {
+            return true;
+        }
         const int sy = (static_cast<int>(to_y_) - static_cast<int>(this->y())) / 5;
         const int sx = (static_cast<int>(to_x_) - static_cast<int>(this->x())) / 5;
         if(std::signbit(sy))
@@ -177,17 +193,5 @@ namespace nctk
             }
         }
         return (this->y() == this->to_y_ && this->x() == this->to_x_);
-    }
-
-    void swap_and_move(window& a, window& b, std::function<bool()> draw_callback)
-    {
-        {
-            auto t = a;
-            a = b;
-            b = t;
-        }
-        a.move_while_drawing(b.y(), b.x());
-        b.move_while_drawing(a.y(), a.x());
-        while(!draw_callback()){}
     }
 }

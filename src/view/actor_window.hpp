@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../nctk/window.hpp"
+#include "../nctk/window_list.hpp"
 #include "card_window.hpp"
 #include <deque>
 #include <memory>
@@ -14,7 +15,7 @@ public:
     actor_window(actor& m, main_window& whole_window, const std::shared_ptr<nctk::window> chip_notation_window, const std::string& chip_description);
     virtual ~actor_window()=0;
 
-    void new_deal(const std::shared_ptr<nctk::window> deck_window);
+    void new_deal();
     void adjust_exchange();
     void sort_hand();           //!< 見栄え重視で挿入ソートする
     std::string show_down()const;
@@ -26,10 +27,7 @@ public:
     const actor& model()const;
 
 protected:
-    std::shared_ptr<card_window> lookup_card(const size_t index);
-    void clear_hand();
-
     actor& model_;
     main_window& whole_;
-    std::deque<std::shared_ptr<card_window> > hand_; //!< window_selecterにdequeを渡す必要があるので別に持っておく
+    std::shared_ptr<nctk::window_list<card_window> > hand_; //!< window_selecterにdequeを渡す必要があるので別に持っておく
 };

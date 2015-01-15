@@ -22,10 +22,13 @@ public:
     void adjust_exchange();
     void report(const lead no_fold_actor);
 
-    std::shared_ptr<card_window> deck_window()const;
-    std::shared_ptr<player_window> player_();
+    std::shared_ptr<card_window> deck_;
+
+    std::shared_ptr<player_window> player_;
 
 private:
-    std::shared_ptr<ai_window> ai_();
+    std::shared_ptr<window> message_;
+    
+    std::shared_ptr<ai_window> ai_;
     std::shared_ptr<poker_mediator> model_;
 };

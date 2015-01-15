@@ -9,7 +9,7 @@ event_manager::event_manager()
 void event_manager::play()
 {
     this->tui_->init_game(this->poker_);
-    this->poker_->set_controller(this->tui_->player_());
+    this->poker_->set_controller(this->tui_->player_);
 
     this->new_deal();
 }

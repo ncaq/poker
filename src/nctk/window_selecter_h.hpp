@@ -1,6 +1,6 @@
 #pragma once
 
-#include "window.hpp"
+#include "window_list.hpp"
 #include <deque>
 #include <fstream>
 
@@ -9,43 +9,37 @@ namespace nctk
     class arrow_window : public window
     {
     public:
-        arrow_window(const size_t y, const size_t x)
-            : window(y, x, [](){return immutable_contents_;})
-        {}
+        arrow_window(const size_t y, const size_t x);
 
     private:
         static const std::vector<std::string> immutable_contents_;
     };
 
-    template <typename T>
+    template<typename WindowDerived>
     class window_selecter_h : public window
     {
     public:
-        window_selecter_h(const std::deque<std::shared_ptr<T> >& hs)
+        window_selecter_h(const window_list<WindowDerived>& hs)
             : list_(hs)
             , selected_(list_.size(), false)
             , hover_cursor_(0)
-        {
-        }
+        {}
+
+        virtual ~window_selecter_h(){}
 
         virtual bool draw()
         {
             this->clear();
-            std::function<std::shared_ptr<arrow_window>(const size_t, const size_t)>
-                make_arrow_window = [this](const size_t y, const size_t x)
-                {
-                    return std::make_shared<arrow_window>(y, x);
-                };
-            for(size_t i = 0; i < list_.size(); ++i)
+            for(size_t i = 0; i < this->list_.size(); ++i)
             {
-                if(selected_.at(i))
+                if(this->selected_.at(i))
                 {
-                    this->insert(nctk::to_string(i), list_.at(i)->make_under(make_arrow_window));
+                    this->add(std::make_shared<arrow_window>(list_.at(i)->under(), list_.at(i)->x()));
                 }
             }
-            if(hover_cursor_ < list_.size())
+            if(this->hover_cursor_ < this->list_.size())
             {
-                this->insert("hover" + nctk::to_string(hover_cursor_), list_.at(hover_cursor_)->make_under(make_arrow_window));
+                this->add(std::make_shared<arrow_window>(this->list_.at(this->hover_cursor_)->under(), this->list_.at(this->hover_cursor_)->x()));
             }
             return window::draw();
         }
@@ -97,7 +91,7 @@ namespace nctk
         }
 
     private:
-        const std::deque<std::shared_ptr<T> >& list_;
+        const window_list<WindowDerived>& list_;
         std::deque<bool> selected_;
         size_t hover_cursor_;
     };

@@ -16,9 +16,9 @@ public:
 
     void set_hide(bool hide);
 
-    bool operator<(const card_window& take)const;
-    bool operator==(const card_window& take)const;
-    bool operator!=(const card_window& take)const;
+    virtual bool operator<(const card_window& take)const;
+    virtual bool operator==(const card_window& take)const;
+    virtual bool operator!=(const card_window& take)const;
 
 private:
     std::vector<std::string> split(const size_t index)const;

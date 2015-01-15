@@ -3,8 +3,8 @@
 #include "display.hpp"
 #include <cmath>
 #include <functional>
-#include <map>
 #include <memory>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -29,41 +29,35 @@ namespace nctk
 
         virtual bool draw();
 
-        using child_iterator = typename std::map<std::string, std::shared_ptr<window> >::iterator;
+        template<typename WindowDerived>
+        std::shared_ptr<WindowDerived> add(const std::shared_ptr<WindowDerived> w);
 
-        template<typename WindowChild = window>
-        std::shared_ptr<WindowChild> at(const std::string& name)const;
-
-        template<typename WindowChild>
-        std::pair<child_iterator, bool> insert(const std::string& name, std::shared_ptr<WindowChild> w);
-
-        virtual void erase(const std::string& name);
+        virtual void erase(const std::shared_ptr<window> w);
         virtual void clear();
-
-        template <typename Window>
-        Window make_under(std::function<Window(const size_t, const size_t)> maker)const;
-        template <typename Window>
-        Window make_right(std::function<Window(const size_t, const size_t)> maker)const;
 
         void move_while_drawing(const size_t to_y, const size_t to_x);
         void place_to_right(window& take)const;
         void resize(const size_t h, const size_t w);
 
+        void yx(const size_t y, const size_t x);
+        void y(const size_t y);
+        void x(const size_t x);
+
         std::vector<std::string> show_contents()const;
+        size_t colu()const;
+        size_t line()const;
+        size_t y()const;
+        size_t to_y()const;
+        size_t x()const;
+        size_t to_x()const;
         size_t under()const;
         size_t to_under()const;
         size_t right()const;
         size_t to_right()const;
 
-        void yx(const size_t y, const size_t x);
-        void y(const size_t y);
-        void x(const size_t x);
-        size_t colu()const;
-        size_t line()const;
-        size_t y()const;
-        size_t x()const;
+        virtual window& operator=(const window& take);
+        virtual bool operator<(const window& w)const; //!< インターフェイス用途なのでデフォルト実装に実用性はないです
 
-        window& operator=(const window& take);
         template<typename ShowAble>
         window& operator+=(const ShowAble& input);
 
@@ -76,10 +70,8 @@ namespace nctk
         size_t to_x_ = 0;
 
         std::function<std::vector<std::string>()> contents_;
-        std::map<std::string, std::shared_ptr<window> > children_;
+        std::set<std::shared_ptr<window> > children_;
     };
-
-    void swap_and_move(window& a, window& b, std::function<bool()> draw_callback);
 
     template<typename ShowAble>
     struct show_contents_function
@@ -141,28 +133,10 @@ namespace nctk
         this->contents_ = show_contents_function<ShowAble>::value(input);
     }
 
-    template<typename WindowChild>
-    std::shared_ptr<WindowChild> window::at(const std::string& name)const
+    template<typename WindowDerived>
+    std::shared_ptr<WindowDerived> window::add(const std::shared_ptr<WindowDerived> w)
     {
-        return std::dynamic_pointer_cast<WindowChild>(this->children_.at(name));
-    }
-
-    template<typename WindowChild>
-    std::pair<window::child_iterator, bool> window::insert(const std::string& name, std::shared_ptr<WindowChild> w)
-    {
-        return this->children_.insert(std::make_pair(name, w));
-    }
-
-    template<typename Window>
-    Window window::make_under(std::function<Window(const size_t, const size_t)> maker)const
-    {
-        return maker(this->to_under(), this->to_x_);
-    }
-
-    template<typename Window>
-    Window window::make_right(std::function<Window(const size_t, const size_t)> maker)const
-    {
-        return maker(this->to_y_, this->to_right());
+        return std::dynamic_pointer_cast<WindowDerived>(*this->children_.insert(w).first);
     }
 
     // template<typename ShowAble>

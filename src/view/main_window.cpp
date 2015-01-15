@@ -10,9 +10,8 @@
 
 main_window::main_window()
 {
-    this->insert("deck",    std::make_shared<card_window> (card(suit_t::spade, 1), 9, 0, true));
-    this->insert("pool",    std::make_shared<nctk::window>(10, 13));
-    this->insert("message", std::make_shared<nctk::window>(14, 13));
+    this->deck_ = this->add(std::make_shared<card_window> (card(suit_t::spade, 1), 9, 0, true));
+    this->message_ = this->add(std::make_shared<nctk::window>(14, 13));
     this->update_message({"up: select card to change",
                 "right and left: move cursor",
                 "down or enter: done selecting"
@@ -22,20 +21,21 @@ main_window::main_window()
 void main_window::init_game(std::shared_ptr<poker_mediator> model)
 {
     this->model_ = model;
-    this->insert("player", std::make_shared<player_window>(this->model_->player_ref(), *this, std::make_shared<nctk::window>(11, 13)));
-    this->insert("ai",     std::make_shared<ai_window>    (this->model_->ai_ref(),     *this, std::make_shared<nctk::window>(12, 13)));
+    this->player_ = this->add(std::make_shared<player_window>(this->model_->player_ref(), *this, std::make_shared<nctk::window>(11, 13)));
+    this->ai_     = this->add(std::make_shared<ai_window>    (this->model_->ai_ref(),     *this, std::make_shared<nctk::window>(12, 13)));
 
-    std::function<std::string()> pool_message_callback = [this]()
+    std::function<std::vector<std::string>()> pool_message_callback = [this]()
         {
-            return 
-            "pool   chip:  " + nctk::to_string(*this->player_()->model().pool()  +
-                                               *this->ai_()    ->model().pool()) +
-            " (player: "     + nctk::to_string(*this->player_()->model().pool()) +
-            ", ai: "         + nctk::to_string(*this->ai_()    ->model().pool()) +
-            ")"
-            ;
+            return std::vector<std::string>
+            ({
+                "pool   chip:  " + nctk::to_string(*this->player_->model().pool()  +
+                                                   *this->ai_    ->model().pool()) +
+                    " (player: " + nctk::to_string(*this->player_->model().pool()) +
+                    ", ai: "     + nctk::to_string(*this->ai_    ->model().pool()) +
+                    ")"
+                    });
         };
-    this->at("pool")->set_contents(pool_message_callback);
+    this->add(std::make_shared<nctk::window>(10, 13, pool_message_callback)); // pool
 }
 
 bool main_window::draw()
@@ -54,29 +54,33 @@ bool main_window::draw()
 
 void main_window::update_message(const std::vector<std::string>& contents)
 {
-    this->at("message")->set_contents(contents);
+    this->message_->set_contents(contents);
 }
 
 void main_window::new_deal()
 {
-    this->player_()->new_deal(this->deck_window());
-    this->ai_()    ->new_deal(this->deck_window());
+    this->player_->new_deal();
+    this->ai_    ->new_deal();
     while(!this->draw()){}
-    this->player_()->sort_hand();
-    this->ai_()    ->sort_hand();
+    this->player_->sort_hand();
+    this->ai_    ->sort_hand();
     while(!this->draw()){}
 }
 
 void main_window::adjust_exchange()
 {
-    this->player_()->adjust_exchange();
-    this->ai_()    ->adjust_exchange();
+    this->player_->adjust_exchange();
+    this->ai_    ->adjust_exchange();
+    while(!this->draw()){}
+    this->player_->sort_hand();
+    this->ai_    ->sort_hand();
+    while(!this->draw()){}
 }
 
 void main_window::report(const lead no_fold_actor)
 {
-    this->player_()->set_hide_cards(false);
-    this->ai_()    ->set_hide_cards(false);
+    this->player_->set_hide_cards(false);
+    this->ai_    ->set_hide_cards(false);
 
     lead high_card_actor = this->model_->comp_hand();
     std::string card_report;
@@ -114,23 +118,8 @@ void main_window::report(const lead no_fold_actor)
     }
 
     this->update_message({
-            {"player: " + this->player_()->show_down()},
-            {"ai    : " + this->ai_()    ->show_down()},
+            {"player: " + this->player_->show_down()},
+            {"ai    : " + this->ai_    ->show_down()},
             {card_report + pay_report}}
         );
-}
-
-std::shared_ptr<card_window> main_window::deck_window()const
-{
-    return this->at<card_window>("deck");
-}
-
-std::shared_ptr<player_window> main_window::player_()
-{
-    return this->at<player_window>("player");
-}
-
-std::shared_ptr<ai_window> main_window::ai_()
-{
-    return this->at<ai_window>("ai");
 }

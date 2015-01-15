@@ -11,7 +11,6 @@ public:
     virtual size_t raise();
     virtual bool call(const size_t ai_pool);
 
-    virtual void set_hide_cards(bool);
     virtual bool default_hide_setting()const;
     virtual size_t hand_y_top()const;
 };
