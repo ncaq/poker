@@ -1,8 +1,9 @@
 # readme
 
-# ドキュメント
+# 詳細なドキュメント
 
-html/index.htmlにdoxygenのドキュメントがあります
+html/index.htmlにdoxygenのドキュメントがあります.
+ここにそれぞれの関数の解説を書くのは勘弁してください.
 
 # 遊び方
 
