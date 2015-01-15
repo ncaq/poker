@@ -1,9 +1,9 @@
 #pragma once
 
+#include "card.hpp"
 #include <algorithm>
 #include <deque>
 #include <memory>
-#include "card.hpp"
 
 namespace poker                 //<! std::flushと名前被ったので退避
 {
