@@ -74,7 +74,6 @@ namespace nctk
     std::string display::get_dialog()
     {
         std::string backup = user_input_;
-        form_description_ = "";
         return user_input_;
     }
 
@@ -82,6 +81,7 @@ namespace nctk
     {
         std::cout << form_description_;
 
+        form_description_ = "";
         user_input_ = "";
         std::getline(std::cin, user_input_);
     }
