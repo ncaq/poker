@@ -11,15 +11,15 @@ namespace nctk
     std::string display::form_description_;
     std::string display::user_input_;
 
-    void display::echo_mode(bool p)
+    int display::echo_mode(bool p)
     {
         if(p)
         {
-            system("/bin/stty echo icanon");
+            return std::system("/bin/stty echo icanon");
         }
         else
         {
-            system("/bin/stty -echo -icanon"); //!< get_char()が改行を待たないようになる
+            return std::system("/bin/stty -echo -icanon"); //!< get_char()が改行を待たないようになる
         }
     }
 
@@ -53,9 +53,9 @@ namespace nctk
         std::this_thread::sleep_for(std::chrono::milliseconds(80));
     }
 
-    void display::clear()
+    int display::clear()
     {
-        std::system("clear");
+        return std::system("clear");
     }
 
     char display::get_key()

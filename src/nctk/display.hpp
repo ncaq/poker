@@ -19,10 +19,10 @@ namespace nctk
     class display final
     {
     public:
-        static void echo_mode(bool p);
+        static int echo_mode(bool p);
         static void write(const window& w);
         static void flush();
-        static void clear();
+        static int clear();
         static char get_key();
         static void set_dialog(const std::string& description); //!< dialogは1つしか用意出来ないので上書きされます
         static std::string get_dialog();

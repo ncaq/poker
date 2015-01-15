@@ -58,9 +58,6 @@ namespace nctk
         virtual window& operator=(const window& take);
         virtual bool operator<(const window& w)const; //!< インターフェイス用途なのでデフォルト実装に実用性はないです
 
-        template<typename ShowAble>
-        window& operator+=(const ShowAble& input);
-
     private:
         bool increase_moving();
 
@@ -137,17 +134,5 @@ namespace nctk
     std::shared_ptr<WindowDerived> window::add(const std::shared_ptr<WindowDerived> w)
     {
         return std::dynamic_pointer_cast<WindowDerived>(*this->children_.insert(w).first);
-    }
-
-    // template<typename ShowAble>
-    // window& window::operator+=(const ShowAble& input)
-    // {
-    //     this->set_contents(this->show_contents() + show_contents_function<ShowAble>::value(input)());
-    //     return *this;
-    // }
-    template<typename ShowAble>
-    window& window::operator+=(const ShowAble&)
-    {
-        return *this;
     }
 }

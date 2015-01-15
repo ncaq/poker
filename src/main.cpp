@@ -1,8 +1,8 @@
 #include "controller/event_manager.hpp"
+#include "nctk/debug_stream.hpp"
 #include <fstream>
 #include <iostream>
 #include <string>
-// #include "nctk/debug_stream.hpp"
 
 int main()
 {
@@ -16,15 +16,15 @@ int main()
     }
     catch(const std::exception& e)
     {
-        // nctk::debug_stream() << "exception: " << typeid(e).name() << std::endl
-        //                      << e.what() << std::endl;
+        nctk::debug_stream() << "exception: " << typeid(e).name() << std::endl
+                             << e.what() << std::endl;
 
         std::cerr << e.what() << std::endl;
         throw;
     }
     catch(...)
     {
-        // nctk::debug_stream() << "unclear error" << std::endl;
+        nctk::debug_stream() << "unclear error" << std::endl;
         throw;
     }
 }
