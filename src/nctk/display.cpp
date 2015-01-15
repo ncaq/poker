@@ -55,7 +55,9 @@ namespace nctk
 
     int display::clear()
     {
-        return std::system("clear");
+        // cygwin(ncursesなし)にclearコマンドなんて無かった
+        // return std::system("clear");
+        return 0;
     }
 
     char display::get_key()
