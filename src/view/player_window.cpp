@@ -40,7 +40,7 @@ size_t player_window::raise()
     {
         nctk::display::set_dialog("please input raise chip size. [0 <= x <= 20]:");
         this->whole_.draw();
-        chip_size = std::stoi(nctk::display::get_dialog());
+        chip_size = nctk::stoi(nctk::display::get_dialog());
     }catch(...)
     {
         return this->raise();
