@@ -16,7 +16,6 @@ html/index.htmlにdoxygenのドキュメントがあります.
 poker.exeをmintty(cygwinのターミナルエミュレータ)で実行してください.
 おそらくcmd.exe(コマンドプロンプト)では動きません.
 cygwinのバージョンによっては動かない可能性があります.
-poker_32bit.exeなら動く可能性があります.
 
 ビルド出来れば確実に動きます.
 
@@ -55,6 +54,9 @@ poker.elfを実行.
 ## 手順
 
 普通にmakeでコンパイルできます.
+
+1. cygwin terminal(mintty)で **cd** をして,このディレクトリに移動する
+2. makeコマンドを実行
 
 ## library
 
