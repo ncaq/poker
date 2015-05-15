@@ -2,7 +2,7 @@
 
 namespace nctk
 {
-    bool utf8_char(const size_t c)
+    bool utf8_char(const uint64_t c)
     {
         return c < 0xffffffffffffff80 || 0xffffffffffffffbf < c;
     }
